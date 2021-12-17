@@ -1,9 +1,6 @@
 package com.nhlstenden.student.vigmo.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,8 @@ import javax.persistence.*;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Screen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

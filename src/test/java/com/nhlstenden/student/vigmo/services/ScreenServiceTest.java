@@ -20,26 +20,26 @@ import java.util.Optional;
 
 
 class ScreenServiceTest {
-
-    @InjectMocks
-    private ScreenService service;
-
     @Mock
     private ScreenRepository repository;
 
     @Mock
     private MappingUtility mapper;
 
+    @InjectMocks
+    private ScreenService service;
+
     @BeforeEach
     void setup(){
         openMocks(this);
 
         //mocks for the repo
-        when(repository.save(any(Screen.class))).thenReturn(new Screen());
-        when(repository.findById(any(Long.class))).thenReturn(Optional.of(new Screen()));
+        when(repository.save(any(Screen.class))).thenReturn(Screen.builder().id(1L).build());
+        when(repository.findById(any(Long.class))).thenReturn(Optional.of(Screen.builder().id(1L).build()));
 
         //mocks for the mapper
-        when(mapper.mapObject(any(Screen.class), eq(ScreenDto.class))).thenReturn(new ScreenDto());
+        when(mapper.mapObject(any(Screen.class), eq(ScreenDto.class))).thenReturn(ScreenDto.builder().id(1L).build());
+        when(mapper.mapObject(any(ScreenDto.class), eq(Screen.class))).thenReturn(Screen.builder().id(1L).build());
     }
 
     @Test
@@ -57,6 +57,10 @@ class ScreenServiceTest {
 
     @Test
     void createScreen() {
+        ScreenDto screenDto = new ScreenDto(null, "Screen1", "Top", "no-key-needed");
+        Long id = service.createScreen(screenDto);
+
+        assertThat(id).isNotNull();
     }
 
     @Test
