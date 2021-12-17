@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class MediaSlideDto extends SlideDto {
     private Boolean audioEnabled;
     private String type;

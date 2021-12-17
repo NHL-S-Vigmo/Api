@@ -11,7 +11,6 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public abstract class SlideDto {
     private Long id;
     @Positive

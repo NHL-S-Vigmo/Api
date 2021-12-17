@@ -19,8 +19,4 @@ public class AvailabilityRepositoryTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private void test(){
-        MediaSlideDto test = new MediaSlideDto();
-
-    }
 }

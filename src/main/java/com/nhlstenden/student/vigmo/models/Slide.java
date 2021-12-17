@@ -16,7 +16,6 @@ import java.time.LocalTime;
 @ToString
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-@MappedSuperclass
 public abstract class Slide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
