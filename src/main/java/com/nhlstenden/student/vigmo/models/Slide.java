@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @MappedSuperclass
-public class Slide {
+public abstract class Slide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -26,9 +26,6 @@ public class Slide {
     @ManyToOne(optional = false)
     @JoinColumn(name = "slideshow_id", nullable = false)
     private Slideshow slideshow;
-
-    @Column(name = "type", nullable = false, length = 1)
-    private String type;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = false;

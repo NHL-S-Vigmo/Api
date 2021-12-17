@@ -24,8 +24,9 @@ public class Availability {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "week_day", nullable = false)
-    private Boolean weekDay = false;
+    @Column(name = "week_day", nullable = false, columnDefinition = "ENUM('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY')")
+    @Enumerated(EnumType.STRING)
+    private WeekDay weekDay;
 
     @Column(name = "start_time")
     private LocalTime startTime;

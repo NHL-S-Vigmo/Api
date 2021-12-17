@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -31,6 +32,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan("com.nhlstenden.student.vigmo")
 @PropertySource("classpath:application.properties")
+@EnableJpaRepositories("com.nhlstenden.student.vigmo.repositories")
 public class ApiConfig implements WebMvcConfigurer {
 
     @Override
@@ -59,7 +61,6 @@ public class ApiConfig implements WebMvcConfigurer {
         em.setDataSource(dataSource);
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
-        em.setPersistenceUnitName("DB_UNIT");
         return em;
     }
 

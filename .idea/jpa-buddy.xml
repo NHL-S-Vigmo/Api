@@ -3,6 +3,8 @@
   <component name="JpaBuddyIdeaProjectConfig" ddlActionDbType="mysql">
     <option name="liquibaseDirectory" value="db" />
     <option name="defaultUnitInitialized" value="true" />
+    <option name="updateChangeLogPath" value="src/main/resources/db/changelog_master.xml" />
+    <option name="updateDbConnectionName" value="4efb9867-629c-43ff-b89d-e5c004ec6965" />
     <option name="reverseEngineeringLastDbConnectionId" value="4efb9867-629c-43ff-b89d-e5c004ec6965" />
     <option name="reLastEntityCreationPackage" value="src/main/java/com/nhlstenden/student/vigmo/models" />
   </component>

@@ -19,6 +19,9 @@ public class MediaSlide extends Slide {
     @Column(name = "audio_enabled", nullable = false)
     private Boolean audioEnabled = false;
 
+    @Column(name = "type", nullable = false)
+    private String type;
+
     @Column(name = "resource", nullable = false)
     private String resource;
 }

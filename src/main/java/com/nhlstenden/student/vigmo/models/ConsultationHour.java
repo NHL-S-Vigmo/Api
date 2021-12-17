@@ -23,8 +23,9 @@ public class ConsultationHour {
     @Column(name = "description", length = 220)
     private String description;
 
-    @Column(name = "week_day", nullable = false)
-    private Boolean weekDay = false;
+    @Column(name = "week_day", nullable = false, columnDefinition = "ENUM('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY')")
+    @Enumerated(EnumType.STRING)
+    private WeekDay weekDay;
 
     @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
