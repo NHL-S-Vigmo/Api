@@ -2,5 +2,7 @@
 <project version="4">
   <component name="JpaBuddyIdeaProjectConfig">
     <option name="defaultUnitInitialized" value="true" />
+    <option name="reverseEngineeringLastDbConnectionId" value="4efb9867-629c-43ff-b89d-e5c004ec6965" />
+    <option name="reLastEntityCreationPackage" value="src/main/java/com/nhlstenden/student/vigmo/models" />
   </component>
 </project>
