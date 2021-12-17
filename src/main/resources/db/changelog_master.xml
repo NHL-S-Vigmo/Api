@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="1639749961521-1" author="Brandon">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(220)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pfp_location" type="VARCHAR(220)"/>
+        </createTable>
+        <createTable tableName="logs">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_logs"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="VARCHAR(220)"/>
+            <column name="datetime" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="logs" constraintName="FK_LOGS_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="availabilities">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_availabilities"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="week_day" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="TIME"/>
+            <column name="end_time" type="TIME"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="availabilities" constraintName="FK_AVAILABILITIES_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
+        <createTable tableName="screens">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_screens"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="VARCHAR(50)"/>
+            <column name="auth_key" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="slideshows">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_slideshows"/>
+            </column>
+            <column name="screen_id" type="BIGINT"/>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="screen_id" baseTableName="slideshows" constraintName="FK_SLIDESHOWS_ON_SCREEN" referencedColumnNames="id" referencedTableName="screens"/>
+        <createTable tableName="slideshow_variables">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_slideshow_variables"/>
+            </column>
+            <column name="slideshow_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(220)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="slideshow_variables" constraintName="FK_SLIDESHOW_VARIABLES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <createTable tableName="slides">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_slides"/>
+            </column>
+            <column name="slideshow_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="DATE"/>
+            <column name="end_date" type="DATE"/>
+            <column name="start_time" type="TIME"/>
+            <column name="end_time" type="TIME"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="slides" constraintName="FK_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <createTable tableName="text_slides">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_text_slides"/>
+            </column>
+            <column name="slideshow_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="DATE"/>
+            <column name="end_date" type="DATE"/>
+            <column name="start_time" type="TIME"/>
+            <column name="end_time" type="TIME"/>
+            <column name="title" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="text_slides" constraintName="FK_TEXT_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="text_slides" constraintName="FK_TEXT_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <createTable tableName="media_slides">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_media_slides"/>
+            </column>
+            <column name="slideshow_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="DATE"/>
+            <column name="end_date" type="DATE"/>
+            <column name="start_time" type="TIME"/>
+            <column name="end_time" type="TIME"/>
+            <column name="audio_enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="media_slides" constraintName="FK_MEDIA_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="media_slides" constraintName="FK_MEDIA_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <createTable tableName="rss_slides">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_rss_slides"/>
+            </column>
+            <column name="slideshow_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="DATE"/>
+            <column name="end_date" type="DATE"/>
+            <column name="start_time" type="TIME"/>
+            <column name="end_time" type="TIME"/>
+            <column name="url" type="VARCHAR(220)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title_tag" type="VARCHAR(50)"/>
+            <column name="description_tag" type="VARCHAR(50)"/>
+            <column name="author_tag" type="VARCHAR(50)"/>
+            <column name="category_tag" type="VARCHAR(50)"/>
+            <column name="image_tag" type="VARCHAR(50)"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="rss_slides" constraintName="FK_RSS_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="rss_slides" constraintName="FK_RSS_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <createTable tableName="consultation_hours">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_consultation_hours"/>
+            </column>
+            <column name="description" type="VARCHAR(220)"/>
+            <column name="week_day" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
