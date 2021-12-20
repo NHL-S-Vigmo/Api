@@ -40,9 +40,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="logs" constraintName="FK_LOGS_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
-
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="availabilities" constraintName="FK_AVAILABILITIES_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
         <createTable tableName="screens">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_screens"/>
@@ -64,7 +61,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="screen_id" baseTableName="slideshows" constraintName="FK_SLIDESHOWS_ON_SCREEN" referencedColumnNames="id" referencedTableName="screens"/>
         <createTable tableName="slideshow_variables">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_slideshow_variables"/>
@@ -79,7 +75,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="slideshow_variables" constraintName="FK_SLIDESHOW_VARIABLES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
         <createTable tableName="slides">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_slides"/>
@@ -129,8 +124,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="id" baseTableName="text_slides" constraintName="FK_TEXT_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
-        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="text_slides" constraintName="FK_TEXT_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
         <createTable tableName="media_slides">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_media_slides"/>
@@ -158,8 +151,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="id" baseTableName="media_slides" constraintName="FK_MEDIA_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
-        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="media_slides" constraintName="FK_MEDIA_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
         <createTable tableName="rss_slides">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_rss_slides"/>
@@ -189,8 +180,6 @@
             <column name="category_tag" type="VARCHAR(50)"/>
             <column name="image_tag" type="VARCHAR(50)"/>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="id" baseTableName="rss_slides" constraintName="FK_RSS_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
-        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="rss_slides" constraintName="FK_RSS_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
 
         <createTable tableName="availabilities">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -205,7 +194,6 @@
             <column name="start_time" type="TIME"/>
             <column name="end_time" type="TIME"/>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="availabilities" constraintName="FK_AVAILABILITIES_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
         <createTable tableName="consultation_hours">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_consultation_hours"/>
@@ -221,5 +209,16 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="screen_id" baseTableName="slideshows" constraintName="FK_SLIDESHOWS_ON_SCREEN" referencedColumnNames="id" referencedTableName="screens"/>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="slideshow_variables" constraintName="FK_SLIDESHOW_VARIABLES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="text_slides" constraintName="FK_TEXT_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="text_slides" constraintName="FK_TEXT_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="media_slides" constraintName="FK_MEDIA_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="media_slides" constraintName="FK_MEDIA_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="rss_slides" constraintName="FK_RSS_SLIDES_ON_ID" referencedColumnNames="id" referencedTableName="slides"/>
+        <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="rss_slides" constraintName="FK_RSS_SLIDES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="availabilities" constraintName="FK_AVAILABILITIES_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="logs" constraintName="FK_LOGS_ON_USER" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>
