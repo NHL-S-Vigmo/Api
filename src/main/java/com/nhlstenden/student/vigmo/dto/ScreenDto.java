@@ -18,7 +18,7 @@ public class ScreenDto {
 
     @Size(max = 50)
     private String location;
-    
+
     @Size(max = 255) @NotEmpty
     private String authKey;
 }
