@@ -16,10 +16,10 @@ public interface VigmoController<T> {
     ResponseEntity<T> get(@PathVariable("id") final long id);
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> post(@Valid T postObject);
+    ResponseEntity<Void> post(@Valid @RequestBody T postObject);
 
     @PutMapping("/{id}")
-    ResponseEntity<Void> put(@PathVariable("id") final long id,@Valid T putObject);
+    ResponseEntity<Void> put(@PathVariable("id") final long id, @Valid @RequestBody T putObject);
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") final long id);
