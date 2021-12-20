@@ -31,9 +31,6 @@ public class TestApplicationContext {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setPackagesToScan("com.nhlstenden.student.vigmo.models");
-        em.setPackagesToScan("com.nhlstenden.student.vigmo.dto");
-        em.setPackagesToScan("com.nhlstenden.student.vigmo.services");
-        em.setPackagesToScan("com.nhlstenden.student.vigmo.transformers");
         em.setDataSource(dataSource);
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setJpaProperties(additionalProperties());
