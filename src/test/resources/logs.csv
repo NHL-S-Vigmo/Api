@@ -1,0 +1,5 @@
+"id","user_id","action","message","datetime"
+1,"1","add user", "Thijs_Smegen added user Martijn_Pomp with role teacher", "12-04-2021 15:01:23"
+2,"1","disable user", "Thijs_Smegen disabled user Rene_Laan", "17-04-2021 12:13:42"
+3,"5","add slide", "Martijn_Pomp added a text slide with id 6", "20-12-2021 09:41:23"
+4,"","delete slide", "Gerjan_van_Oenen deleted text slide with id 6", "20-12-2021 10:41:23"
