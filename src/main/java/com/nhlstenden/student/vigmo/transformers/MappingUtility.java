@@ -18,7 +18,7 @@ public class MappingUtility {
         return source.stream().map(element -> modelMapper.map(element, target)).collect(Collectors.toList());
     }
 
-    public <S, T> T mapObject(S source, Class<T> target){
-      return modelMapper.map(source, target);
-    };
+    public <S, T> T mapObject(S source, Class<T> target) {
+        return modelMapper.map(source, target);
+    }
 }
