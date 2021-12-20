@@ -25,7 +25,6 @@ public class AvailabilityRepositoryTest {
     @Test
     void testFindAll(){
         List<Availability> availabilities = availabilityRepository.findAll();
-        assertEquals(12, availabilities.size());
-
+        assertEquals(11, availabilities.size());
     }
 }
