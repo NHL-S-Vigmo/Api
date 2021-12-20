@@ -1,17 +1,20 @@
 package com.nhlstenden.student.vigmo.repositories;
 
 import com.nhlstenden.student.vigmo.TestApplicationContext;
-import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.nhlstenden.student.vigmo.models.Availability;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestApplicationContext.class)
+import static org.junit.Assert.assertEquals;
+
+@SpringJUnitConfig(TestApplicationContext.class)
+@Transactional
 public class AvailabilityRepositoryTest {
     @Autowired
     private AvailabilityRepository availabilityRepository;
@@ -19,4 +22,9 @@ public class AvailabilityRepositoryTest {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Test
+    void testFindAll(){
+        List<Availability> availabilities = availabilityRepository.findAll();
+        assertEquals(11, availabilities.size());
+    }
 }

@@ -1,3 +1,3 @@
-"id","audio_enabled","type","resource"
-1,"true",".mp4","/videos/2021/2/christmas.mp4"
-4,"false", ".mkv", "/videos/2021/3/exams.mkv"
+"id","audio_enabled","resource"
+1,"true","/videos/2021/2/christmas.mp4"
+4,"false","/videos/2021/3/exams.mkv"

@@ -4,6 +4,7 @@ import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -17,8 +18,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "com.nhlstenden.student.vigmo")
 @EnableTransactionManagement
+@ComponentScan("com.nhlstenden.student.vigmo.repositories")
+@EnableJpaRepositories("com.nhlstenden.student.vigmo.repositories")
 public class TestApplicationContext {
     @Bean
     public DataSource datasource() {
