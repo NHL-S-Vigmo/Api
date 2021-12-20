@@ -39,7 +39,7 @@ public class TestApplicationContext {
     public SpringLiquibase liquibase(){
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(datasource());
-        liquibase.setChangeLog("classpath:db/changelog_master.xml");
+        liquibase.setChangeLog("classpath:db/liquibase-load-data.xml");
         return liquibase;
     }
 

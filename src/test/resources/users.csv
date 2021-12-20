@@ -1,0 +1,6 @@
+"id","username","password","enabled","role","pfp_location"
+1,"Thijs_Smegen","$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.","true","ROLE_ADMIN","/image_013.jpg"
+2,"Jan_Doornbos","$2y$10$qWUcTd1T1VG1M0Pmq839P.ziwvlJ0lBDEilcNEC7/TJluqEvuRLqW","false","ROLE_TEACHER","/image_014.png"
+3,"Niels_Doorn","$2y$10$sYG5WmMbT.u6TwDr/4cUb.OSVHpX8gRLK4BDNjzEpHHgt4kE6d.7O","true","ROLE_TEACHER","/image_015.gif"
+4,"Rene_Laan","$2y$10$l39MwIfSwvsHR4GTt2jm6enawKZzUkmS58l.yMn8hsM.CzvWcZtkq","false","ROLE_ADMIN","/image_016.png"
+5,"Martijn_Pomp","$2y$10$1N6lUFZ34frCZBw/MNM9s.i6DdzsdEM1llfjdbeLUP/akMVIO3tlC","true","ROLE_TEACHER","/image_017.png"

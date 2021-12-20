@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <include file="changelog_master.xml" relativeToChangelogFile="true"/>
+    <changeSet id="1" author="Thomas">
+        <loadData tableName="availabilities" file="availabilities.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="bigint" index="1" header="user_id"/>
+            <column type="varchar" index="2" header="week_day"/>
+            <column type="time" index="3" header="start_time"/>
+            <column type="time" index="4" header="end_time"/>
+        </loadData>
+        <loadData tableName="consultation_hours" file="consultation_hours.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="varchar" index="1" header="description"/>
+            <column type="varchar" index="2" header="week_day"/>
+            <column type="time" index="3" header="start_time"/>
+            <column type="time" index="4" header="end_time"/>
+        </loadData>
+        <loadData tableName="logs" file="logs.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="bigint" index="1" header="user_id"/>
+            <column type="varchar" index="2" header="username"/>
+            <column type="varchar" index="3" header="action"/>
+            <column type="varchar" index="4" header="message"/>
+            <column type="datetime" index="5" header="datetime"/>
+        </loadData>
+        <loadData tableName="media_slides" file="media_slides.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="boolean" index="1" header="audio_enabled"/>
+            <column type="varchar" index="2" header="type"/>
+            <column type="varchar" index="3" header="resource"/>
+        </loadData>
+        <loadData tableName="rss_slides" file="rss_slides.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="varchar" index="1" header="url"/>
+            <column type="varchar" index="2" header="title_tag"/>
+            <column type="varchar" index="3" header="description_tag"/>
+            <column type="varchar" index="4" header="author_tag"/>
+            <column type="varchar" index="5" header="category_tag"/>
+            <column type="varchar" index="6" header="image_tag"/>
+        </loadData>
+        <loadData tableName="screens" file="screens.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="bigint" index="1" header="slideshow_id"/>
+            <column type="boolean" index="2" header="is_active"/>
+            <column type="int" index="3" header="duration"/>
+            <column type="date" index="4" header="start_date"/>
+            <column type="date" index="5" header="end_date"/>
+            <column type="time" index="6" header="start_time"/>
+            <column type="time" index="7" header="end_time"/>
+        </loadData>
+        <loadData tableName="slideshow_variables" file="slideshow_variables.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="bigint" index="1" header="slideshow_id"/>
+            <column type="varchar" index="2" header="name"/>
+            <column type="varchar" index="3" header="value"/>
+        </loadData>
+        <loadData tableName="text_slides" file="text_slides.csv">
+            <column type="bigint" index="0" header="id"/>
+            <column type="varchar" index="1" header="username"/>
+            <column type="varchar" index="2" header="password"/>
+            <column type="boolean" index="3" header="enabled"/>
+            <column type="varchar" index="4" header="role"/>
+            <column type="varchar" index="5" header="pfp_location"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
