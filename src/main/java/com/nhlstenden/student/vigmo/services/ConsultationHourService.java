@@ -6,8 +6,6 @@ import com.nhlstenden.student.vigmo.repositories.ConsultationHourRepository;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ConsultationHourService extends AbstractVigmoService<ConsultationHourRepository, ConsultationHourDto, ConsultationHour> {
 
