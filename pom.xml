@@ -206,7 +206,12 @@
             <artifactId>spring-hateoas</artifactId>
             <version>0.15.0.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>VigmoWebBuild</finalName>
