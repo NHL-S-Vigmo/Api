@@ -6,7 +6,7 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("Availability Controller")
+@Api(value = "Availability Controller", protocols = "GET,PUT,POST,DELETE", consumes = "application/json", produces = "application/json")
 @RestController
 @RequestMapping("availabilities")
 public class AvailabilityController extends AbstractVigmoController<AvailabilityService, AvailabilityDto> {

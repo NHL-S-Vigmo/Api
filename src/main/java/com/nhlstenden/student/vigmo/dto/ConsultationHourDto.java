@@ -17,20 +17,20 @@ import java.time.LocalTime;
 public class ConsultationHourDto {
     private Long id;
 
-    @ApiModelProperty(notes = "Description of the current hour", name = "description", required = false, value = "Ochtend spreekuur")
+    @ApiModelProperty(name = "description", required = false, value = "Description of the current hour")
     @Size(max = 220)
     @NotEmpty
     private String description;
 
-    @ApiModelProperty(notes = "The day this hour falls on", name = "weekDay", required = true, value = "MONDAY")
+    @ApiModelProperty(name = "weekDay", required = true, value = "The day this hour falls on")
     @WeekdayValidator
     private String weekDay;
 
-    @ApiModelProperty(notes = "When the hour starts", name = "startTime", required = true, value = "10:45:00")
+    @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45:00")
     @NotNull
     private String startTime;
 
-    @ApiModelProperty(notes = "When the hour ends", name = "endTime", required = true, value = "11:30:00")
+    @ApiModelProperty(name = "endTime", required = true, value = "When the hour ends", example = "11:30:00")
     @NotNull
     private String endTime;
 }
