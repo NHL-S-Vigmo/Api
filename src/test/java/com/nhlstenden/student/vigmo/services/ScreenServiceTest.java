@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.modelmapper.ModelMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -44,21 +43,21 @@ class ScreenServiceTest {
 
     @Test
     void getScreens() {
-        List<ScreenDto> screens = service.getScreens();
+        List<ScreenDto> screens = service.getList();
 
         assertThat(screens).isNotNull();
     }
 
     @Test
     void getScreen() {
-        ScreenDto screen = service.getScreen(1L);
+        ScreenDto screen = service.get(1L);
         assertThat(screen).isNotNull();
     }
 
     @Test
     void createScreen() {
         ScreenDto screenDto = new ScreenDto(null, "Screen1", "Top", "no-key-needed");
-        Long id = service.createScreen(screenDto);
+        Long id = service.create(screenDto);
 
         assertThat(id).isNotNull();
     }

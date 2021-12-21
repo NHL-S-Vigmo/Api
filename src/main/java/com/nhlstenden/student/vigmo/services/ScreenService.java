@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ScreenService {
+public class ScreenService implements VigmoService<ScreenDto> {
     private final MappingUtility mapper;
     private final ScreenRepository screenRepository;
 
@@ -21,11 +21,11 @@ public class ScreenService {
         this.mapper = mapper;
     }
 
-    public List<ScreenDto> getScreens(){
+    public List<ScreenDto> getList(){
         return mapper.mapList(screenRepository.findAll(), ScreenDto.class);
     }
 
-    public ScreenDto getScreen(Long id){
+    public ScreenDto get(long id){
         Optional<Screen> dbObject = screenRepository.findById(id);
         if(dbObject.isPresent()){
             return mapper.mapObject(dbObject.get(), ScreenDto.class);
@@ -35,19 +35,19 @@ public class ScreenService {
         }
     }
 
-    public Long createScreen(ScreenDto screenDto){
+    public long create(ScreenDto screenDto){
         Screen newObject = mapper.mapObject(screenDto, Screen.class);
         screenRepository.save(newObject);
         return newObject.getId();
     }
 
-    public void updateScreen(ScreenDto screenDto, Long id){
+    public void update(ScreenDto screenDto, long id){
         Screen newObject = mapper.mapObject(screenDto, Screen.class);
         newObject.setId(id);
         screenRepository.save(newObject);
     }
 
-    public void deleteScreen(Long id){
+    public void delete(long id){
         screenRepository.deleteById(id);
     }
 }

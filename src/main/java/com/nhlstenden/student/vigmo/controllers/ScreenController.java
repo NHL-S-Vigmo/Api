@@ -24,32 +24,32 @@ public class ScreenController implements VigmoController<ScreenDto> {
     @Override
     @ApiOperation(value = "Gets list of screens in the database")
     public ResponseEntity<List<ScreenDto>> get() {
-        return ResponseEntity.ok(screenService.getScreens());
+        return ResponseEntity.ok(screenService.getList());
     }
 
     @ApiOperation(value = "Gets a specific screen")
     @Override
     public ResponseEntity<ScreenDto> get(final long id) {
-        return ResponseEntity.ok(screenService.getScreen(id));
+        return ResponseEntity.ok(screenService.get(id));
     }
 
     @ApiOperation(value = "Creates a new screen")
     @Override
     public ResponseEntity<Void> post(ScreenDto postObject) {
-        return ResponseEntity.created(URI.create(String.format("/screens/%d", screenService.createScreen(postObject)))).build();
+        return ResponseEntity.created(URI.create(String.format("/screens/%d", screenService.create(postObject)))).build();
     }
 
     @ApiOperation(value = "Updates an existing screen in the database")
     @Override
     public ResponseEntity<Void> put(final long id, ScreenDto putObject) {
-        screenService.updateScreen(putObject, id);
+        screenService.update(putObject, id);
         return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "Deletes a screen from the database")
     @Override
     public ResponseEntity<Void> delete(final long id) {
-        screenService.deleteScreen(id);
+        screenService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
