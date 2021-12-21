@@ -9,12 +9,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public class AbstractVigmoService<Repository extends JpaRepository<Entity, Long>, DTO, Entity extends EntityId> implements VigmoService<DTO> {
+public abstract class AbstractVigmoService<Repository extends JpaRepository<Entity, Long>, DTO, Entity extends EntityId> implements VigmoService<DTO> {
 
     private final Repository repo;
     private final MappingUtility mapper;
     private final Class<DTO> dtoType;
     private final Class<Entity> entityType;
+
     public AbstractVigmoService(Repository repo, MappingUtility mapper, Class<DTO> dto, Class<Entity> entity){
         this.repo = repo;
         this.mapper = mapper;
@@ -34,7 +35,7 @@ public class AbstractVigmoService<Repository extends JpaRepository<Entity, Long>
             return mapper.mapObject(dbObject.get(), dtoType);
         }
         else{
-            throw new DataNotFoundException("ScreenService could not find " + id);
+            throw new DataNotFoundException(getClass().getName() + " could not find " + id);
         }
     }
 

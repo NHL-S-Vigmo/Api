@@ -14,5 +14,5 @@ public class ConsultationHourService extends AbstractVigmoService<ConsultationHo
     public ConsultationHourService(ConsultationHourRepository repo, MappingUtility mapper) {
         super(repo, mapper, ConsultationHourDto.class, ConsultationHour.class);
     }
-    
+
 }
