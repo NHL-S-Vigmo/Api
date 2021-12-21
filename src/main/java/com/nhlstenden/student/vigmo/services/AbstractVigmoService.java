@@ -46,13 +46,23 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
 
     @Override
     public void update(DTO dto, long id) {
-        Entity newObject = mapper.mapObject(dto, entityType);
-        newObject.setId(id);
-        repo.save(newObject);
+        Optional<Entity> dbObject = repo.findById(id);
+        if(dbObject.isPresent()){
+            Entity newObject = mapper.mapObject(dto, entityType);
+            newObject.setId(id);
+            repo.save(newObject);
+        }else{
+            throw new DataNotFoundException(getClass().getName() + " could not find " + id);
+        }
     }
 
     @Override
     public void delete(long id) {
-        repo.deleteById(id);
+        Optional<Entity> dbObject = repo.findById(id);
+        if(dbObject.isPresent()){
+            repo.deleteById(id);
+        }else{
+            throw new DataNotFoundException("ScreenService could not find " + id);
+        }
     }
 }
