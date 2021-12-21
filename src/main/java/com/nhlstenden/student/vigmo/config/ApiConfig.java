@@ -80,19 +80,24 @@ public class ApiConfig implements WebMvcConfigurer {
         return transactionManager;
     }
 
+    /**
+     * Bean for {@link ModelMapper} to transform models into dto's.
+     * Creates a custom converter for {@link LocalTime time} to transform time to a string
+     * @return A ModelMapper instance wrapped by Spring
+     */
     @Bean
     public ModelMapper mapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setFieldMatchingEnabled(true);
 
-        Provider<LocalTime> localDateProvider = new AbstractProvider<LocalTime>() {
+        Provider<LocalTime> localTimeProvider = new AbstractProvider<LocalTime>() {
             @Override
             public LocalTime get() {
                 return LocalTime.now();
             }
         };
 
-        Converter<String, LocalTime> toStringDate = new AbstractConverter<String, LocalTime>() {
+        Converter<String, LocalTime> toStringTime = new AbstractConverter<String, LocalTime>() {
             @Override
             protected LocalTime convert(String source) {
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -101,8 +106,8 @@ public class ApiConfig implements WebMvcConfigurer {
         };
 
         modelMapper.createTypeMap(String.class, LocalTime.class);
-        modelMapper.addConverter(toStringDate);
-        modelMapper.getTypeMap(String.class, LocalTime.class).setProvider(localDateProvider);
+        modelMapper.addConverter(toStringTime);
+        modelMapper.getTypeMap(String.class, LocalTime.class).setProvider(localTimeProvider);
 
         return modelMapper;
     }
