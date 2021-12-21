@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Screen {
+public class Screen implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -26,4 +26,14 @@ public class Screen {
 
     @Column(name = "auth_key", nullable = false)
     private String authKey;
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }

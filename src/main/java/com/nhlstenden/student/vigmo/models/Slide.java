@@ -16,7 +16,7 @@ import java.time.LocalTime;
 @ToString
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Slide {
+public abstract class Slide implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -43,4 +43,14 @@ public abstract class Slide {
 
     @Column(name = "end_time")
     private LocalTime endTime;
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }

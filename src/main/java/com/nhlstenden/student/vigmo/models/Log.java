@@ -14,7 +14,7 @@ import java.time.Instant;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Log {
+public class Log implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,4 +35,14 @@ public class Log {
 
     @Column(name = "datetime", nullable = false)
     private Instant datetime;
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }
