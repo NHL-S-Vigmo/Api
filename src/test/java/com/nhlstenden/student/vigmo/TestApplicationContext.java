@@ -52,7 +52,7 @@ public class TestApplicationContext {
         return transactionManager;
     }
 
-    private Properties additionalProperties() {
+    protected Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "none");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");

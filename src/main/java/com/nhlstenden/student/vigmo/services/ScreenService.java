@@ -42,12 +42,22 @@ public class ScreenService implements VigmoService<ScreenDto> {
     }
 
     public void update(ScreenDto screenDto, long id){
-        Screen newObject = mapper.mapObject(screenDto, Screen.class);
-        newObject.setId(id);
-        screenRepository.save(newObject);
+        Optional<Screen> dbObject = screenRepository.findById(id);
+        if(dbObject.isPresent()){
+            Screen newObject = mapper.mapObject(screenDto, Screen.class);
+            newObject.setId(id);
+            screenRepository.save(newObject);
+        }else{
+            throw new DataNotFoundException("ScreenService could not find " + id);
+        }
     }
 
     public void delete(long id){
-        screenRepository.deleteById(id);
+        Optional<Screen> dbObject = screenRepository.findById(id);
+        if(dbObject.isPresent()){
+            screenRepository.deleteById(id);
+        }else{
+            throw new DataNotFoundException("ScreenService could not find " + id);
+        }
     }
 }
