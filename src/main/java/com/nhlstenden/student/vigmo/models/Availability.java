@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Availability {
+public class Availability implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,4 +33,14 @@ public class Availability {
 
     @Column(name = "end_time")
     private LocalTime endTime;
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }

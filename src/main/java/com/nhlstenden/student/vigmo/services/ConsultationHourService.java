@@ -1,37 +1,18 @@
 package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
+import com.nhlstenden.student.vigmo.models.ConsultationHour;
+import com.nhlstenden.student.vigmo.repositories.ConsultationHourRepository;
+import com.nhlstenden.student.vigmo.transformers.MappingUtility;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class ConsultationHourService implements VigmoService<ConsultationHourDto> {
+@Service
+public class ConsultationHourService extends AbstractVigmoService<ConsultationHourRepository, ConsultationHourDto, ConsultationHour> {
 
-    public ConsultationHourService() {
-        
+    public ConsultationHourService(ConsultationHourRepository repo, MappingUtility mapper) {
+        super(repo, mapper, ConsultationHourDto.class, ConsultationHour.class);
     }
-
-    @Override
-    public List<ConsultationHourDto> getList() {
-        return null;
-    }
-
-    @Override
-    public ConsultationHourDto get(long id) {
-        return null;
-    }
-
-    @Override
-    public long create(ConsultationHourDto dto) {
-        return 0;
-    }
-
-    @Override
-    public void update(ConsultationHourDto dto, long id) {
-
-    }
-
-    @Override
-    public void delete(long id) {
-
-    }
+    
 }

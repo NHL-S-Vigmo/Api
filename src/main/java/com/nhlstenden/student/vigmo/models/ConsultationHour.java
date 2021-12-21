@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ConsultationHour {
+public class ConsultationHour implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -32,4 +32,14 @@ public class ConsultationHour {
 
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }
