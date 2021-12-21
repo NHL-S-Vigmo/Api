@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 @NoArgsConstructor
-public class SlideshowVariable {
+public class SlideshowVariable implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -28,4 +28,14 @@ public class SlideshowVariable {
 
     @Column(name = "value", nullable = false, length = 220)
     private String value;
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }

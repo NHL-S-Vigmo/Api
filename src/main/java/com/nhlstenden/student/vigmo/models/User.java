@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 @NoArgsConstructor
-public class User {
+public class User implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,4 +33,14 @@ public class User {
 
     @Column(name = "pfp_location", length = 220)
     private String pfpLocation;
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }

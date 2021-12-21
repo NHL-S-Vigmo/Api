@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Slideshow {
+public class Slideshow implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -30,4 +30,14 @@ public class Slideshow {
 
     @OneToMany(mappedBy = "slideshow", fetch = FetchType.EAGER)
     private List<Slide> slideList = new ArrayList<>(0);
+
+    @Override
+    public long getId(){
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 }
