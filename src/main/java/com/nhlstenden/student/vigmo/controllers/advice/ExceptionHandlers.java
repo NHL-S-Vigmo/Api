@@ -1,6 +1,7 @@
 package com.nhlstenden.student.vigmo.controllers.advice;
 
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
+import com.nhlstenden.student.vigmo.exception.GenericTypeTransformerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -28,6 +29,11 @@ public class ExceptionHandlers {
     @ExceptionHandler(RuntimeException.class)
     public ErrorResponse handleAnyRuntimeException(RuntimeException exception) {
         return new ErrorResponse("Something unexpected went wrong: " + exception.getMessage());
+    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(GenericTypeTransformerException.class)
+    public ErrorResponse handleGenericTypeTransformerException(GenericTypeTransformerException exception) {
+        return new ErrorResponse("Transforming of generic class went wrong: " + exception.getMessage());
     }
 
     public static class ErrorResponse {
