@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo.controllers;
+package com.nhlstenden.student.vigmo.controllers.logic;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

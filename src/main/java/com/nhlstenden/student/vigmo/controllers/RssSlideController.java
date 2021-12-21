@@ -1,5 +1,6 @@
 package com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.services.RssSlideService;
 import io.swagger.annotations.Api;

@@ -1,9 +1,8 @@
 package com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
-import com.nhlstenden.student.vigmo.dto.ScreenDto;
 import com.nhlstenden.student.vigmo.services.ConsultationHourService;
-import com.nhlstenden.student.vigmo.services.ScreenService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

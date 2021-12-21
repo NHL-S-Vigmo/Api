@@ -3,6 +3,7 @@ package com.nhlstenden.student.vigmo.services;
 import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import com.nhlstenden.student.vigmo.models.Slideshow;
 import com.nhlstenden.student.vigmo.repositories.SlideshowRepository;
+import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,7 @@
-package com.nhlstenden.student.vigmo.services;
+package com.nhlstenden.student.vigmo.services.logic;
 
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.EntityId;
-import com.nhlstenden.student.vigmo.models.Screen;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo.services;
+package com.nhlstenden.student.vigmo.services.logic;
 
 
 import java.util.List;

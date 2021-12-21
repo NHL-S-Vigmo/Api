@@ -1,5 +1,6 @@
 package com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.TextSlideDto;
 import com.nhlstenden.student.vigmo.services.TextSlideService;
 import io.swagger.annotations.Api;

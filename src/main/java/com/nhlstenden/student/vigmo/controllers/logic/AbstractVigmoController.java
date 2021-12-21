@@ -1,6 +1,6 @@
-package com.nhlstenden.student.vigmo.controllers;
+package com.nhlstenden.student.vigmo.controllers.logic;
 
-import com.nhlstenden.student.vigmo.services.VigmoService;
+import com.nhlstenden.student.vigmo.services.logic.VigmoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
