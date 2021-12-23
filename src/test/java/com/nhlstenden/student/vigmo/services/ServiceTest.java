@@ -1,10 +1,9 @@
 package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
-import com.nhlstenden.student.vigmo.testEntity.TestEntity;
-import com.nhlstenden.student.vigmo.testEntity.TestEntityDto;
-import com.nhlstenden.student.vigmo.testEntity.TestEntityRepository;
-import com.nhlstenden.student.vigmo.testEntity.TestEntityService;
+import com.nhlstenden.student.vigmo.repositories.TestEntityRepository;
+import com.nhlstenden.student.vigmo.models.TestEntity;
+import com.nhlstenden.student.vigmo.dto.TestEntityDto;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo.testEntity;
+package com.nhlstenden.student.vigmo.dto;
 
 import lombok.*;
 
