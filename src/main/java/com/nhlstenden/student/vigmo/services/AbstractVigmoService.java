@@ -2,7 +2,6 @@ package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.EntityId;
-import com.nhlstenden.student.vigmo.models.Screen;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -64,7 +63,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
         if(dbObject.isPresent()){
             repo.deleteById(id);
         }else{
-            throw new DataNotFoundException("ScreenService could not find " + id);
+            throw new DataNotFoundException(getClass().getName() + " could not find " + id);
         }
     }
 }
