@@ -1,5 +1,5 @@
 # Vigmo Cool
-*Project for Advanded Java Minor, made by Students*
+*Project for Advanced Java Minor, made by Students*
 
 ## Available endpoints
 

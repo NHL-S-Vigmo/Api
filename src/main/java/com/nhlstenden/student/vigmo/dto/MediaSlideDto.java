@@ -1,7 +1,6 @@
 package com.nhlstenden.student.vigmo.dto;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter

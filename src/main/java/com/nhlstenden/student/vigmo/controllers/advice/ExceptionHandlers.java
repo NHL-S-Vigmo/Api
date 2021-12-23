@@ -2,6 +2,9 @@ package com.nhlstenden.student.vigmo.controllers.advice;
 
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.exception.GenericTypeTransformerException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -35,20 +38,10 @@ public class ExceptionHandlers {
     public ErrorResponse handleGenericTypeTransformerException(GenericTypeTransformerException exception) {
         return new ErrorResponse("Transforming of generic class went wrong: " + exception.getMessage());
     }
-
+    @AllArgsConstructor
+    @Getter
+    @Setter
     public static class ErrorResponse {
         private String error;
-
-        public ErrorResponse(String message) {
-            this.error = message;
-        }
-
-        public String getError() {
-            return this.error;
-        }
-
-        public void setError(String error) {
-            this.error = error;
-        }
     }
 }

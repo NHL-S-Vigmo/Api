@@ -81,7 +81,7 @@ public class ApiConfig implements WebMvcConfigurer {
     }
 
     /**
-     * Bean for {@link ModelMapper} to transform models into dto's.
+     * Bean for {@link ModelMapper} to transform models into dtos.
      * Creates a custom converter for {@link LocalTime time} to transform time to a string
      * @return A ModelMapper instance wrapped by Spring
      */

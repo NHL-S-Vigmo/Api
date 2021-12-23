@@ -17,7 +17,7 @@ public class WeekdayValidatorImpl implements ConstraintValidator<WeekdayValidato
 
     @Override
     public void initialize(WeekdayValidator constraintAnnotation) {
-        valueList = new ArrayList<String>();
+        valueList = new ArrayList<>();
 
         @SuppressWarnings("rawtypes")
         Enum[] enumValArr = WeekDay.class.getEnumConstants();

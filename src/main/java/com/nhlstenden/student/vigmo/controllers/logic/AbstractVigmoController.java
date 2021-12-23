@@ -12,7 +12,7 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
 
     private final Service service;
 
-    public AbstractVigmoController(Service service) {
+    public AbstractVigmoController(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") Service service) {
         this.service = service;
     }
 

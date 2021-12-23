@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -17,7 +16,7 @@ import java.time.LocalTime;
 public class AvailabilityDto {
     private Long id;
 
-    @ApiModelProperty(name = "description", required = false, value = "The user this data belongs to\nSee [user-controller](#/user-controller) for more info")
+    @ApiModelProperty(name = "description", value = "The user this data belongs to\nSee [user-controller](#/user-controller) for more info")
     private Long userId;
 
     @ApiModelProperty(name = "weekDay", required = true, value = "The day of availability")

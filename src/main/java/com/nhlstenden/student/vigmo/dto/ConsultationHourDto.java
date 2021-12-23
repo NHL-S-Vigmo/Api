@@ -7,7 +7,6 @@ import lombok.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -17,7 +16,7 @@ import java.time.LocalTime;
 public class ConsultationHourDto {
     private Long id;
 
-    @ApiModelProperty(name = "description", required = false, value = "Description of the current hour")
+    @ApiModelProperty(name = "description", value = "Description of the current hour")
     @Size(max = 220)
     @NotEmpty
     private String description;
