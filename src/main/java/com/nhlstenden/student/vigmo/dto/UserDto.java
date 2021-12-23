@@ -1,5 +1,6 @@
 package com.nhlstenden.student.vigmo.dto;
 
+import com.nhlstenden.student.vigmo.validators.BcryptValidator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class UserDto {
     @Size(max = 50) @NotEmpty
     private String username;
 
-    @Size(max = 220) @NotEmpty
+    @BcryptValidator
     private String password;
 
     private Boolean enabled;
