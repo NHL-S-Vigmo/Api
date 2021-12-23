@@ -1,20 +1,36 @@
 package com.nhlstenden.student.vigmo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.nhlstenden.student.vigmo.validators.WeekdayValidator;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ConsultationHourDto {
     private Long id;
+
+    @ApiModelProperty(name = "description", required = false, value = "Description of the current hour")
+    @Size(max = 220)
+    @NotEmpty
     private String description;
+
+    @ApiModelProperty(name = "weekDay", required = true, value = "The day this hour falls on")
+    @WeekdayValidator
     private String weekDay;
-    private LocalTime startTime;
-    private LocalTime endTime;
+
+    @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45:00")
+    @NotNull
+    private String startTime;
+
+    @ApiModelProperty(name = "endTime", required = true, value = "When the hour ends", example = "11:30:00")
+    @NotNull
+    private String endTime;
 }

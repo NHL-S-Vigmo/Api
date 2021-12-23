@@ -1,6 +1,6 @@
 package com.nhlstenden.student.vigmo.config;
 
-import org.modelmapper.ModelMapper;
+import org.modelmapper.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -18,6 +18,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -78,11 +80,35 @@ public class ApiConfig implements WebMvcConfigurer {
         return transactionManager;
     }
 
+    /**
+     * Bean for {@link ModelMapper} to transform models into dto's.
+     * Creates a custom converter for {@link LocalTime time} to transform time to a string
+     * @return A ModelMapper instance wrapped by Spring
+     */
     @Bean
     public ModelMapper mapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setFieldMatchingEnabled(true);
+        modelMapper.getConfiguration().setFieldMatchingEnabled(true);
+
+        Provider<LocalTime> localTimeProvider = new AbstractProvider<LocalTime>() {
+            @Override
+            public LocalTime get() {
+                return LocalTime.now();
+            }
+        };
+
+        Converter<String, LocalTime> toStringTime = new AbstractConverter<String, LocalTime>() {
+            @Override
+            protected LocalTime convert(String source) {
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss");
+                return LocalTime.parse(source, format);
+            }
+        };
+
+        modelMapper.createTypeMap(String.class, LocalTime.class);
+        modelMapper.addConverter(toStringTime);
+        modelMapper.getTypeMap(String.class, LocalTime.class).setProvider(localTimeProvider);
+
         return modelMapper;
     }
 }

@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo.services;
+package com.nhlstenden.student.vigmo.services.logic;
 
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.EntityId;
@@ -34,15 +34,13 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
             return mapper.mapObject(dbObject.get(), dtoType);
         }
         else{
-            throw new DataNotFoundException(getClass().getName() + " could not find " + id);
+            throw new DataNotFoundException(getClass().getSimpleName() + " could not find " + id);
         }
     }
 
     @Override
     public long create(DTO dto) {
-        Entity newObject = mapper.mapObject(dto, entityType);
-        repo.save(newObject);
-        return newObject.getId();
+        return repo.save(mapper.mapObject(dto, entityType)).getId();
     }
 
     @Override
