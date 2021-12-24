@@ -5,6 +5,7 @@ import com.nhlstenden.student.vigmo.models.EntityId;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +16,10 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     private final Class<DTO> dtoType;
     private final Class<Entity> entityType;
 
-    public AbstractVigmoService(Repository repo, MappingUtility mapper, Class<DTO> dto, Class<Entity> entity){
+    public AbstractVigmoService(Repository repo, MappingUtility mapper, Class<DTO> dto, Class<Entity> entity) {
         this.repo = repo;
         this.mapper = mapper;
-        this.dtoType =dto;
+        this.dtoType = dto;
         this.entityType = entity;
     }
 
@@ -29,13 +30,9 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
 
     @Override
     public DTO get(long id) {
-        Optional<Entity> dbObject = repo.findById(id);
-        if(dbObject.isPresent()){
-            return mapper.mapObject(dbObject.get(), dtoType);
-        }
-        else{
-            throw new DataNotFoundException(getClass().getSimpleName() + " could not find " + id);
-        }
+        Entity o = Optional.of(repo.findById(id)).get()
+                .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
+        return mapper.mapObject(o, dtoType);
     }
 
     @Override
@@ -45,23 +42,17 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
 
     @Override
     public void update(DTO dto, long id) {
-        Optional<Entity> dbObject = repo.findById(id);
-        if(dbObject.isPresent()){
-            Entity newObject = mapper.mapObject(dto, entityType);
-            newObject.setId(id);
-            repo.save(newObject);
-        }else{
-            throw new DataNotFoundException(getClass().getName() + " could not find " + id);
-        }
+        Optional<Entity> o = Optional.of(repo.findById(id))
+                .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
+        Entity newObject = mapper.mapObject(dto, entityType);
+        newObject.setId(id);
+        repo.save(newObject);
     }
 
     @Override
     public void delete(long id) {
-        Optional<Entity> dbObject = repo.findById(id);
-        if(dbObject.isPresent()){
-            repo.deleteById(id);
-        }else{
-            throw new DataNotFoundException(getClass().getName() + " could not find " + id);
-        }
+        Optional<Entity> o = Optional.of(repo.findById(id))
+                .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
+        repo.deleteById(id);
     }
 }

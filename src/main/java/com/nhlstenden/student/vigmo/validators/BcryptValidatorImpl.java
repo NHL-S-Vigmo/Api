@@ -12,7 +12,7 @@ public class BcryptValidatorImpl implements ConstraintValidator<BcryptValidator,
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if(value == null){
+        if (value == null) {
             return false;
         }
         //^[$]2[abxy][$]: Algorithm identifier
