@@ -30,7 +30,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
 
     @Override
     public DTO get(long id) {
-        Entity o = Optional.of(repo.findById(id)).get()
+        Entity o = repo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
         return mapper.mapObject(o, dtoType);
     }
