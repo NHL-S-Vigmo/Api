@@ -1,6 +1,5 @@
 package com.nhlstenden.student.vigmo.services.logic;
 
-
 import java.util.List;
 
 public interface VigmoService<DtoObject> {
