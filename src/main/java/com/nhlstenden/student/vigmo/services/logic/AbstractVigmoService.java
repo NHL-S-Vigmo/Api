@@ -30,7 +30,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
 
     @Override
     public DTO get(long id) {
-        Entity o = Optional.of(repo.findById(id)).get()
+        Entity o = repo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
         return mapper.mapObject(o, dtoType);
     }
@@ -42,8 +42,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
 
     @Override
     public void update(DTO dto, long id) {
-        Optional<Entity> o = Optional.of(repo.findById(id))
-                .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
+        repo.findById(id).orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
         Entity newObject = mapper.mapObject(dto, entityType);
         newObject.setId(id);
         repo.save(newObject);
@@ -51,8 +50,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
 
     @Override
     public void delete(long id) {
-        Optional<Entity> o = Optional.of(repo.findById(id))
-                .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
+        repo.findById(id).orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
         repo.deleteById(id);
     }
 }

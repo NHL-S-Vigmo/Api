@@ -7,7 +7,10 @@ import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class LogService extends AbstractVigmoService<LogRepository, LogDto, Log> {
     public LogService(LogRepository repo, MappingUtility mapper) {
         super(repo, mapper, LogDto.class, Log.class);
