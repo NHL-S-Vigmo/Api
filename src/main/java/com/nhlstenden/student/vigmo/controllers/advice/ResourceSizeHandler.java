@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class ResourceSizeHandler implements ResponseBodyAdvice<List<?>> {
@@ -20,9 +22,12 @@ public class ResourceSizeHandler implements ResponseBodyAdvice<List<?>> {
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         //Checks if this advice is applicable.
         //In this case it applies to any endpoint which returns a collection.
-
-        String typeName = ((ParameterizedType)returnType.getGenericParameterType()).getActualTypeArguments()[0].getTypeName();
-        return typeName.contains("java.util.List");
+        try{
+            String typeName = ((ParameterizedType)returnType.getGenericParameterType()).getActualTypeArguments()[0].getTypeName();
+            return typeName.contains("java.util.List");
+        }catch(Exception exception){
+            return List.class.isAssignableFrom(returnType.getParameterType());
+        }
     }
 
     @Override
