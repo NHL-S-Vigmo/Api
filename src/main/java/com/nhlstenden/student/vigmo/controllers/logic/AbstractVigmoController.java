@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.net.URI;
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(exposedHeaders = "X-Total-Count, Location")
 public abstract class AbstractVigmoController<Service extends VigmoService<DTO>, DTO> implements VigmoController<DTO> {
 
     private final Service service;
