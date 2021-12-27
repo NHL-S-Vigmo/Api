@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api("Consultation Hour Controller")
 @RestController
-@RequestMapping("consultation_hour")
+@RequestMapping("consultation_hours")
 public class ConsultationHourController extends AbstractVigmoController<ConsultationHourService, ConsultationHourDto> {
 
     public ConsultationHourController(ConsultationHourService service) {
