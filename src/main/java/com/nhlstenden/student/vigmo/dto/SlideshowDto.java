@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -20,8 +22,8 @@ public class SlideshowDto {
     @ApiModelProperty(name = "screenId", value = "Id of the screen the slideshow is assigned to")
     private Long screenId;
 
-    @NotNull
+    @NotEmpty
+    @Size(max = 50)
     @ApiModelProperty(name = "name", value = "Name of the slideshow")
-    @Max(50)
     private String name;
 }

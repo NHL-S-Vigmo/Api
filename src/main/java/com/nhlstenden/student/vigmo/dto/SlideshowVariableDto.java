@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -21,13 +23,13 @@ public class SlideshowVariableDto {
     @ApiModelProperty(name = "slideshowId", value = "Id of the slideshow")
     private Long slideshowId;
 
-    @NotNull
-    @Max(50)
+    @NotEmpty
+    @Size(max = 50)
     @ApiModelProperty(name = "name", value = "Name of the variable")
     private String name;
 
-    @NotNull
-    @Max(220)
+    @NotEmpty
+    @Size(max = 220)
     @ApiModelProperty(name = "value", value = "Value of the variable")
     private String value;
 }
