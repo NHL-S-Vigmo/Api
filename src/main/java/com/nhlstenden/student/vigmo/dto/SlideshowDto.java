@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 public class SlideshowDto {
     private Long id;
 
-    @Max(20)
     @ApiModelProperty(name = "screenId", value = "Id of the screen the slideshow is assigned to")
     private Long screenId;
 

@@ -19,7 +19,6 @@ public class SlideshowVariableDto {
     private Long id;
 
     @NotNull
-    @Max(20)
     @ApiModelProperty(name = "slideshowId", value = "Id of the slideshow")
     private Long slideshowId;
 

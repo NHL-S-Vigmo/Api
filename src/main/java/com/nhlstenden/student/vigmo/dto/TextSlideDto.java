@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 public class TextSlideDto extends SlideDto {
     @ApiModelProperty(name = "title", value = "Title of the slide")
     @NotEmpty
-    @Max(50)
     private String title;
 
     @ApiModelProperty(name = "message", value = "Text of the slide")
