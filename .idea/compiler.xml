@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="NHL-S_Vigmo" />
         <module name="NHL-S Vigmo" />
+        <module name="Api" />
       </profile>
     </annotationProcessing>
   </component>
