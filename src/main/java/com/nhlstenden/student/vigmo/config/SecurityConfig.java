@@ -79,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         enableRESTAuthentication(http)
                 .authorizeRequests()
                 .anyRequest()
-                .hasRole("USER")
+                .hasAnyRole("USER", "ADMIN", "DOCENT")
                 .and()
                 .csrf()
                 .disable();
