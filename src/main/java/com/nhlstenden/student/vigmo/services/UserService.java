@@ -10,9 +10,14 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Transactional
 public class UserService extends AbstractVigmoService<UserRepository, UserDto, User> {
     public UserService(UserRepository repo, MappingUtility mapper) {
         super(repo, mapper, UserDto.class, User.class);
+    }
+
+    public UserDto findByUsername(String username){
+        User u = repo.findByUsername(username);
+
+        return mapper.mapObject(u, dtoType);
     }
 }

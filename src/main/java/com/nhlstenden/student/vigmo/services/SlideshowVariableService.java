@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Transactional
 public class SlideshowVariableService extends AbstractVigmoService<SlideshowVariableRepository, SlideshowVariableDto, SlideshowVariable> {
     public SlideshowVariableService(SlideshowVariableRepository repo, MappingUtility mapper) {
         super(repo, mapper, SlideshowVariableDto.class, SlideshowVariable.class);

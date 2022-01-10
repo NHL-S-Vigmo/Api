@@ -7,10 +7,7 @@ import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
-@Transactional
 public class TextSlideService extends AbstractVigmoService<TextSlideRepository, TextSlideDto, TextSlide> {
     public TextSlideService(TextSlideRepository repo, MappingUtility mapper) {
         super(repo, mapper, TextSlideDto.class, TextSlide.class);

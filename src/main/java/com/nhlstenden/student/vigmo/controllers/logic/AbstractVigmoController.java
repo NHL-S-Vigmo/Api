@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin(exposedHeaders = "X-Total-Count, Location")
 public abstract class AbstractVigmoController<Service extends VigmoService<DTO>, DTO> implements VigmoController<DTO> {
 
-    private final Service service;
+    protected final Service service;
 
     public AbstractVigmoController(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") Service service) {
         this.service = service;

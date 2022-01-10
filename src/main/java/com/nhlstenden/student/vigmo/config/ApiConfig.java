@@ -5,6 +5,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -26,7 +27,7 @@ import java.util.Properties;
 
 @EnableWebMvc
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement()
 @ComponentScan("com.nhlstenden.student.vigmo")
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("com.nhlstenden.student.vigmo.repositories")
@@ -71,6 +72,7 @@ public class ApiConfig implements WebMvcConfigurer {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "none");
         properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
+        properties.setProperty("hibernate.enable_lazy_load_no_trans", "true");
         return properties;
     }
 

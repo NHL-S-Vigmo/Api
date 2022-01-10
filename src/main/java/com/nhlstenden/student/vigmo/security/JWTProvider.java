@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 
 public class JWTProvider {
     private static final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS256;
@@ -24,20 +25,47 @@ public class JWTProvider {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username) {
+    public String createToken(String username, String role, String profilePicture) {
+
+        HashMap<String, Object> claimMap = new HashMap<>();
+        claimMap.put("pfp_location", profilePicture);
+        claimMap.put("role", role);
+
         Date now = new Date();
         Date expiration = new Date(now.getTime() + validityInMilliseconds);
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
+                .addClaims(claimMap)
                 .signWith(ALGORITHM, secretKey)
                 .compact();
     }
 
+    public String createScreenToken(String screenName, String role) {
+
+        HashMap<String, Object> claimMap = new HashMap<>();
+        claimMap.put("role", role);
+
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + validityInMilliseconds);
+        return Jwts.builder()
+                .setSubject(screenName)
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .addClaims(claimMap)
+                .signWith(ALGORITHM, secretKey)
+                .compact();
+    }
+
+
+
     public Authentication getAuthentication(String tokenString) {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
+
+        //todo: split on role screen as the auth
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(user);
         return new UsernamePasswordAuthenticationToken(userDetails, "",
                 userDetails.getAuthorities());
@@ -46,9 +74,14 @@ public class JWTProvider {
     public String getRefreshToken(String tokenString) {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
+
+        //todo: maybe get these refreshed from the database.
+        String role = claims.get("role", String.class);
+        String pfp_location = claims.get("pfp_location", String.class);
+
         Date expiration = claims.getExpiration();
         if (new Date(new Date().getTime() + validityInMilliseconds / 10).after(expiration)) {
-            return createToken(user);
+            return createToken(user, role, pfp_location);
         }
         return null;
     }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Transactional
 public class LogService extends AbstractVigmoService<LogRepository, LogDto, Log> {
     public LogService(LogRepository repo, MappingUtility mapper) {
         super(repo, mapper, LogDto.class, Log.class);
