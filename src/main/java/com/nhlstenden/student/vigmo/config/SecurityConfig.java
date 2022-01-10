@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTProvider jwtProvider;
 
-    public SecurityConfig(DataSource dataSource){
+    public SecurityConfig(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
 
-        enableRESTAuthentication(http)
+        disableAuthOnSwagger(enableRESTAuthentication(http))
                 .authorizeRequests()
                 .anyRequest()
                 .hasAnyRole("USER", "ADMIN", "DOCENT")
@@ -99,5 +99,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(new JWTFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http;
+    }
+
+    private HttpSecurity disableAuthOnSwagger(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeRequests().mvcMatchers("/swagger-ui.html",
+                        "swagger-resources/**",
+                        "/webjars/springfox-swagger-ui/**",
+                        "/v2/api-docs**",
+                        "/",
+                        "index.jsp")
+                .permitAll();
+        return httpSecurity;
     }
 }
