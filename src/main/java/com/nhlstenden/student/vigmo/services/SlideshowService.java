@@ -29,16 +29,17 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
     public List<SlideshowVariableDto> getVariables(Long id){
         Slideshow slideshow = repo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
-        Hibernate.initialize(slideshow.getSlideshowVariableList());
 
         return mapper.mapList(slideshow.getSlideshowVariableList(), SlideshowVariableDto.class);
     }
 
     public List<SlideshowSlidesDto> getSlides(Long id){
-        List<SlideshowSlidesDto> returnList = new ArrayList<>();
-        Slideshow slideshow = repo.getById(id);
+        Slideshow slideshow = repo.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
+
         List<Slide> slides = slideshow.getSlideList();
 
+        List<SlideshowSlidesDto> returnList = new ArrayList<>();
         //go through each slide and add details about it.
         for(Slide slide: slides){
             SlideshowSlidesDto slideDto = new SlideshowSlidesDto();

@@ -47,7 +47,7 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "Deletes a object from the database")
+    @ApiOperation(value = "Deletes an object from the database")
     @Override
     public ResponseEntity<Void> delete(final long id) {
         service.delete(id);
