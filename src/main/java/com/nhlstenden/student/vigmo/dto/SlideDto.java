@@ -28,19 +28,19 @@ public abstract class SlideDto {
     @Positive
     private Integer duration;
 
-    @ApiModelProperty(name = "startDate", required = true, value = "When the slide is visible", example = "2022-01-21")
+    @ApiModelProperty(name = "startDate", value = "When the slide is visible", example = "2022-01-21")
     @DateTimeFormat(fallbackPatterns = {"yyyy-MM-dd"})
     private String startDate;
 
-    @ApiModelProperty(name = "endDate", required = true, value = "When the slide is visible", example = "2022-02-21")
+    @ApiModelProperty(name = "endDate", value = "When the slide is visible", example = "2022-02-21")
     @DateTimeFormat(fallbackPatterns = {"yyyy-MM-dd"})
     private String endDate;
 
-    @ApiModelProperty(name = "startTime", required = true, value = "When the slide is visible", example = "10:45")
+    @ApiModelProperty(name = "startTime", value = "When the slide is visible", example = "10:45")
     @DateTimeFormat(fallbackPatterns = {"hh:mm"})
     private String startTime;
 
-    @ApiModelProperty(name = "endTime", required = true, value = "When the slide is visible", example = "11:30")
+    @ApiModelProperty(name = "endTime", value = "When the slide is visible", example = "11:30")
     @DateTimeFormat(fallbackPatterns = {"hh:mm"})
     private String endTime;
 }
