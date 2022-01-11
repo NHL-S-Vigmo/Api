@@ -1,6 +1,8 @@
 package com.nhlstenden.student.vigmo.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +51,9 @@ public class AvailabilityControllerTest {
         String providedJsonString = "{\"userId\":1,\"weekDay\":\"THURSDAY\",\"startTime\":\"13:00\",\"endTime\":\"17:00\"}";
         String expectedJsonString = "{\"id\":12,\"userId\":1,\"weekDay\":\"THURSDAY\",\"startTime\":\"13:00\",\"endTime\":\"17:00\"}";
 
+        AvailabilityDto dto = new AvailabilityDto(null, 1L, "", "", "");
         this.mockMvc.perform(get("/availabilities/12")).andExpect(status().isNotFound());
-        this.mockMvc.perform(post("/availabilities").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isCreated());
+        this.mockMvc.perform(post("/availabilities").contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().isCreated());
         this.mockMvc.perform(get("/availabilities/12")).andExpect(status().isOk()).andExpect(content().json(expectedJsonString));
     }
 

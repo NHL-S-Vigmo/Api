@@ -1,6 +1,8 @@
 package com.nhlstenden.student.vigmo.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,12 @@ public class UserControllerTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
+    private ObjectMapper om;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.om = new ObjectMapper();
     }
 
     @Test
@@ -37,7 +41,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetOne() throws  Exception {
+    public void testGetOne() throws Exception {
         String getScreenJsonString = "{\"id\":1,\"username\":\"Thijs_Smegen\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_ADMIN\",\"pfpLocation\":\"/image_013.jpg\"}";
 
         this.mockMvc.perform(get("/users/1")).andExpect(status().isOk()).andExpect(content().json(getScreenJsonString));
@@ -70,5 +74,27 @@ public class UserControllerTest {
         this.mockMvc.perform(delete("/users/1")).andExpect(status().isNoContent());
         this.mockMvc.perform(get("/users/1")).andExpect(status().isNotFound());
         this.mockMvc.perform(delete("/users/1")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCreateExistingUsername() throws Exception {
+        UserDto user = new UserDto(null, "Thijs_Smegen", "password", true, "ROLE_DOCENT", "");
+
+        this.mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsString(user)))
+                .andExpect(status()
+                        .isConflict());
+    }
+
+    @Test
+    public void changePasswordUsingPut() throws Exception {
+        UserDto user = new UserDto(1L, "Thijs_Smegen", "password1", true, "ROLE_ADMIN", "");
+
+        this.mockMvc.perform(put("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsString(user)))
+                .andExpect(status()
+                        .isOk());
     }
 }

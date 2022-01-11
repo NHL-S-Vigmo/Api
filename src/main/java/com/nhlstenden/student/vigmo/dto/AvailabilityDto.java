@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Generated
 @Getter
@@ -16,6 +17,8 @@ public class AvailabilityDto {
     private Long id;
 
     @ApiModelProperty(name = "description", value = "The user this data belongs to\nSee [user-controller](#/user-controller) for more info")
+    @NotNull
+    @Positive
     private Long userId;
 
     @ApiModelProperty(name = "weekDay", required = true, value = "The day of availability")

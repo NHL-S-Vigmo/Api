@@ -13,8 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
@@ -79,5 +78,19 @@ public class SlideshowControllerTest {
         String nonExistentScreenJsonString = "{\"screenId\":4,\"name\":\"New Years\"}";
         this.mockMvc.perform(post("/slideshows").contentType(MediaType.APPLICATION_JSON).content(duplicateScreenJsonString)).andExpect(status().isBadRequest());
         this.mockMvc.perform(post("/slideshows").contentType(MediaType.APPLICATION_JSON).content(nonExistentScreenJsonString)).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetSlideshowVariables(){
+
+    }
+
+    @Test
+    public void testGetSlideshowSlides() throws Exception {
+        this.mockMvc.perform(get("/slideshows/1/slides"))
+                .andExpect(status().isOk())
+                .andExpectAll(
+                        jsonPath("$.length()").value(3)
+                );
     }
 }

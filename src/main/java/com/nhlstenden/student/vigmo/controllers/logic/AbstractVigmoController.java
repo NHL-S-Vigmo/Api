@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -35,14 +36,14 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
     @ApiOperation(value = "Creates a new object")
     @ApiResponses(value = {@ApiResponse(code = 400, message = "Bad request")})
     @Override
-    public ResponseEntity<Void> post(DTO postObject) {
+    public ResponseEntity<Void> post(@Valid DTO postObject) {
         return ResponseEntity.created(URI.create(String.format("/%s/%d", getPathName(), service.create(postObject)))).build();
     }
 
     @ApiOperation(value = "Updates an existing object in the database")
     @ApiResponses(value = {@ApiResponse(code = 400, message = "Bad request")})
     @Override
-    public ResponseEntity<Void> put(final long id, DTO putObject) {
+    public ResponseEntity<Void> put(final long id, @Valid DTO putObject) {
         service.update(putObject, id);
         return ResponseEntity.ok().build();
     }

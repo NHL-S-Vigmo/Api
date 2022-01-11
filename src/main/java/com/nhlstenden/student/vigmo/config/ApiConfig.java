@@ -108,6 +108,7 @@ public class ApiConfig implements WebMvcConfigurer {
         Converter<String, LocalDate> toStringDate = new AbstractConverter<String, LocalDate>() {
             @Override
             protected LocalDate convert(String source) {
+                if(source == null || source.isEmpty()) return null;
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 return LocalDate.parse(source, format);
             }
@@ -132,6 +133,7 @@ public class ApiConfig implements WebMvcConfigurer {
         Converter<String, LocalTime> toStringTime = new AbstractConverter<String, LocalTime>() {
             @Override
             protected LocalTime convert(String source) {
+                if(source == null || source.isEmpty()) return null;
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
                 return LocalTime.parse(source, format);
             }

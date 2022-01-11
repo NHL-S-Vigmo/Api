@@ -45,7 +45,6 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
             long id = isFieldSet(dto);
 
             if (id != -1) {
-                //Optional<Entity> entity = repo.findById(id);
                 throw new IdProvidedInCreateRequestException("Id provided in create request", id);
             }
         } catch (NoSuchFieldException e) {
