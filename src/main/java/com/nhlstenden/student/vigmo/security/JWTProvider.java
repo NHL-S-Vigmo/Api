@@ -18,7 +18,7 @@ public class JWTProvider {
     private static final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS256;
     private final UserDetailsService userDetailsService;
     private final String secretKey;
-    private final long validityInMilliseconds = 600000; // 10 minutes
+    private final long validityInMilliseconds = 600000000; // 7 days
 
     public JWTProvider(UserDetailsService userDetailsService, String secretKey) {
         this.userDetailsService = userDetailsService;
