@@ -14,7 +14,6 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class TextSlide extends Slide {
     @Column(name = "title", nullable = false, length = 50)

@@ -13,7 +13,6 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Slide implements EntityId {

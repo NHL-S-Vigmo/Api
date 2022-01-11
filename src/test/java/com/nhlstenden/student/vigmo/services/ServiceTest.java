@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -27,6 +28,12 @@ class ServiceTest {
     @Mock
     private MappingUtility mapper;
 
+    @Mock
+    private TestEntity testEntityMock;
+
+    @Mock
+    private TestEntityDto testEntityDtoMock;
+
     @InjectMocks
     private TestEntityService service;
 
@@ -35,14 +42,13 @@ class ServiceTest {
         openMocks(this);
 
         //mocks for the repo
-        when(repository.save(any(TestEntity.class))).thenReturn(TestEntity.builder().id(1L).build());
-        when(repository.findById(1L)).thenReturn(Optional.of(TestEntity.builder().id(1L).build()));
+        when(repository.save(any(TestEntity.class))).thenReturn(testEntityMock);
+        when(repository.findById(1L)).thenReturn(Optional.of(testEntityMock));
         when(repository.findById(2L)).thenReturn(Optional.empty());
 
-
         //mocks for the mapper
-        when(mapper.mapObject(any(TestEntity.class), eq(TestEntityDto.class))).thenReturn(TestEntityDto.builder().id(1L).build());
-        when(mapper.mapObject(any(TestEntityDto.class), eq(TestEntity.class))).thenReturn(TestEntity.builder().id(1L).build());
+        when(mapper.mapObject(any(TestEntity.class), eq(TestEntityDto.class))).thenReturn(testEntityDtoMock);
+        when(mapper.mapObject(any(TestEntityDto.class), eq(TestEntity.class))).thenReturn(testEntityMock);
     }
 
     @Test
@@ -86,10 +92,15 @@ class ServiceTest {
 
     @Test
     void testUpdateEntity() {
-        TestEntityDto testEntityDto = new TestEntityDto();
-        service.update(testEntityDto, 1L);
+        service.update(testEntityDtoMock, 1L);
 
-        assertThatThrownBy(() -> service.update(testEntityDto, 2L))
+        //verify that the find, mapper and save functions were called
+        verify(repository).findById(anyLong());
+        verify(mapper).mapObject(testEntityDtoMock, TestEntity.class);
+        verify(repository).save(testEntityMock);
+
+        //assert that when you update a non-existing item, it throws a data not found exception.
+        assertThatThrownBy(() -> service.update(testEntityDtoMock, 2L))
                 .isInstanceOf(DataNotFoundException.class);
     }
 
@@ -97,6 +108,11 @@ class ServiceTest {
     void testDeleteEntity() {
         service.delete(1L);
 
+        //verify that the delete method and the find method were called on the repository
+        verify(repository).findById(anyLong());
+        verify(repository).deleteById(anyLong());
+
+        //assert that when you delete a non-existing item, it throws a data not found exception.
         assertThatThrownBy(() -> service.delete(2L))
                 .isInstanceOf(DataNotFoundException.class);
     }

@@ -65,7 +65,6 @@ public class JWTProvider {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
 
-        //todo: split on role screen as the auth
         String role = claims.get("role", String.class);
         if(role.equals("ROLE_SCREEN")){
             return new ScreenAuthenticationToken(AuthorityUtils.createAuthorityList("ROLE_SCREEN"));

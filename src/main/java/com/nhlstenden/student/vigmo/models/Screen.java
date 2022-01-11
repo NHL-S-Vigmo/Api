@@ -8,10 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Screen implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

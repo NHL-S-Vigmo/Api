@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 @Generated
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class TextSlideDto extends SlideDto {
     @ApiModelProperty(name = "title", value = "Title of the slide")
