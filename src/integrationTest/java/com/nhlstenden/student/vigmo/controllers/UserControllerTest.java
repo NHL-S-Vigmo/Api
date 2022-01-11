@@ -31,14 +31,14 @@ public class UserControllerTest {
 
     @Test
     public void testGetAll() throws Exception {
-        String getScreensJsonString = "[{\"id\":1,\"username\":\"Thijs_Smegen\",\"password\":\"$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.\",\"enabled\":true,\"role\":\"ROLE_ADMIN\",\"pfpLocation\":\"/image_013.jpg\"},{\"id\":2,\"username\":\"Jan_Doornbos\",\"password\":\"$2y$10$qWUcTd1T1VG1M0Pmq839P.ziwvlJ0lBDEilcNEC7/TJluqEvuRLqW\",\"enabled\":false,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_014.png\"},{\"id\":3,\"username\":\"Niels_Doorn\",\"password\":\"$2y$10$sYG5WmMbT.u6TwDr/4cUb.OSVHpX8gRLK4BDNjzEpHHgt4kE6d.7O\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_015.gif\"},{\"id\":4,\"username\":\"Rene_Laan\",\"password\":\"$2y$10$l39MwIfSwvsHR4GTt2jm6enawKZzUkmS58l.yMn8hsM.CzvWcZtkq\",\"enabled\":false,\"role\":\"ROLE_ADMIN\",\"pfpLocation\":\"/image_016.png\"},{\"id\":5,\"username\":\"Martijn_Pomp\",\"password\":\"$2y$10$1N6lUFZ34frCZBw/MNM9s.i6DdzsdEM1llfjdbeLUP/akMVIO3tlC\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_017.png\"}]";
+        String getScreensJsonString = "[{\"id\":1,\"username\":\"Thijs_Smegen\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_ADMIN\",\"pfpLocation\":\"/image_013.jpg\"},{\"id\":2,\"username\":\"Jan_Doornbos\",\"password\":\"\",\"enabled\":false,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_014.png\"},{\"id\":3,\"username\":\"Niels_Doorn\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_015.gif\"},{\"id\":4,\"username\":\"Rene_Laan\",\"password\":\"\",\"enabled\":false,\"role\":\"ROLE_ADMIN\",\"pfpLocation\":\"/image_016.png\"},{\"id\":5,\"username\":\"Martijn_Pomp\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_017.png\"}]";
 
         this.mockMvc.perform(get("/users")).andExpect(status().isOk()).andExpect(content().json(getScreensJsonString));
     }
 
     @Test
     public void testGetOne() throws  Exception {
-        String getScreenJsonString = "{\"id\":1,\"username\":\"Thijs_Smegen\",\"password\":\"$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.\",\"enabled\":true,\"role\":\"ROLE_ADMIN\",\"pfpLocation\":\"/image_013.jpg\"}";
+        String getScreenJsonString = "{\"id\":1,\"username\":\"Thijs_Smegen\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_ADMIN\",\"pfpLocation\":\"/image_013.jpg\"}";
 
         this.mockMvc.perform(get("/users/1")).andExpect(status().isOk()).andExpect(content().json(getScreenJsonString));
         this.mockMvc.perform(get("/users/6")).andExpect(status().isNotFound());
@@ -46,8 +46,8 @@ public class UserControllerTest {
 
     @Test
     public void testPost() throws Exception {
-        String providedJsonString = "{\"username\":\"Rob_Smit\",\"password\":\"$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
-        String expectedJsonString = "{\"id\":6,\"username\":\"Rob_Smit\",\"password\":\"$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
+        String providedJsonString = "{\"username\":\"Rob_Smit\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
+        String expectedJsonString = "{\"id\":6,\"username\":\"Rob_Smit\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
         this.mockMvc.perform(get("/users/6")).andExpect(status().isNotFound());
         this.mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isCreated());
         this.mockMvc.perform(get("/users/6")).andExpect(status().isOk()).andExpect(content().json(expectedJsonString));
@@ -55,8 +55,8 @@ public class UserControllerTest {
 
     @Test
     public void testPut() throws Exception {
-        String providedJsonString = "{\"username\":\"Rob_Smit\",\"password\":\"$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
-        String expectedJsonString = "{\"id\":1,\"username\":\"Rob_Smit\",\"password\":\"$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
+        String providedJsonString = "{\"username\":\"Rob_Smit\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
+        String expectedJsonString = "{\"id\":1,\"username\":\"Rob_Smit\",\"password\":\"\",\"enabled\":true,\"role\":\"ROLE_TEACHER\",\"pfpLocation\":\"/image_018.jpg\"}";
 
         this.mockMvc.perform(put("/users/1").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isOk());
         this.mockMvc.perform(get("/users/1")).andExpect(status().isOk()).andExpect(content().json(expectedJsonString));
