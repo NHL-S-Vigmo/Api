@@ -20,7 +20,6 @@ public class UserDto {
     @Size(max = 50) @NotEmpty
     private String username;
 
-    @BcryptValidator
     private String password;
 
     @NotNull
