@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,8 +31,13 @@ public class Slideshow implements EntityId {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "slideshow", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "slideshow", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Slide> slideList = new ArrayList<>(0);
+
+    @OneToMany(mappedBy = "slideshow", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<SlideshowVariable> slideshowVariableList = new ArrayList<>(0);
 
     @Override
     public long getId(){

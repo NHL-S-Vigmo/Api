@@ -5,15 +5,12 @@ import com.nhlstenden.student.vigmo.models.EntityId;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
-
 public abstract class AbstractVigmoService<Repository extends JpaRepository<Entity, Long>, DTO, Entity extends EntityId> implements VigmoService<DTO> {
 
-    private final Repository repo;
-    private final MappingUtility mapper;
-    private final Class<DTO> dtoType;
+    protected final Repository repo;
+    protected final MappingUtility mapper;
+    protected final Class<DTO> dtoType;
     private final Class<Entity> entityType;
 
     public AbstractVigmoService(Repository repo, MappingUtility mapper, Class<DTO> dto, Class<Entity> entity) {

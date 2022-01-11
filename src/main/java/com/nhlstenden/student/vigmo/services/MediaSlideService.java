@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Transactional
 public class MediaSlideService extends AbstractVigmoService<MediaSlideRepository, MediaSlideDto, MediaSlide> {
     public MediaSlideService(MediaSlideRepository repo, MappingUtility mapper) {
         super(repo, mapper, MediaSlideDto.class, MediaSlide.class);

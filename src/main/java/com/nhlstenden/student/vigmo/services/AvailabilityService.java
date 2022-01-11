@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Transactional
 public class AvailabilityService extends AbstractVigmoService<AvailabilityRepository, AvailabilityDto, Availability> {
     public AvailabilityService(AvailabilityRepository repo, MappingUtility mapper) {
         super(repo, mapper, AvailabilityDto.class, Availability.class);

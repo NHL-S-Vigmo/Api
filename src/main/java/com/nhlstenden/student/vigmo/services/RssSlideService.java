@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-@Transactional
 public class RssSlideService extends AbstractVigmoService<RssSlideRepository, RssSlideDto, RssSlide> {
     public RssSlideService(RssSlideRepository repo, MappingUtility mapper) {
         super(repo, mapper, RssSlideDto.class, RssSlide.class);
