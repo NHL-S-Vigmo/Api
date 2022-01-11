@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -33,7 +31,7 @@ class ServiceTest {
     private TestEntityService service;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         openMocks(this);
 
         //mocks for the repo
@@ -45,8 +43,6 @@ class ServiceTest {
         //mocks for the mapper
         when(mapper.mapObject(any(TestEntity.class), eq(TestEntityDto.class))).thenReturn(TestEntityDto.builder().id(1L).build());
         when(mapper.mapObject(any(TestEntityDto.class), eq(TestEntity.class))).thenReturn(TestEntity.builder().id(1L).build());
-
-
     }
 
     @Test
@@ -56,39 +52,52 @@ class ServiceTest {
         when(mapper.mapList(anyList(), eq(TestEntityDto.class))).thenReturn(testEntityDtoList);
 
         List<TestEntityDto> entities = service.getList();
-        assertFalse(entities.isEmpty());
+
+        assertThat(entities.isEmpty())
+                .isFalse();
     }
 
     @Test
-    void testGetEntitiesWhenEmpty(){
+    void testGetEntitiesWhenEmpty() {
         List<TestEntityDto> entities = service.getList();
-        assertTrue(entities.isEmpty());
+
+        assertThat(entities.isEmpty())
+                .isTrue();
     }
 
     @Test
     void testGetEntity() {
         TestEntityDto entity = service.get(1L);
-        assertThat(entity).isNotNull();
-        assertThrows(DataNotFoundException.class, ()->service.get(2L));
+
+        assertThat(entity)
+                .isNotNull();
+        assertThatThrownBy(() -> service.get(2L))
+                .isInstanceOf(DataNotFoundException.class);
     }
 
     @Test
     void testCreateEntity() {
         TestEntityDto testEntityDto = new TestEntityDto();
         Long id = service.create(testEntityDto);
-        assertThat(id).isNotNull();
+
+        assertThat(id)
+                .isNotNull();
     }
 
     @Test
     void testUpdateEntity() {
         TestEntityDto testEntityDto = new TestEntityDto();
         service.update(testEntityDto, 1L);
-        assertThrows(DataNotFoundException.class, ()->service.update(testEntityDto, 2L));
+
+        assertThatThrownBy(() -> service.update(testEntityDto, 2L))
+                .isInstanceOf(DataNotFoundException.class);
     }
 
     @Test
     void testDeleteEntity() {
         service.delete(1L);
-        assertThrows(DataNotFoundException.class, ()->service.delete(2L));
+
+        assertThatThrownBy(() -> service.delete(2L))
+                .isInstanceOf(DataNotFoundException.class);
     }
 }
