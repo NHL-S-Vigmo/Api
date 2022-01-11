@@ -2,7 +2,9 @@ package com.nhlstenden.student.vigmo.controllers.advice;
 
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.exception.GenericTypeTransformerException;
+import com.nhlstenden.student.vigmo.exception.IdProvidedInCreateRequestException;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,12 @@ public class ExceptionHandlers {
         return new ErrorResponse("Reading data failed: " + exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IdProvidedInCreateRequestException.class)
+    public ErrorResponse handleIdProvidedInCreateRequestException(IdProvidedInCreateRequestException exception, HttpServletRequest request) {
+        return new ErrorResponse(String.format("'%s' To modify the object with id '%d' perform a PUT request.", exception.getMessage(), exception.getId()));
+    }
+
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ErrorResponse handleHttpMediaTypeNotAcceptableException() {
@@ -38,6 +46,8 @@ public class ExceptionHandlers {
     public ErrorResponse handleGenericTypeTransformerException(GenericTypeTransformerException exception) {
         return new ErrorResponse("Transforming of generic class went wrong: " + exception.getMessage());
     }
+
+    @Generated
     @AllArgsConstructor
     @Getter
     @Setter

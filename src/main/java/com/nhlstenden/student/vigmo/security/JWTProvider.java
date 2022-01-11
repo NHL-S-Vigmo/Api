@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
@@ -18,7 +19,7 @@ public class JWTProvider {
     private static final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS256;
     private final UserDetailsService userDetailsService;
     private final String secretKey;
-    private final long validityInMilliseconds = 600000; // 10 minutes
+    private final long validityInMilliseconds = 600000000; // 7 days
 
     public JWTProvider(UserDetailsService userDetailsService, String secretKey) {
         this.userDetailsService = userDetailsService;
@@ -64,11 +65,15 @@ public class JWTProvider {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
 
-        //todo: split on role screen as the auth
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user);
-        return new UsernamePasswordAuthenticationToken(userDetails, "",
-                userDetails.getAuthorities());
+        String role = claims.get("role", String.class);
+        if(role.equals("ROLE_SCREEN")){
+            return new ScreenAuthenticationToken(AuthorityUtils.createAuthorityList("ROLE_SCREEN"));
+        }
+        else{
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user);
+            return new UsernamePasswordAuthenticationToken(userDetails, "",
+                    userDetails.getAuthorities());
+        }
     }
 
     public String getRefreshToken(String tokenString) {

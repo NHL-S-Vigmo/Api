@@ -1,12 +1,10 @@
 package com.nhlstenden.student.vigmo.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Generated
 @Table(name = "users")
 @Entity
 @Getter

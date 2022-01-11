@@ -3,6 +3,9 @@ package com.nhlstenden.student.vigmo;
 import com.nhlstenden.student.vigmo.config.ApiConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.annotation.Generated;
+
+@Generated("org.springframework")
 public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
