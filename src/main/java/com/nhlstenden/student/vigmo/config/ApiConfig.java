@@ -1,5 +1,6 @@
 package com.nhlstenden.student.vigmo.config;
 
+import jakarta.persistence.EntityManagerFactory;
 import org.modelmapper.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
@@ -17,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -77,9 +78,9 @@ public class ApiConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(emf);
+    public PlatformTransactionManager transactionManager(Environment env) {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setDataSource(datasource(env));
         return transactionManager;
     }
 

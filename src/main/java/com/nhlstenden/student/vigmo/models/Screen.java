@@ -2,7 +2,7 @@ package com.nhlstenden.student.vigmo.models;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Table(name = "screens")
 @Entity

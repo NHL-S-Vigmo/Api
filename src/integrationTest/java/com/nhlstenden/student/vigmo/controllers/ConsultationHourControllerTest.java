@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -25,7 +25,7 @@ public class ConsultationHourControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -37,7 +37,7 @@ public class ConsultationHourControllerTest {
     }
 
     @Test
-    public void testGetOne() throws  Exception {
+    public void testGetOne() throws Exception {
         String getConsultationHourJsonString = "{\"id\":1,\"weekDay\":\"MONDAY\",\"startTime\":\"12:15\",\"endTime\":\"13:00\"}";
 
         this.mockMvc.perform(get("/consultation_hours/1")).andExpect(status().isOk()).andExpect(content().json(getConsultationHourJsonString));

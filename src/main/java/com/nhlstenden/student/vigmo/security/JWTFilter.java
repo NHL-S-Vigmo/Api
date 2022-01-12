@@ -19,8 +19,7 @@ public class JWTFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(jakarta.servlet.ServletRequest request, jakarta.servlet.ServletResponse response, jakarta.servlet.FilterChain chain) throws IOException, jakarta.servlet.ServletException {
         // Get the token from the request
         String token = jwtProvider.getToken((HttpServletRequest) request);
         try {

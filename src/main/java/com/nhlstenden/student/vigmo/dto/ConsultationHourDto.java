@@ -2,12 +2,11 @@ package com.nhlstenden.student.vigmo.dto;
 
 import com.nhlstenden.student.vigmo.validators.WeekdayValidator;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Generated
 @Getter

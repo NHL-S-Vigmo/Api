@@ -1,9 +1,10 @@
 package com.nhlstenden.student.vigmo.validators;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-import javax.validation.ReportAsSingleViolation;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+import jakarta.validation.ReportAsSingleViolation;
+import jakarta.validation.constraints.NotNull;
+
 import java.lang.annotation.*;
 
 @Documented

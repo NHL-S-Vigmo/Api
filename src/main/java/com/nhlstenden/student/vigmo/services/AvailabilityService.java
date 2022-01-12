@@ -7,8 +7,6 @@ import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
 public class AvailabilityService extends AbstractVigmoService<AvailabilityRepository, AvailabilityDto, Availability> {
     public AvailabilityService(AvailabilityRepository repo, MappingUtility mapper, LogService logService) {

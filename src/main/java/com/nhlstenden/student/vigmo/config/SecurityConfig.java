@@ -1,9 +1,8 @@
 package com.nhlstenden.student.vigmo.config;
 
-import com.nhlstenden.student.vigmo.security.JWTFilter;
-import com.nhlstenden.student.vigmo.security.JWTProvider;
-import com.nhlstenden.student.vigmo.security.UnauthenticatedHandler;
-import com.nhlstenden.student.vigmo.security.UserAccessDeniedHandler;
+import com.nhlstenden.student.vigmo.security.*;
+
+import javax.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -96,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedHandler(new UserAccessDeniedHandler())
                 .authenticationEntryPoint(new UnauthenticatedHandler());
-        http.addFilterBefore(new JWTFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore((Filter) new JWTFilter(jwtProvider), AbstractAuthenticationProcessingFilterJavaX.class);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http;
     }

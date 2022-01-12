@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Table(name = "slideshow_variables")
 @Entity
