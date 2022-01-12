@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class RssSlideService extends AbstractVigmoService<RssSlideRepository, RssSlideDto, RssSlide> {
-    public RssSlideService(RssSlideRepository repo, MappingUtility mapper) {
-        super(repo, mapper, RssSlideDto.class, RssSlide.class);
+    public RssSlideService(RssSlideRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, RssSlideDto.class, RssSlide.class, logService);
     }
 }

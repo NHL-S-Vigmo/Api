@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class AvailabilityService extends AbstractVigmoService<AvailabilityRepository, AvailabilityDto, Availability> {
-    public AvailabilityService(AvailabilityRepository repo, MappingUtility mapper) {
-        super(repo, mapper, AvailabilityDto.class, Availability.class);
+    public AvailabilityService(AvailabilityRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, AvailabilityDto.class, Availability.class, logService);
     }
 }

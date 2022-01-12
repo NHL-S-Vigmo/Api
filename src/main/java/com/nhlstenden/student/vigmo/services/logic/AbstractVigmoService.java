@@ -1,11 +1,16 @@
 package com.nhlstenden.student.vigmo.services.logic;
 
+import com.nhlstenden.student.vigmo.dto.LogDto;
 import com.nhlstenden.student.vigmo.exception.IdProvidedInCreateRequestException;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.EntityId;
+import com.nhlstenden.student.vigmo.models.User;
+import com.nhlstenden.student.vigmo.services.LogService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.Instant;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,12 +24,20 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     protected final MappingUtility mapper;
     protected final Class<DTO> dtoType;
     private final Class<Entity> entityType;
+    private final LogService logService;
+    private final String ACTION_CREATE;
+    private final String ACTION_UPDATE;
+    private final String ACTION_DELETE;
 
-    public AbstractVigmoService(Repository repo, MappingUtility mapper, Class<DTO> dto, Class<Entity> entity) {
+    public AbstractVigmoService(Repository repo, MappingUtility mapper, Class<DTO> dto, Class<Entity> entity, LogService logService) {
         this.repo = repo;
         this.mapper = mapper;
         this.dtoType = dto;
         this.entityType = entity;
+        this.logService = logService;
+        this.ACTION_CREATE = "Create " + entityType.getSimpleName();
+        this.ACTION_UPDATE = "Update " + entityType.getSimpleName();
+        this.ACTION_DELETE = "Delete " + entityType.getSimpleName();
     }
 
     @Override
@@ -66,6 +79,28 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     public void delete(long id) {
         repo.findById(id).orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
         repo.deleteById(id);
+    }
+
+    @Override
+    public long create(DTO dto, long userId, String username) {
+        long id = create(dto);
+        LogDto logDto = new LogDto(userId, username, ACTION_CREATE,"", Instant.now());
+        logService.create(logDto);
+        return id;
+    }
+
+    @Override
+    public void update(DTO dto, long id, long userId, String username) {
+        update(dto, id);
+        LogDto logDto = new LogDto(userId, username ,ACTION_UPDATE,"", Instant.now());
+        logService.create(logDto);
+    }
+
+    @Override
+    public void delete(long id, long userId, String username) {
+        delete(id);
+        LogDto logDto = new LogDto(userId, username, ACTION_DELETE, "", Instant.now());
+        logService.create(logDto);
     }
 
     /**

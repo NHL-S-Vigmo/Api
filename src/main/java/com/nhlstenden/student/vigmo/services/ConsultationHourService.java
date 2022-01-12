@@ -12,8 +12,8 @@ import javax.transaction.Transactional;
 @Service
 public class ConsultationHourService extends AbstractVigmoService<ConsultationHourRepository, ConsultationHourDto, ConsultationHour> {
 
-    public ConsultationHourService(ConsultationHourRepository repo, MappingUtility mapper) {
-        super(repo, mapper, ConsultationHourDto.class, ConsultationHour.class);
+    public ConsultationHourService(ConsultationHourRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, ConsultationHourDto.class, ConsultationHour.class, logService);
     }
 
 }
