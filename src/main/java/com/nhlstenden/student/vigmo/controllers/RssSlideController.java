@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("rss_slides")
 public class RssSlideController extends AbstractVigmoController<RssSlideService, RssSlideDto> {
-    public RssSlideController(RssSlideService service, JWTProvider jwtProvider, UserService userService) {
-        super(service, jwtProvider, userService);
+    public RssSlideController(RssSlideService service, UserService userService) {
+        super(service, userService);
     }
 }

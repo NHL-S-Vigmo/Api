@@ -23,8 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("slideshows")
 public class SlideshowController extends AbstractVigmoController<SlideshowService, SlideshowDto> {
-    public SlideshowController(SlideshowService service, JWTProvider jwtProvider, UserService userService) {
-        super(service, jwtProvider, userService);
+    public SlideshowController(SlideshowService service, UserService userService) {
+        super(service, userService);
     }
 
     @ApiOperation(value = "Gets the related variables for the requested slideshow")

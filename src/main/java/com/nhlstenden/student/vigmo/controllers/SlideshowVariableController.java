@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("slideshow_variables")
 public class SlideshowVariableController extends AbstractVigmoController<SlideshowVariableService, SlideshowVariableDto> {
-    public SlideshowVariableController(SlideshowVariableService service, JWTProvider jwtProvider, UserService userService) {
-        super(service, jwtProvider, userService);
+    public SlideshowVariableController(SlideshowVariableService service, UserService userService) {
+        super(service, userService);
     }
 }

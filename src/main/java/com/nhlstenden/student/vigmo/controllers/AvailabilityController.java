@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("availabilities")
 public class AvailabilityController extends AbstractVigmoController<AvailabilityService, AvailabilityDto> {
-    public AvailabilityController(AvailabilityService service, JWTProvider jwtProvider, UserService userService) {
-        super(service, jwtProvider, userService);
+    public AvailabilityController(AvailabilityService service, UserService userService) {
+        super(service, userService);
     }
 }
