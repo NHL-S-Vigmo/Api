@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class MediaSlideService extends AbstractVigmoService<MediaSlideRepository, MediaSlideDto, MediaSlide> {
-    public MediaSlideService(MediaSlideRepository repo, MappingUtility mapper) {
-        super(repo, mapper, MediaSlideDto.class, MediaSlide.class);
+    public MediaSlideService(MediaSlideRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, MediaSlideDto.class, MediaSlide.class, logService);
     }
 }

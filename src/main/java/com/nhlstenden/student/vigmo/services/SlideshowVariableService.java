@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class SlideshowVariableService extends AbstractVigmoService<SlideshowVariableRepository, SlideshowVariableDto, SlideshowVariable> {
-    public SlideshowVariableService(SlideshowVariableRepository repo, MappingUtility mapper) {
-        super(repo, mapper, SlideshowVariableDto.class, SlideshowVariable.class);
+    public SlideshowVariableService(SlideshowVariableRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, SlideshowVariableDto.class, SlideshowVariable.class, logService);
     }
 }

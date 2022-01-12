@@ -22,8 +22,8 @@ import java.util.Locale;
 
 @Service
 public class SlideshowService extends AbstractVigmoService<SlideshowRepository, SlideshowDto, Slideshow> {
-    public SlideshowService(SlideshowRepository repo, MappingUtility mapper) {
-        super(repo, mapper, SlideshowDto.class, Slideshow.class);
+    public SlideshowService(SlideshowRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, SlideshowDto.class, Slideshow.class, logService);
     }
 
     public List<SlideshowVariableDto> getVariables(Long id){

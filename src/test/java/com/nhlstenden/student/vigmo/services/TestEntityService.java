@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TestEntityService  extends AbstractVigmoService<TestEntityRepository, TestEntityDto, TestEntity> {
-    public TestEntityService(TestEntityRepository repo, MappingUtility mapper) {
-        super(repo, mapper, TestEntityDto.class, TestEntity.class);
+    public TestEntityService(TestEntityRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, TestEntityDto.class, TestEntity.class, logService);
     }
 }

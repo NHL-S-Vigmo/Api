@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class ScreenService extends AbstractVigmoService<ScreenRepository, ScreenDto, Screen> {
-    public ScreenService(ScreenRepository repo, MappingUtility mapper) {
-        super(repo, mapper, ScreenDto.class, Screen.class);
+    public ScreenService(ScreenRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, ScreenDto.class, Screen.class, logService);
     }
 }

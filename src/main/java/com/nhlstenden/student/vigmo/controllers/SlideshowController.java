@@ -2,9 +2,11 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.SlideshowDto;
+import com.nhlstenden.student.vigmo.security.JWTProvider;
 import com.nhlstenden.student.vigmo.dto.SlideshowSlidesDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.services.SlideshowService;
+import com.nhlstenden.student.vigmo.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -21,8 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("slideshows")
 public class SlideshowController extends AbstractVigmoController<SlideshowService, SlideshowDto> {
-    public SlideshowController(SlideshowService service) {
-        super(service);
+    public SlideshowController(SlideshowService service, JWTProvider jwtProvider, UserService userService) {
+        super(service, jwtProvider, userService);
     }
 
     @ApiOperation(value = "Gets the related variables for the requested slideshow")

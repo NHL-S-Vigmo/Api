@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TextSlideService extends AbstractVigmoService<TextSlideRepository, TextSlideDto, TextSlide> {
-    public TextSlideService(TextSlideRepository repo, MappingUtility mapper) {
-        super(repo, mapper, TextSlideDto.class, TextSlide.class);
+    public TextSlideService(TextSlideRepository repo, MappingUtility mapper, LogService logService) {
+        super(repo, mapper, TextSlideDto.class, TextSlide.class, logService);
     }
 }

@@ -17,10 +17,11 @@ import java.util.Optional;
 
 @Service
 public class UserService extends AbstractVigmoService<UserRepository, UserDto, User> {
+
     private final PasswordEncoder encoder;
 
-    public UserService(UserRepository repo, MappingUtility mapper, PasswordEncoder encoder) {
-        super(repo, mapper, UserDto.class, User.class);
+    public UserService(UserRepository repo, MappingUtility mapper, PasswordEncoder encoder, LogService logService) {
+        super(repo, mapper, UserDto.class, User.class, logService);
         this.encoder = encoder;
     }
 
