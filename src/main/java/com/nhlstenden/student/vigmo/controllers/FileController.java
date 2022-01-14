@@ -9,10 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +33,7 @@ public class FileController extends AbstractVigmoController<FileService, FileDto
 
         File media = service.getRawEntityByKey(file_key);
         headers.setContentType(MediaType.parseMediaType(media.getMimeType()));
-        headers.setContentDispositionFormData("attachment", media.getName());
+        headers.setContentDisposition(ContentDisposition.inline().filename(media.getName()).build());
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(media.getData());
