@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +30,17 @@ public class UserService extends AbstractVigmoService<UserRepository, UserDto, U
                 .orElseThrow(() -> new DataNotFoundException("Could not find user " + username));
 
         return mapper.mapObject(u, dtoType);
+    }
+
+    @Override
+    public List<UserDto> getList() {
+        List<UserDto> returnList = super.getList();
+
+        for(UserDto user: returnList){
+            user.setPassword("");
+        }
+
+        return returnList;
     }
 
     @Override

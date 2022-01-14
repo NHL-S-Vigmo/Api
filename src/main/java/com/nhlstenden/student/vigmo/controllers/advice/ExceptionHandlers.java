@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -37,6 +39,18 @@ public class ExceptionHandlers {
         return new ErrorResponse(String.format("Duplicate resource: %s", exception.getMessage()));
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ErrorResponse handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+        return new ErrorResponse(String.format("Invalid credentials: %s", exception.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(DisabledException.class)
+    public ErrorResponse handleDisabledException(DisabledException exception, HttpServletRequest request) {
+        return new ErrorResponse(String.format("%s", exception.getMessage()));
+    }
+
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ErrorResponse handleHttpMediaTypeNotAcceptableException() {
@@ -58,7 +72,6 @@ public class ExceptionHandlers {
     @Generated
     @AllArgsConstructor
     @Getter
-    @Setter
     public static class ErrorResponse {
         private String error;
     }

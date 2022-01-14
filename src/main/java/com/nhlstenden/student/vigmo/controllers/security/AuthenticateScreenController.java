@@ -5,6 +5,9 @@ import com.nhlstenden.student.vigmo.security.JWTProvider;
 import com.nhlstenden.student.vigmo.security.models.LoginDto;
 import com.nhlstenden.student.vigmo.services.ScreenService;
 import com.nhlstenden.student.vigmo.services.UserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,10 +28,17 @@ public class AuthenticateScreenController {
         this.screenService = screenService;
     }
 
+    @ApiOperation(value = "Endpoint used for signing in as a screen")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Signed in, jwt is in header"),
+            @ApiResponse(code = 401, message = "Invalid credentials"),
+            @ApiResponse(code = 403, message = "Account is disabled")
+    })
     @GetMapping("/{authToken}")
     public ResponseEntity<Void> login(@PathVariable("authToken") String authToken) {
         //Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 
+        //fixme: problem, this is always screen 1. this is bad.!
         ScreenDto screen = screenService.get(1L);
 
         if(screen == null) //throw bad credentials exception
