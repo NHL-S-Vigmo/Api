@@ -2,11 +2,14 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
+import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.dto.ScreenDto;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -14,7 +17,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -28,10 +33,7 @@ public class ScreenControllerTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-    private ScreenDto providerData103;
-    private ScreenDto providerData105;
-    private ScreenDto providerData109;
-    private ScreenDto providerData110;
+    private HashMap<Integer, ScreenDto> testDataMap;
     private ObjectMapper om;
 
     @BeforeEach
@@ -41,37 +43,34 @@ public class ScreenControllerTest {
                 .build();
 
         om = new ObjectMapper();
+        testDataMap = new HashMap<>();
 
         //data objects currently in DB
-        providerData103 = new ScreenDto(1L, "Screen_103", "Upstairs south wall", "DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI");
-        providerData105 = new ScreenDto(2L, "Screen_105", "Marketing department", "YLXvpg8uweU67ezdphj6XDuVCwY2g5v6");
-        providerData109 = new ScreenDto(3L, "Screen_109", "Cafeteria", "4XFZbFUeHU50Gk2LIn96ZNpn2CYP3KrG");
-        providerData110 = new ScreenDto(4L, "Screen_110", "Upstairs north wall", "iGlGqaKCPNmd2PmAUlzrRkFPIwpLfxva");
+         testDataMap.put(1, new ScreenDto(1L, "Screen_103", "Upstairs south wall", "DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI"));
+         testDataMap.put(2, new ScreenDto(2L, "Screen_105", "Marketing department", "YLXvpg8uweU67ezdphj6XDuVCwY2g5v6"));
+         testDataMap.put(3, new ScreenDto(3L, "Screen_109", "Cafeteria", "4XFZbFUeHU50Gk2LIn96ZNpn2CYP3KrG"));
     }
 
     @Test
-    @WithMockUser(username = "bacon", authorities = "ROLE_DOCENT")
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetAll() throws Exception {
-        List<ScreenDto> screens = new ArrayList<>();
-        screens.add(providerData103);
-        screens.add(providerData105);
-        screens.add(providerData109);
 
+        List<ScreenDto> testDataList = new ArrayList<>(testDataMap.values());
         this.mockMvc.perform(get("/screens"))
                 .andExpect(status()
                         .isOk())
                 .andExpect(content()
-                        .json(om.writeValueAsString(screens)));
+                        .json(om.writeValueAsString(testDataList)));
     }
 
     @Test
-    @WithMockUser(username = "bacon", authorities = "ROLE_DOCENT")
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws Exception {
         this.mockMvc.perform(get("/screens/1"))
                 .andExpect(status()
                         .isOk())
                 .andExpect(content()
-                        .json(om.writeValueAsString(providerData103)));
+                        .json(om.writeValueAsString(testDataMap.get(1))));
 
         this.mockMvc.perform(get("/screens/4"))
                 .andExpect(status()
@@ -79,38 +78,37 @@ public class ScreenControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "bacon", authorities = "ROLE_DOCENT")
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
+        ScreenDto providedDto = new ScreenDto(null, "Screen_110", "Upstairs north wall", "iGlGqaKCPNmd2PmAUlzrRkFPIwpLfxva");
+        ScreenDto expectedDto = new ScreenDto(4L, "Screen_110", "Upstairs north wall", "iGlGqaKCPNmd2PmAUlzrRkFPIwpLfxva");
+
         this.mockMvc.perform(get("/screens/4"))
                 .andExpect(status()
                         .isNotFound());
 
-        //set the object id to null
-        Long id = providerData110.getId();
-        providerData110.setId(null);
-
         this.mockMvc.perform(post("/screens")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(om.writeValueAsString(providerData110)))
+                        .content(om.writeValueAsString(providedDto)))
                 .andExpect(status()
                         .isCreated());
-
-        //set the object id back to what was expected
-        providerData110.setId(id);
 
         this.mockMvc.perform(get("/screens/4"))
                 .andExpect(status()
                         .isOk())
                 .andExpect(content()
-                        .json(om.writeValueAsString(providerData110)));
+                        .json(om.writeValueAsString(expectedDto)));
     }
 
     @Test
-    @WithMockUser(username = "bacon", authorities = "ROLE_DOCENT")
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPut() throws Exception {
+        ScreenDto providedDto = new ScreenDto(null, "Screen_110", "Upstairs north wall", "iGlGqaKCPNmd2PmAUlzrRkFPIwpLfxva");
+        ScreenDto expectedDto = new ScreenDto(1L, "Screen_110", "Upstairs north wall", "iGlGqaKCPNmd2PmAUlzrRkFPIwpLfxva");
+
         this.mockMvc.perform(put("/screens/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(om.writeValueAsString(providerData103)))
+                        .content(om.writeValueAsString(providedDto)))
                 .andExpect(status()
                         .isOk());
 
@@ -118,17 +116,17 @@ public class ScreenControllerTest {
                 .andExpect(status()
                         .isOk())
                 .andExpect(content()
-                        .json(om.writeValueAsString(providerData103)));
+                        .json(om.writeValueAsString(expectedDto)));
 
         this.mockMvc.perform(put("/screens/4")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(om.writeValueAsString(providerData110)))
+                        .content(om.writeValueAsString(providedDto)))
                 .andExpect(status()
                         .isNotFound());
     }
 
     @Test
-    @WithMockUser(username = "bacon", authorities = "ROLE_DOCENT")
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
         this.mockMvc.perform(get("/screens/1"))
                 .andExpect(status().isOk());

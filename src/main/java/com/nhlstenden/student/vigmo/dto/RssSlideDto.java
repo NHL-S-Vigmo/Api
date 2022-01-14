@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Generated
@@ -12,6 +14,21 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RssSlideDto extends SlideDto {
+    public RssSlideDto(Long id, String url, String titleTag,
+                       String descriptionTag, String authorTag, String categoryTag,
+                       String imageTag, @NotNull Boolean isActive,
+                       @NotNull @Positive Integer duration,
+                       String startDate, String endDate, String startTime,
+                       String endTime, @Positive @NotNull Long slideshowId) {
+        super(id, slideshowId, isActive, duration, startDate, endDate, startTime, endTime);
+        this.url = url;
+        this.titleTag = titleTag;
+        this.descriptionTag = descriptionTag;
+        this.authorTag = authorTag;
+        this.categoryTag = categoryTag;
+        this.imageTag = imageTag;
+    }
+
     @ApiModelProperty(name = "url", value = "Url of the RSS")
     @Size(max = 220)
     @NotEmpty

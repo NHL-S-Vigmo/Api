@@ -3,10 +3,7 @@ package com.nhlstenden.student.vigmo.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Generated
 @Getter
@@ -14,6 +11,18 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MediaSlideDto extends SlideDto {
+    public MediaSlideDto(Long id, Boolean audioEnabled, String type,
+                         String resource, @NotNull Boolean isActive,
+                         @NotNull @Positive Integer duration,
+                         String startDate, String endDate,
+                         String startTime, String endTime,
+                         @Positive @NotNull Long slideshowId) {
+        super(id, slideshowId, isActive, duration, startDate, endDate, startTime, endTime);
+        this.audioEnabled = audioEnabled;
+        this.type = type;
+        this.resource = resource;
+    }
+
     @ApiModelProperty(name = "audioEnabled", value = "If the current media slide should play audio")
     @NotNull
     private Boolean audioEnabled;

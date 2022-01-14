@@ -1,10 +1,15 @@
 package com.nhlstenden.student.vigmo.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
+import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
+import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -12,6 +17,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,57 +34,120 @@ public class RssSlideControllerTest {
 
     private MockMvc mockMvc;
 
+    private HashMap<Integer, RssSlideDto> testDataMap;
+    private ObjectMapper om;
+
     @BeforeEach
     public void setup(){
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
+
+        om = new ObjectMapper();
+        testDataMap = new HashMap<>();
+        testDataMap.put(1, new RssSlideDto( 2L,"https://www.nu.nl/rss/Algemeen","title","description","creator","category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L));
+        testDataMap.put(2, new RssSlideDto( 7L,"http://feeds.nos.nl/nosnieuwsalgemeen","title","description",null,null,null,true,30,null,"2021-12-21",null,null,2L));
+
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetAll() throws Exception {
-        String getScreensJsonString = "[{\"id\":2,\"url\":\"https://www.nu.nl/rss/Algemeen\",\"titleTag\":\"title\",\"descriptionTag\":\"description\",\"authorTag\":\"creator\",\"categoryTag\":\"category\",\"imageTag\":\"enclosure\",\"isActive\":true,\"duration\":30,\"startDate\":\"2021-12-21\",\"endDate\":null,\"startTime\":\"12:00\",\"endTime\":null,\"slideshowId\":1},{\"id\":7,\"url\":\"http://feeds.nos.nl/nosnieuwsalgemeen\",\"titleTag\":\"title\",\"descriptionTag\":\"description\",\"authorTag\":null,\"categoryTag\":null,\"imageTag\":null,\"isActive\":true,\"duration\":30,\"startDate\":null,\"endDate\":\"2021-12-21\",\"startTime\":null,\"endTime\":null,\"slideshowId\":2}]";
+        List<RssSlideDto> testDataList = new ArrayList<>(testDataMap.values());
 
-        this.mockMvc.perform(get("/rss_slides")).andExpect(status().isOk()).andExpect(content().json(getScreensJsonString));
+        this.mockMvc.perform(get("/rss_slides")).
+                andExpect(status().
+                        isOk()).
+                andExpect(content().
+                        json(om.writeValueAsString(testDataList)));
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws  Exception {
-        String getScreenJsonString = "{\"id\":2,\"url\":\"https://www.nu.nl/rss/Algemeen\",\"titleTag\":\"title\",\"descriptionTag\":\"description\",\"authorTag\":\"creator\",\"categoryTag\":\"category\",\"imageTag\":\"enclosure\",\"isActive\":true,\"duration\":30,\"startDate\":\"2021-12-21\",\"endDate\":null,\"startTime\":\"12:00\",\"endTime\":null,\"slideshowId\":1}";
 
-        this.mockMvc.perform(get("/rss_slides/2")).andExpect(status().isOk()).andExpect(content().json(getScreenJsonString));
-        this.mockMvc.perform(get("/rss_slides/1")).andExpect(status().isNotFound());
-        this.mockMvc.perform(get("/rss_slides/8")).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/rss_slides/2")).
+                andExpect(status().
+                        isOk()).
+                andExpect(content().
+                        json(om.writeValueAsString(testDataMap.get(1))));
+        this.mockMvc.perform(get("/rss_slides/1")).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(get("/rss_slides/8")).
+                andExpect(status().
+                        isNotFound());
 
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
-        String providedJsonString = "{\"url\":\"https://www.telegraaf.nl/nieuws/rss\",\"titleTag\":\"title\",\"descriptionTag\":\"description\",\"authorTag\":\"\",\"categoryTag\":\"category\",\"imageTag\":\"enclosure\",\"isActive\":true,\"duration\":30,\"startDate\":\"2021-12-21\",\"endDate\":\"\",\"startTime\":\"12:00\",\"endTime\":\"\",\"slideshowId\":1}";
-        String expectedJsonString = "{\"id\":8,\"url\":\"https://www.telegraaf.nl/nieuws/rss\",\"titleTag\":\"title\",\"descriptionTag\":\"description\",\"authorTag\":null,\"categoryTag\":\"category\",\"imageTag\":\"enclosure\",\"isActive\":true,\"duration\":30,\"startDate\":\"2021-12-21\",\"endDate\":null,\"startTime\":\"12:00\",\"endTime\":null,\"slideshowId\":1}";
+        RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
+        RssSlideDto expectedDto = new RssSlideDto( 8L,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
-        this.mockMvc.perform(get("/rss_slides/8")).andExpect(status().isNotFound());
-        this.mockMvc.perform(post("/rss_slides").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isCreated());
-        this.mockMvc.perform(get("/rss_slides/8")).andExpect(status().isOk()).andExpect(content().json(expectedJsonString));
+        this.mockMvc.perform(get("/rss_slides/8")).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(post("/rss_slides").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isCreated());
+        this.mockMvc.perform(get("/rss_slides/8")).
+                andExpect(status().
+                        isOk()).
+                andExpect(content().
+                        json(om.writeValueAsString(expectedDto)));
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPut() throws Exception {
-        String providedJsonString = "{\"url\":\"https://www.telegraaf.nl/nieuws/rss\",\"titleTag\":\"title\",\"descriptionTag\":\"description\",\"authorTag\":\"\",\"categoryTag\":\"category\",\"imageTag\":\"enclosure\",\"isActive\":true,\"duration\":30,\"startDate\":\"2021-12-21\",\"endDate\":\"\",\"startTime\":\"12:00\",\"endTime\":\"\",\"slideshowId\":1}";
-        String expectedJsonString = "{\"id\":2,\"url\":\"https://www.telegraaf.nl/nieuws/rss\",\"titleTag\":\"title\",\"descriptionTag\":\"description\",\"authorTag\":null,\"categoryTag\":\"category\",\"imageTag\":\"enclosure\",\"isActive\":true,\"duration\":30,\"startDate\":\"2021-12-21\",\"endDate\":null,\"startTime\":\"12:00\",\"endTime\":null,\"slideshowId\":1}";
+        RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
+        RssSlideDto expectedDto = new RssSlideDto( 2L,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
-        this.mockMvc.perform(put("/rss_slides/2").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isOk());
-        this.mockMvc.perform(get("/rss_slides/2")).andExpect(status().isOk()).andExpect(content().json(expectedJsonString));
-        this.mockMvc.perform(put("/rss_slides/1").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isNotFound());
-        this.mockMvc.perform(put("/rss_slides/4").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isNotFound());
+        this.mockMvc.perform(put("/rss_slides/2").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isOk());
+        this.mockMvc.perform(get("/rss_slides/2")).
+                andExpect(status().
+                        isOk()).
+                andExpect(content().
+                        json(om.writeValueAsString(expectedDto)));
+        this.mockMvc.perform(put("/rss_slides/1").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(put("/rss_slides/4").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isNotFound());
 
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/rss_slides/2")).andExpect(status().isOk());
-        this.mockMvc.perform(delete("/rss_slides/2")).andExpect(status().isNoContent());
-        this.mockMvc.perform(get("/rss_slides/2")).andExpect(status().isNotFound());
-        this.mockMvc.perform(delete("/rss_slides/2")).andExpect(status().isNotFound());
-        this.mockMvc.perform(delete("/rss_slides/1")).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/rss_slides/2")).
+                andExpect(status().
+                        isOk());
+        this.mockMvc.perform(delete("/rss_slides/2")).
+                andExpect(status().
+                        isNoContent());
+        this.mockMvc.perform(get("/rss_slides/2")).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(delete("/rss_slides/2")).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(delete("/rss_slides/1")).
+                andExpect(status().
+                        isNotFound());
 
     }
 }

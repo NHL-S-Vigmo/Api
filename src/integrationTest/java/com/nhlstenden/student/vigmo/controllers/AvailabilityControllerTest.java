@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -14,6 +15,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,53 +32,115 @@ public class AvailabilityControllerTest {
 
     private MockMvc mockMvc;
 
+    private HashMap<Integer, AvailabilityDto> testDataMap;
+    private ObjectMapper om;
+
+
     @BeforeEach
     public void setup(){
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
+
+        om = new ObjectMapper();
+        testDataMap = new HashMap<>();
+        testDataMap.put(1, new AvailabilityDto(1L,5L,"MONDAY","09:15","16:00"));
+        testDataMap.put(2, new AvailabilityDto(2L,5L,"TUESDAY","10:15","11:00"));
+        testDataMap.put(3, new AvailabilityDto(3L,5L,"TUESDAY","14:15","16:45"));
+        testDataMap.put(4, new AvailabilityDto(4L,5L,"FRIDAY","10:15","11:00"));
+        testDataMap.put(5, new AvailabilityDto(5L,2L,"MONDAY","11:15","13:00"));
+        testDataMap.put(6, new AvailabilityDto(6L,2L,"THURSDAY","10:15","11:00"));
+        testDataMap.put(7, new AvailabilityDto(7L,2L,"THURSDAY","14:15","16:45"));
+        testDataMap.put(8, new AvailabilityDto(8L,2L,"FRIDAY","09:15","14:00"));
+        testDataMap.put(9, new AvailabilityDto(9L,2L,"FRIDAY","15:15","17:00"));
+        testDataMap.put(10, new AvailabilityDto(10L,4L,"MONDAY","10:15","14:00"));
+        testDataMap.put(11, new AvailabilityDto(11L,1L,"FRIDAY","09:00","17:00"));
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetAll() throws Exception {
-        String getAvailabilitiesJsonString = "[{\"id\":1,\"userId\":5,\"weekDay\":\"MONDAY\",\"startTime\":\"09:15\",\"endTime\":\"16:00\"},{\"id\":2,\"userId\":5,\"weekDay\":\"TUESDAY\",\"startTime\":\"10:15\",\"endTime\":\"11:00\"},{\"id\":3,\"userId\":5,\"weekDay\":\"TUESDAY\",\"startTime\":\"14:15\",\"endTime\":\"16:45\"},{\"id\":4,\"userId\":5,\"weekDay\":\"FRIDAY\",\"startTime\":\"10:15\",\"endTime\":\"11:00\"},{\"id\":5,\"userId\":2,\"weekDay\":\"MONDAY\",\"startTime\":\"11:15\",\"endTime\":\"13:00\"},{\"id\":6,\"userId\":2,\"weekDay\":\"THURSDAY\",\"startTime\":\"10:15\",\"endTime\":\"11:00\"},{\"id\":7,\"userId\":2,\"weekDay\":\"THURSDAY\",\"startTime\":\"14:15\",\"endTime\":\"16:45\"},{\"id\":8,\"userId\":2,\"weekDay\":\"FRIDAY\",\"startTime\":\"09:15\",\"endTime\":\"14:00\"},{\"id\":9,\"userId\":2,\"weekDay\":\"FRIDAY\",\"startTime\":\"15:15\",\"endTime\":\"17:00\"},{\"id\":10,\"userId\":4,\"weekDay\":\"MONDAY\",\"startTime\":\"10:15\",\"endTime\":\"14:00\"},{\"id\":11,\"userId\":1,\"weekDay\":\"FRIDAY\",\"startTime\":\"09:00\",\"endTime\":\"17:00\"}]";
 
-        this.mockMvc.perform(get("/availabilities")).andExpect(status().isOk()).andExpect(content().json(getAvailabilitiesJsonString));
+        List<AvailabilityDto> testDataList = new ArrayList<>(testDataMap.values());
+        this.mockMvc.perform(get("/availabilities"))
+                .andExpect(status()
+                        .isOk())
+                .andExpect(content()
+                        .json(om.writeValueAsString(testDataList)));
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws  Exception {
-        String getAvailabilityJsonString = "{\"id\":1,\"userId\":5,\"weekDay\":\"MONDAY\",\"startTime\":\"09:15\",\"endTime\":\"16:00\"}";
-
-        this.mockMvc.perform(get("/availabilities/1")).andExpect(status().isOk()).andExpect(content().json(getAvailabilityJsonString));
-        this.mockMvc.perform(get("/availabilities/12")).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/availabilities/1"))
+                .andExpect(status()
+                        .isOk())
+                .andExpect(content()
+                        .json(om.writeValueAsString(testDataMap.get(1))));
+        this.mockMvc.perform(get("/availabilities/12"))
+                .andExpect(status()
+                        .isNotFound());
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
-        String providedJsonString = "{\"userId\":1,\"weekDay\":\"THURSDAY\",\"startTime\":\"13:00\",\"endTime\":\"17:00\"}";
-        String expectedJsonString = "{\"id\":12,\"userId\":1,\"weekDay\":\"THURSDAY\",\"startTime\":\"13:00\",\"endTime\":\"17:00\"}";
+        AvailabilityDto providedDto = new AvailabilityDto(null, 1L, "THURSDAY", "13:00", "17:00");
+        AvailabilityDto expectedDto = new AvailabilityDto(12L, 1L, "THURSDAY", "13:00", "17:00");
 
-        AvailabilityDto dto = new AvailabilityDto(null, 1L, "", "", "");
-        this.mockMvc.perform(get("/availabilities/12")).andExpect(status().isNotFound());
-        this.mockMvc.perform(post("/availabilities").contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(dto))).andExpect(status().isCreated());
-        this.mockMvc.perform(get("/availabilities/12")).andExpect(status().isOk()).andExpect(content().json(expectedJsonString));
+        this.mockMvc.perform(get("/availabilities/12"))
+                .andExpect(status()
+                        .isNotFound());
+        this.mockMvc.perform(post("/availabilities")
+                .contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isCreated());
+        this.mockMvc.perform(get("/availabilities/12")).
+                andExpect(status().
+                        isOk()).
+                andExpect(content().
+                        json(om.writeValueAsString(expectedDto)));
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPut() throws Exception {
-        String providedJsonString = "{\"userId\":1,\"weekDay\":\"THURSDAY\",\"startTime\":\"13:00\",\"endTime\":\"17:00\"}";
-        String expectedJsonString = "{\"id\":1,\"userId\":1,\"weekDay\":\"THURSDAY\",\"startTime\":\"13:00\",\"endTime\":\"17:00\"}";
+        AvailabilityDto providedDto = new AvailabilityDto(null, 1L, "THURSDAY", "13:00", "17:00");
+        AvailabilityDto expectedDto = new AvailabilityDto(1L, 1L, "THURSDAY", "13:00", "17:00");
 
-        this.mockMvc.perform(put("/availabilities/1").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isOk());
-        this.mockMvc.perform(get("/availabilities/1")).andExpect(status().isOk()).andExpect(content().json(expectedJsonString));
-        this.mockMvc.perform(put("/availabilities/12").contentType(MediaType.APPLICATION_JSON).content(providedJsonString)).andExpect(status().isNotFound());
+        this.mockMvc.perform(put("/availabilities/1").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isOk());
+        this.mockMvc.perform(get("/availabilities/1")).
+                andExpect(status().
+                        isOk()).
+                andExpect(content().
+                        json(om.writeValueAsString(expectedDto)));
+        this.mockMvc.perform(put("/availabilities/12").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isNotFound());
 
     }
 
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/availabilities/1")).andExpect(status().isOk());
-        this.mockMvc.perform(delete("/availabilities/1")).andExpect(status().isNoContent());
-        this.mockMvc.perform(get("/availabilities/1")).andExpect(status().isNotFound());
-        this.mockMvc.perform(delete("/availabilities/1")).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/availabilities/1")).
+                andExpect(status().
+                        isOk());
+        this.mockMvc.perform(delete("/availabilities/1")).
+                andExpect(status().
+                        isNoContent());
+        this.mockMvc.perform(get("/availabilities/1")).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(delete("/availabilities/1")).
+                andExpect(status().
+                        isNotFound());
     }
 }

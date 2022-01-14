@@ -2,6 +2,7 @@ package com.nhlstenden.student.vigmo.controllers.logic;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,11 @@ public interface VigmoController<T> {
     ResponseEntity<T> get(@PathVariable("id") final long id);
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> post(@Valid @RequestBody T postObject, Principal principal);
+    ResponseEntity<Void> post(@Valid @RequestBody T postObject, Authentication authentication);
 
     @PutMapping("/{id}")
-    ResponseEntity<Void> put(@PathVariable("id") final long id, @Valid @RequestBody T putObject, Principal principal);
+    ResponseEntity<Void> put(@PathVariable("id") final long id, @Valid @RequestBody T putObject, Authentication authentication);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable("id") final long id, Principal principal);
+    ResponseEntity<Void> delete(@PathVariable("id") final long id, Authentication authentication);
 }

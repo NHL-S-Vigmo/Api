@@ -1,4 +1,4 @@
-"id","week_day","start_time","end_time"
-1,"MONDAY","12:15","13:00"
-2,"TUESDAY","10:15","11:00"
-3,"TUESDAY","14:15","14:45"
+"id","description","week_day","start_time","end_time"
+1,"Noon consultation","MONDAY","12:15","13:00"
+2,"Morning consultation","TUESDAY","10:15","11:00"
+3,"Afternoon consultation","TUESDAY","14:15","14:45"
