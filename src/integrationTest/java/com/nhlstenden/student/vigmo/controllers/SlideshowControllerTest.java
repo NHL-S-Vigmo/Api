@@ -85,9 +85,6 @@ public class SlideshowControllerTest {
         SlideshowDto providedDto = new SlideshowDto(null,3L,"New Years");
         SlideshowDto expectedDto = new SlideshowDto(4L,3L,"New Years");
 
-        this.mockMvc.perform(get("/slideshows/4")).
-                andExpect(status().
-                        isNotFound());
         this.mockMvc.perform(post("/slideshows").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
@@ -127,9 +124,6 @@ public class SlideshowControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/slideshows/1")).
-                andExpect(status().
-                        isOk());
         this.mockMvc.perform(delete("/slideshows/1")).
                 andExpect(status().
                         isNoContent());
@@ -144,18 +138,18 @@ public class SlideshowControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testScreenValidation() throws Exception {
-        SlideshowDto duplicateScreenDto = new SlideshowDto(null,3L,"New Years");
+        SlideshowDto duplicateSlideshowDto = new SlideshowDto(null,3L,"New Years");
         SlideshowDto nonExistentScreenDto = new SlideshowDto(null,4L,"New Years");
         this.mockMvc.perform(post("/slideshows").
                 contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(duplicateScreenDto))).
+                content(om.writeValueAsString(duplicateSlideshowDto))).
                 andExpect(status().
                         isBadRequest());
         this.mockMvc.perform(post("/slideshows").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(nonExistentScreenDto))).
                 andExpect(status().
-                        isBadRequest());
+                        isNotFound());
     }
 
     @Test

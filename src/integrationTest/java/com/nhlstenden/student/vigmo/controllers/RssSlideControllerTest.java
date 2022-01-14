@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
+import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
 import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,9 +88,6 @@ public class RssSlideControllerTest {
     public void testPost() throws Exception {
         RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
-        this.mockMvc.perform(get("/rss_slides/8")).
-                andExpect(status().
-                        isNotFound());
         MvcResult result = this.mockMvc.perform(post("/rss_slides").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(providedDto))).
@@ -139,9 +137,6 @@ public class RssSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/rss_slides/2")).
-                andExpect(status().
-                        isOk());
         this.mockMvc.perform(delete("/rss_slides/2")).
                 andExpect(status().
                         isNoContent());
@@ -154,6 +149,21 @@ public class RssSlideControllerTest {
         this.mockMvc.perform(delete("/rss_slides/1")).
                 andExpect(status().
                         isNotFound());
+    }
 
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testUserValidation() throws Exception {
+        RssSlideDto nonExistentSlideshowDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,4L);
+        this.mockMvc.perform(post("/rss_slides").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(put("/rss_slides/1").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
+                andExpect(status().
+                        isNotFound());
     }
 }

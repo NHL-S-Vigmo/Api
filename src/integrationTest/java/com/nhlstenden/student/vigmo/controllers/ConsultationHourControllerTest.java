@@ -81,9 +81,6 @@ public class ConsultationHourControllerTest {
         ConsultationHourDto providedDto = new ConsultationHourDto(null,"Afternoon consultation","WEDNESDAY","13:15","14:45");
         ConsultationHourDto expectedDto = new ConsultationHourDto(4L,"Afternoon consultation","WEDNESDAY","13:15","14:45");
 
-        this.mockMvc.perform(get("/consultation_hours/4")).
-                andExpect(status().
-                        isNotFound());
         this.mockMvc.perform(post("/consultation_hours").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).

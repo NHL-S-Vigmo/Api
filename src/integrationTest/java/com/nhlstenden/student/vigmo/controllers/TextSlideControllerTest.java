@@ -3,6 +3,7 @@ package com.nhlstenden.student.vigmo.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
+import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.dto.TextSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -93,9 +94,6 @@ public class TextSlideControllerTest {
     public void testPost() throws Exception {
         TextSlideDto providedDto = new TextSlideDto(null,"Title","Message123",1L,true,30,null,"2021-12-19",null,"12:00");
 
-        this.mockMvc.perform(get("/text_slides/8")).
-                andExpect(status().
-                        isNotFound());
         MvcResult result = this.mockMvc.perform(post("/text_slides").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(providedDto))).
@@ -146,9 +144,6 @@ public class TextSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/text_slides/3")).
-                andExpect(status().
-                        isOk());
         this.mockMvc.perform(delete("/text_slides/3")).
                 andExpect(status().
                         isNoContent());
@@ -162,5 +157,21 @@ public class TextSlideControllerTest {
                 andExpect(status().
                         isNotFound());
 
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testUserValidation() throws Exception {
+        TextSlideDto nonExistentSlideshowDto =  new TextSlideDto(null,"Title","Message123",4L,true,30,null,"2021-12-19",null,"12:00");
+        this.mockMvc.perform(post("/text_slides").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(put("/text_slides/1").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
+                andExpect(status().
+                        isNotFound());
     }
 }

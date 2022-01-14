@@ -85,9 +85,6 @@ public class MediaSlideControllerTest {
     public void testPost() throws Exception {
         MediaSlideDto providedDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
 
-        this.mockMvc.perform(get("/media_slides/8")).
-                andExpect(status().
-                        isNotFound());
         MvcResult result = this.mockMvc.perform(post("/media_slides").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
@@ -137,9 +134,6 @@ public class MediaSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/media_slides/1")).
-                andExpect(status().
-                        isOk());
         this.mockMvc.perform(delete("/media_slides/1")).
                 andExpect(status().
                         isNoContent());
@@ -150,6 +144,22 @@ public class MediaSlideControllerTest {
                 andExpect(status().
                         isNotFound());
         this.mockMvc.perform(delete("/media_slides/2")).
+                andExpect(status().
+                        isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testUserValidation() throws Exception {
+        MediaSlideDto nonExistentSlideshowDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",4L);
+        this.mockMvc.perform(post("/media_slides").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(put("/media_slides/1").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
                 andExpect(status().
                         isNotFound());
     }

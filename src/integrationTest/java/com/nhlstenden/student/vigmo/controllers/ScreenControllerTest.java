@@ -83,10 +83,6 @@ public class ScreenControllerTest {
         ScreenDto providedDto = new ScreenDto(null, "Screen_110", "Upstairs north wall", "iGlGqaKCPNmd2PmAUlzrRkFPIwpLfxva");
         ScreenDto expectedDto = new ScreenDto(4L, "Screen_110", "Upstairs north wall", "iGlGqaKCPNmd2PmAUlzrRkFPIwpLfxva");
 
-        this.mockMvc.perform(get("/screens/4"))
-                .andExpect(status()
-                        .isNotFound());
-
         this.mockMvc.perform(post("/screens")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(providedDto)))
@@ -128,8 +124,6 @@ public class ScreenControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/screens/1"))
-                .andExpect(status().isOk());
         this.mockMvc.perform(delete("/screens/1"))
                 .andExpect(status().isNoContent());
         this.mockMvc.perform(get("/screens/1"))
