@@ -18,20 +18,20 @@ public class AvailabilityService extends AbstractVigmoService<AvailabilityReposi
     }
 
     @Override
-    public long create(AvailabilityDto availabilityDto, long userId, String username) {
+    public long create(AvailabilityDto availabilityDto) {
         //Will throw a data not found runtime exception if screen does not exist
         if(userService.existsById(availabilityDto.getUserId())){
-            return super.create(availabilityDto, userId, username);
+            return super.create(availabilityDto);
         }else{
             throw new DataNotFoundException("User service could not find " + availabilityDto.getUserId());
         }
     }
 
     @Override
-    public void update(AvailabilityDto availabilityDto, long id, long userId, String username) {
+    public void update(AvailabilityDto availabilityDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
         if(userService.existsById(availabilityDto.getUserId())){
-            super.update(availabilityDto, id, userId, username);
+            super.update(availabilityDto, id);
         }else{
             throw new DataNotFoundException("User service could not find " + availabilityDto.getUserId());
         }

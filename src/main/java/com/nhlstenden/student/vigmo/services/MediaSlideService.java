@@ -23,20 +23,20 @@ public class MediaSlideService extends AbstractVigmoService<MediaSlideRepository
     }
 
     @Override
-    public long create(MediaSlideDto mediaSlideDto, long userId, String username) {
+    public long create(MediaSlideDto mediaSlideDto) {
         //Will throw a data not found runtime exception if screen does not exist
         if(slideshowService.existsById(mediaSlideDto.getSlideshowId())){
-            return super.create(mediaSlideDto, userId, username);
+            return super.create(mediaSlideDto);
         }else{
             throw new DataNotFoundException("Slideshow service could not find " + mediaSlideDto.getSlideshowId());
         }
     }
 
     @Override
-    public void update(MediaSlideDto mediaSlideDto, long id, long userId, String username) {
+    public void update(MediaSlideDto mediaSlideDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
         if(slideshowService.existsById(mediaSlideDto.getSlideshowId())){
-            super.update(mediaSlideDto, id, userId, username);
+            super.update(mediaSlideDto, id);
         }else{
             throw new DataNotFoundException("Slideshow service could not find " + mediaSlideDto.getSlideshowId());
         }
