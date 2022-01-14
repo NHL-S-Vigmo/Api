@@ -22,7 +22,7 @@ public class FileService extends AbstractVigmoService<FileRepository, FileDto, F
         List<FileDto> returnList = super.getList();
 
         for(FileDto file: returnList){
-            file.setFile("<removed-binary-data>");
+            file.setData("<removed-binary-data>");
         }
 
         return returnList;
@@ -31,26 +31,26 @@ public class FileService extends AbstractVigmoService<FileRepository, FileDto, F
     @Override
     public FileDto get(long id) {
         FileDto file = super.get(id);
-        file.setFile("<removed-binary-data>");
+        file.setData("<removed-binary-data>");
         return file;
     }
 
     @Override
     public long create(FileDto fileDto) {
         //check if there is a fileKey provided
-        fileDto.setFileKey(generateRandom64LengthKey());
+        fileDto.setKey(generateRandom64LengthKey());
         return super.create(fileDto);
     }
 
     @Override
     public void update(FileDto fileDto, long id) {
         //get the existing key using the get function to inherit not found logic.
-        fileDto.setFileKey(this.get(id).getFileKey());
+        fileDto.setKey(this.get(id).getKey());
         super.update(fileDto, id);
     }
 
     public File getRawEntityByKey(String fileKey) {
-        return repo.findByFileKey(fileKey).orElseThrow(() ->
+        return repo.findByKey(fileKey).orElseThrow(() ->
                 new DataNotFoundException(getClass().getSimpleName() + " could not find " + fileKey));
     }
 

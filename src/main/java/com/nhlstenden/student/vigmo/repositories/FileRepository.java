@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface FileRepository extends JpaRepository<File, Long> {
-    Optional<File> findByFileKey(String fileKey);
+    Optional<File> findByKey(String fileKey);
 }

@@ -20,16 +20,16 @@ public class File implements EntityId{
     private Long id;
 
     @Column(name = "file_name", nullable = false, length = 220)
-    private String fileName;
+    private String name;
 
     @Column(name = "mime_type", nullable = false, length = 50)
     private String mimeType;
 
     @Column(name = "file", nullable = false)
-    private byte[] file;
+    private byte[] data;
 
     @Column(name = "file_key", nullable = false, length = 64)
-    private String fileKey;
+    private String key;
 
     @Override
     public long getId(){

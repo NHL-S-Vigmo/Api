@@ -12,12 +12,12 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileDto {
-    private long id;
+    private Long id;
 
     @ApiModelProperty(name = "File Name", value = "The name and extension of the file.")
     @Size(max = 220)
     @NotEmpty
-    private String fileName;
+    private String name;
 
     @ApiModelProperty(name = "MIME Type", value = "MIME Type/Media Type of the file")
     @Size(max = 50)
@@ -27,8 +27,8 @@ public class FileDto {
     @ApiModelProperty(name = "File Key", value = "Base64 representation of your file.")
     @Size(min = 10)
     @NotEmpty
-    private String file;
+    private String data;
 
     @ApiModelProperty(name = "File Key", value = "Should be left empty, this is generated on the server. Use this to request a rendered file.")
-    private String fileKey;
+    private String key;
 }
