@@ -127,16 +127,19 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/users/1")).
-                andExpect(status().
-                        isOk());
         this.mockMvc.perform(delete("/users/1")).
                 andExpect(status().
                         isNoContent());
         this.mockMvc.perform(get("/users/1")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(delete("/users/1")).
+
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testDeleteNonExistentUser() throws Exception {
+        this.mockMvc.perform(delete("/users/10")).
                 andExpect(status().
                         isNotFound());
     }

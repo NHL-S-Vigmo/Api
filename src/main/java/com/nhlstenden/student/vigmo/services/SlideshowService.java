@@ -1,5 +1,6 @@
 package com.nhlstenden.student.vigmo.services;
 
+import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowSlidesDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
@@ -11,6 +12,7 @@ import com.nhlstenden.student.vigmo.models.TextSlide;
 import com.nhlstenden.student.vigmo.repositories.SlideshowRepository;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
+import liquibase.pro.packaged.O;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,12 @@ import java.util.Locale;
 
 @Service
 public class SlideshowService extends AbstractVigmoService<SlideshowRepository, SlideshowDto, Slideshow> {
-    public SlideshowService(SlideshowRepository repo, MappingUtility mapper, LogService logService) {
+
+    private final ScreenService screenService;
+
+    public SlideshowService(SlideshowRepository repo, MappingUtility mapper, LogService logService, ScreenService screenService) {
         super(repo, mapper, SlideshowDto.class, Slideshow.class, logService);
+        this.screenService = screenService;
     }
 
     public List<SlideshowVariableDto> getVariables(Long id){
@@ -53,5 +59,25 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
         }
 
         return returnList;
+    }
+
+    @Override
+    public long create(SlideshowDto slideshowDto, long userId, String username) {
+        //Will throw a data not found runtime exception if screen does not exist
+        if(screenService.existsById(slideshowDto.getScreenId())){
+            return super.create(slideshowDto, userId, username);
+        }else{
+            throw new DataNotFoundException("Screen service could not find " + slideshowDto.getScreenId());
+        }
+    }
+
+    @Override
+    public void update(SlideshowDto slideshowDto, long id, long userId, String username) {
+        //Will throw a data not found runtime exception if screen does not exist
+        if(screenService.existsById(slideshowDto.getScreenId())){
+            super.update(slideshowDto, id, userId, username);
+        }else{
+            throw new DataNotFoundException("Screen service could not find " + slideshowDto.getScreenId());
+        }
     }
 }

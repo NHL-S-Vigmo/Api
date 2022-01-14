@@ -3,6 +3,7 @@ package com.nhlstenden.student.vigmo.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
+import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,9 +89,6 @@ public class AvailabilityControllerTest {
         AvailabilityDto providedDto = new AvailabilityDto(null, 1L, "THURSDAY", "13:00", "17:00");
         AvailabilityDto expectedDto = new AvailabilityDto(12L, 1L, "THURSDAY", "13:00", "17:00");
 
-        this.mockMvc.perform(get("/availabilities/12"))
-                .andExpect(status()
-                        .isNotFound());
         this.mockMvc.perform(post("/availabilities")
                 .contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
@@ -130,9 +128,6 @@ public class AvailabilityControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/availabilities/1")).
-                andExpect(status().
-                        isOk());
         this.mockMvc.perform(delete("/availabilities/1")).
                 andExpect(status().
                         isNoContent());
@@ -140,6 +135,22 @@ public class AvailabilityControllerTest {
                 andExpect(status().
                         isNotFound());
         this.mockMvc.perform(delete("/availabilities/1")).
+                andExpect(status().
+                        isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testUserValidation() throws Exception {
+        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null,6L,"MONDAY","10:00","10:00");
+        this.mockMvc.perform(post("/availabilities").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentUserDto))).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(put("/availabilities/1").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentUserDto))).
                 andExpect(status().
                         isNotFound());
     }
