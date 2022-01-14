@@ -25,3 +25,8 @@
     ```
 * If you are not using mysql as your db driver, change those values for your respective db type.
 * Now configure the project to run in a webserver that is capable of running java web applications. *During development Tomcat **9.0.55** and **9.0.56** was used*
+
+* Create default user if you have an empty user table. The username is `admin` and password is `changeme`.
+    ```mysql
+    INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `role`, `pfp_location`) VALUES (NULL, 'admin', '$2a$10$6WuZxvmGulNvJTPqhSSwGuPUYfniQqb5t4J0zn.DQPY0CII2kkYwq', '1', 'ROLE_ADMIN', '/ava/avatar.jpg')
+    ```
