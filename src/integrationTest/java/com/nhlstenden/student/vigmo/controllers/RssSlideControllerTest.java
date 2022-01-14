@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -84,17 +86,21 @@ public class RssSlideControllerTest {
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
         RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
-        RssSlideDto expectedDto = new RssSlideDto( 8L,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
         this.mockMvc.perform(get("/rss_slides/8")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(post("/rss_slides").
-                contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(providedDto))).
+        MvcResult result = this.mockMvc.perform(post("/rss_slides").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
                 andExpect(status().
-                        isCreated());
-        this.mockMvc.perform(get("/rss_slides/8")).
+                        isCreated()).andReturn();
+        int location = Integer.parseInt(Objects.requireNonNull(result.getResponse()
+                        .getHeader("Location"))
+                .replace("/rss_slides/", ""));
+        RssSlideDto expectedDto = new RssSlideDto( (long) location,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
+
+        this.mockMvc.perform(get("/rss_slides/" + location)).
                 andExpect(status().
                         isOk()).
                 andExpect(content().

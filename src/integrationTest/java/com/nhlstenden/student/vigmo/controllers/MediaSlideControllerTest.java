@@ -6,11 +6,13 @@ import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -19,6 +21,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -81,17 +84,21 @@ public class MediaSlideControllerTest {
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
         MediaSlideDto providedDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
-        MediaSlideDto expectedDto =  new MediaSlideDto(8L,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
 
         this.mockMvc.perform(get("/media_slides/8")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(post("/media_slides").
+        MvcResult result = this.mockMvc.perform(post("/media_slides").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
-                        isCreated());
-        this.mockMvc.perform(get("/media_slides/8")).
+                        isCreated()).andReturn();
+        int location = Integer.parseInt(Objects.requireNonNull(result.getResponse()
+                        .getHeader("Location"))
+                .replace("/media_slides/", ""));
+        MediaSlideDto expectedDto =  new MediaSlideDto((long) location,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
+
+        this.mockMvc.perform(get("/media_slides/" + location)).
                 andExpect(status().
                         isOk()).
                 andExpect(content().

@@ -19,10 +19,7 @@ import javax.transaction.Transactional;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -95,17 +92,22 @@ public class TextSlideControllerTest {
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
         TextSlideDto providedDto = new TextSlideDto(null,"Title","Message123",1L,true,30,null,"2021-12-19",null,"12:00");
-        TextSlideDto expectedDto = new TextSlideDto(8L,"Title","Message123",1L,true,30,null,"2021-12-19",null,"12:00");
 
         this.mockMvc.perform(get("/text_slides/8")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(post("/text_slides").
-                contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(providedDto))).
+        MvcResult result = this.mockMvc.perform(post("/text_slides").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
                 andExpect(status().
-                        isCreated());
-        this.mockMvc.perform(get("/text_slides/8")).
+                        isCreated()).andReturn();
+        int location = Integer.parseInt(Objects.requireNonNull(result.getResponse()
+                        .getHeader("Location"))
+                .replace("/text_slides/", ""));
+
+        TextSlideDto expectedDto = new TextSlideDto((long) location,"Title","Message123",1L,true,30,null,"2021-12-19",null,"12:00");
+
+        this.mockMvc.perform(get("/text_slides/" + location)).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
