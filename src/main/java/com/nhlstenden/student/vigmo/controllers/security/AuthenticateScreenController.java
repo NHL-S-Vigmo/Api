@@ -36,18 +36,12 @@ public class AuthenticateScreenController {
     })
     @GetMapping("/{authToken}")
     public ResponseEntity<Void> login(@PathVariable("authToken") String authToken) {
-        //Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
-
-        //fixme: problem, this is always screen 1. this is bad.!
-        ScreenDto screen = screenService.get(1L);
+        ScreenDto screen = screenService.getScreenByAuthKey(authToken);
 
         if(screen == null) //throw bad credentials exception
             return ResponseEntity.badRequest().build();
 
-        //String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-
-        //String role = (String) ((UserDetails) authentication.getPrincipal()).getAuthorities().toArray()[0];
-        //String profilePicture = userService.findByUsername(username).getPfpLocation();
+        //create the new JWT with static role ROLE_SCREEN
         String token = jwtProvider.createScreenToken(screen.getName(), "ROLE_SCREEN");
 
         return ResponseEntity.ok()

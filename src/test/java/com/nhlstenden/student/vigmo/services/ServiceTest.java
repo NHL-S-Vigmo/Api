@@ -53,6 +53,7 @@ class ServiceTest {
 
     @Test
     void testGetEntities() {
+        //todo: add mockito verify checks
         List<TestEntityDto> testEntityDtoList = new ArrayList<>();
         testEntityDtoList.add(TestEntityDto.builder().id(1L).build());
         when(mapper.mapList(anyList(), eq(TestEntityDto.class))).thenReturn(testEntityDtoList);
@@ -65,6 +66,7 @@ class ServiceTest {
 
     @Test
     void testGetEntitiesWhenEmpty() {
+        //todo: add mockito verify checks
         List<TestEntityDto> entities = service.getList();
 
         assertThat(entities.isEmpty())
@@ -73,6 +75,7 @@ class ServiceTest {
 
     @Test
     void testGetEntity() {
+        //todo: add mockito verify checks
         TestEntityDto entity = service.get(1L);
 
         assertThat(entity)
@@ -83,6 +86,7 @@ class ServiceTest {
 
     @Test
     void testCreateEntity() {
+        //todo: add mockito verify checks
         TestEntityDto testEntityDto = new TestEntityDto();
         Long id = service.create(testEntityDto);
 
@@ -115,5 +119,20 @@ class ServiceTest {
         //assert that when you delete a non-existing item, it throws a data not found exception.
         assertThatThrownBy(() -> service.delete(2L))
                 .isInstanceOf(DataNotFoundException.class);
+    }
+
+    @Test
+    void createWithLog() {
+        //todo: write test
+    }
+
+    @Test
+    void updateWithLog() {
+        //todo: write test
+    }
+
+    @Test
+    void deleteWithLog() {
+        //todo: write test
     }
 }

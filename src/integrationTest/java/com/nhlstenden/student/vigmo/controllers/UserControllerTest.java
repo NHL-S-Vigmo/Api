@@ -39,7 +39,7 @@ public class UserControllerTest {
 
 
     @BeforeEach
-    public void setup() throws FileNotFoundException {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
@@ -52,7 +52,6 @@ public class UserControllerTest {
         testDataMap.put(3, new UserDto(3L,"Niels_Doorn","",true,"ROLE_TEACHER","/image_015.gif"));
         testDataMap.put(4, new UserDto(4L,"Rene_Laan","",false,"ROLE_ADMIN","/image_016.png"));
         testDataMap.put(5, new UserDto(5L,"Martijn_Pomp","",true,"ROLE_TEACHER","/image_017.png"));
-
     }
 
     @Test

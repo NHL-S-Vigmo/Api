@@ -69,6 +69,7 @@ class SlideshowServiceTest {
 
     @Test
     void getSlides() {
+        //todo: add mockito verify checks
         //todo: write test
     }
 }
