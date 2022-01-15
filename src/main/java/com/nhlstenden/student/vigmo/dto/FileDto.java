@@ -20,7 +20,7 @@ public class FileDto {
     private String name;
 
     @ApiModelProperty(name = "MIME Type", value = "MIME Type/Media Type of the file")
-    @Size(max = 50)
+    @Size(max = 100)
     @NotEmpty
     private String mimeType;
 
