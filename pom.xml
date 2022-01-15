@@ -232,6 +232,7 @@
     </dependencies>
     <build>
         <finalName>VigmoWebBuild</finalName>
+        <testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -246,6 +247,10 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
+                    <configuration>
+                        <source>9</source>
+                        <target>9</target>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -270,15 +275,5 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>9</source>
-                    <target>9</target>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

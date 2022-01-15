@@ -2,8 +2,7 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
-import com.nhlstenden.student.vigmo.dto.TextSlideDto;
-import com.nhlstenden.student.vigmo.dto.UserDto;
+import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +10,16 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,38 +28,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
-public class UserControllerTest {
+public class MediaSlideControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-
-    private HashMap<Integer, UserDto> testDataMap;
+    private HashMap<Integer, MediaSlideDto> testDataMap;
     private ObjectMapper om;
 
 
     @BeforeEach
-    public void setup() {
+    public void setup(){
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
 
         om = new ObjectMapper();
         testDataMap = new HashMap<>();
+        testDataMap.put(1, new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L));
+        testDataMap.put(2, new MediaSlideDto(4L,false,"video","/videos/2021/3/exams.mkv",true,30,null,null,null,null,2L));
 
-        testDataMap.put(1, new UserDto(1L,"Thijs_Smegen","",true,"ROLE_ADMIN","/image_013.jpg"));
-        testDataMap.put(2, new UserDto(2L,"Jan_Doornbos","",false,"ROLE_TEACHER","/image_014.png"));
-        testDataMap.put(3, new UserDto(3L,"Niels_Doorn","",true,"ROLE_TEACHER","/image_015.gif"));
-        testDataMap.put(4, new UserDto(4L,"Rene_Laan","",false,"ROLE_ADMIN","/image_016.png"));
-        testDataMap.put(5, new UserDto(5L,"Martijn_Pomp","",true,"ROLE_TEACHER","/image_017.png"));
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetAll() throws Exception {
+        List<MediaSlideDto> testDataList = new ArrayList<>(testDataMap.values());
 
-        List<UserDto> testDataList = new ArrayList<>(testDataMap.values());
-        this.mockMvc.perform(get("/users")).
+        this.mockMvc.perform(get("/media_slides")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
@@ -68,14 +64,16 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testGetOne() throws Exception {
-
-        this.mockMvc.perform(get("/users/1")).
+    public void testGetOne() throws  Exception {
+        this.mockMvc.perform(get("/media_slides/1")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
                         json(om.writeValueAsString(testDataMap.get(1))));
-        this.mockMvc.perform(get("/users/6")).
+        this.mockMvc.perform(get("/media_slides/2")).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(get("/media_slides/8")).
                 andExpect(status().
                         isNotFound());
     }
@@ -83,17 +81,19 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
-        UserDto providedDto = new UserDto(null,"Rob_Smit","$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.",true,"ROLE_TEACHER","/image_018.jpg");
-        UserDto expectedDto = new UserDto(6L,"Rob_Smit","",true,"ROLE_TEACHER","/image_018.jpg");
-        this.mockMvc.perform(get("/users/6")).
-                andExpect(status().
-                        isNotFound());
-        this.mockMvc.perform(post("/users").
+        MediaSlideDto providedDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
+
+        MvcResult result = this.mockMvc.perform(post("/media_slides").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
-                        isCreated());
-        this.mockMvc.perform(get("/users/6")).
+                        isCreated()).andReturn();
+        int location = Integer.parseInt(Objects.requireNonNull(result.getResponse()
+                        .getHeader("Location"))
+                .replace("/media_slides/", ""));
+        MediaSlideDto expectedDto =  new MediaSlideDto((long) location,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
+
+        this.mockMvc.perform(get("/media_slides/" + location)).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
@@ -103,20 +103,25 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPut() throws Exception {
-        UserDto providedDto = new UserDto(null,"Rob_Smit","$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.",true,"ROLE_TEACHER","/image_018.jpg");
-        UserDto expectedDto = new UserDto(1L,"Rob_Smit","",true,"ROLE_TEACHER","/image_018.jpg");
+        MediaSlideDto providedDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
+        MediaSlideDto expectedDto =  new MediaSlideDto(1L,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
 
-        this.mockMvc.perform(put("/users/1").
+        this.mockMvc.perform(put("/media_slides/1").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isOk());
-        this.mockMvc.perform(get("/users/1")).
+        this.mockMvc.perform(get("/media_slides/1")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
                         json(om.writeValueAsString(expectedDto)));
-        this.mockMvc.perform(put("/users/6").
+        this.mockMvc.perform(put("/media_slides/2").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(put("/media_slides/8").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
@@ -127,44 +132,33 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(delete("/users/1")).
+        this.mockMvc.perform(delete("/media_slides/1")).
                 andExpect(status().
                         isNoContent());
-        this.mockMvc.perform(get("/users/1")).
+        this.mockMvc.perform(get("/media_slides/1")).
                 andExpect(status().
                         isNotFound());
-
-    }
-
-    @Test
-    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testDeleteNonExistentUser() throws Exception {
-        this.mockMvc.perform(delete("/users/10")).
+        this.mockMvc.perform(delete("/media_slides/1")).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(delete("/media_slides/2")).
                 andExpect(status().
                         isNotFound());
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testCreateExistingUsername() throws Exception {
-        UserDto user = new UserDto(null, "Thijs_Smegen", "password", true, "ROLE_DOCENT", "");
-
-        this.mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(om.writeValueAsString(user)))
-                .andExpect(status()
-                        .isConflict());
-    }
-
-    @Test
-    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void changePasswordUsingPut() throws Exception {
-        UserDto user = new UserDto(1L, "Thijs_Smegen", "password1", true, "ROLE_ADMIN", "");
-
-        this.mockMvc.perform(put("/users/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(om.writeValueAsString(user)))
-                .andExpect(status()
-                        .isOk());
+    public void testUserValidation() throws Exception {
+        MediaSlideDto nonExistentSlideshowDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",4L);
+        this.mockMvc.perform(post("/media_slides").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
+                andExpect(status().
+                        isNotFound());
+        this.mockMvc.perform(put("/media_slides/1").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentSlideshowDto))).
+                andExpect(status().
+                        isNotFound());
     }
 }

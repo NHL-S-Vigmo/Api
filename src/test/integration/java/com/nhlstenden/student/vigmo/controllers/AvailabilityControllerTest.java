@@ -3,9 +3,6 @@ package com.nhlstenden.student.vigmo.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
-import com.nhlstenden.student.vigmo.dto.ScreenDto;
-import com.nhlstenden.student.vigmo.dto.SlideshowDto;
-import com.nhlstenden.student.vigmo.models.Slideshow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,73 +21,79 @@ import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
-public class SlideshowControllerTest {
+public class AvailabilityControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-    private HashMap<Integer, SlideshowDto> testDataMap;
+
+    private HashMap<Integer, AvailabilityDto> testDataMap;
     private ObjectMapper om;
 
+
     @BeforeEach
-    public void setup() {
+    public void setup(){
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
 
         om = new ObjectMapper();
         testDataMap = new HashMap<>();
-
-        testDataMap.put(1, new SlideshowDto(1L,3L,"Christmas"));
-        testDataMap.put(2, new SlideshowDto(2L,2L,"Period 2 2021"));
-        testDataMap.put(3, new SlideshowDto(3L,1L,"Period 3 2021"));
-
+        testDataMap.put(1, new AvailabilityDto(1L,5L,"MONDAY","09:15","16:00"));
+        testDataMap.put(2, new AvailabilityDto(2L,5L,"TUESDAY","10:15","11:00"));
+        testDataMap.put(3, new AvailabilityDto(3L,5L,"TUESDAY","14:15","16:45"));
+        testDataMap.put(4, new AvailabilityDto(4L,5L,"FRIDAY","10:15","11:00"));
+        testDataMap.put(5, new AvailabilityDto(5L,2L,"MONDAY","11:15","13:00"));
+        testDataMap.put(6, new AvailabilityDto(6L,2L,"THURSDAY","10:15","11:00"));
+        testDataMap.put(7, new AvailabilityDto(7L,2L,"THURSDAY","14:15","16:45"));
+        testDataMap.put(8, new AvailabilityDto(8L,2L,"FRIDAY","09:15","14:00"));
+        testDataMap.put(9, new AvailabilityDto(9L,2L,"FRIDAY","15:15","17:00"));
+        testDataMap.put(10, new AvailabilityDto(10L,4L,"MONDAY","10:15","14:00"));
+        testDataMap.put(11, new AvailabilityDto(11L,1L,"FRIDAY","09:00","17:00"));
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetAll() throws Exception {
 
-        List<SlideshowDto> testDataList = new ArrayList<>(testDataMap.values());
-
-        this.mockMvc.perform(get("/slideshows")).
-                andExpect(status().
-                        isOk()).
-                andExpect(content().
-                        json(om.writeValueAsString(testDataList)));
+        List<AvailabilityDto> testDataList = new ArrayList<>(testDataMap.values());
+        this.mockMvc.perform(get("/availabilities"))
+                .andExpect(status()
+                        .isOk())
+                .andExpect(content()
+                        .json(om.writeValueAsString(testDataList)));
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws  Exception {
-        String getScreenDto = "{\"id\":1,\"screenId\":3,\"name\":\"Christmas\"}";
-
-        this.mockMvc.perform(get("/slideshows/1")).
-                andExpect(status().
-                        isOk()).
-                andExpect(content().
-                        json(getScreenDto));
-        this.mockMvc.perform(get("/slideshows/4")).
-                andExpect(status().
-                        isNotFound());
+        this.mockMvc.perform(get("/availabilities/1"))
+                .andExpect(status()
+                        .isOk())
+                .andExpect(content()
+                        .json(om.writeValueAsString(testDataMap.get(1))));
+        this.mockMvc.perform(get("/availabilities/12"))
+                .andExpect(status()
+                        .isNotFound());
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
-        SlideshowDto providedDto = new SlideshowDto(null,3L,"New Years");
-        SlideshowDto expectedDto = new SlideshowDto(4L,3L,"New Years");
+        AvailabilityDto providedDto = new AvailabilityDto(null, 1L, "THURSDAY", "13:00", "17:00");
+        AvailabilityDto expectedDto = new AvailabilityDto(12L, 1L, "THURSDAY", "13:00", "17:00");
 
-        this.mockMvc.perform(post("/slideshows").
-                contentType(MediaType.APPLICATION_JSON).
+        this.mockMvc.perform(post("/availabilities")
+                .contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isCreated());
-        this.mockMvc.perform(get("/slideshows/4")).
+        this.mockMvc.perform(get("/availabilities/12")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
@@ -100,20 +103,20 @@ public class SlideshowControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPut() throws Exception {
-        SlideshowDto providedDto = new SlideshowDto(null,3L,"New Years");
-        SlideshowDto expectedDto = new SlideshowDto(1L,3L,"New Years");
+        AvailabilityDto providedDto = new AvailabilityDto(null, 1L, "THURSDAY", "13:00", "17:00");
+        AvailabilityDto expectedDto = new AvailabilityDto(1L, 1L, "THURSDAY", "13:00", "17:00");
 
-        this.mockMvc.perform(put("/slideshows/1").
+        this.mockMvc.perform(put("/availabilities/1").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isOk());
-        this.mockMvc.perform(get("/slideshows/1")).
+        this.mockMvc.perform(get("/availabilities/1")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
                         json(om.writeValueAsString(expectedDto)));
-        this.mockMvc.perform(put("/slideshows/4").
+        this.mockMvc.perform(put("/availabilities/12").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
@@ -124,48 +127,30 @@ public class SlideshowControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(delete("/slideshows/1")).
+        this.mockMvc.perform(delete("/availabilities/1")).
                 andExpect(status().
                         isNoContent());
-        this.mockMvc.perform(get("/slideshows/1")).
+        this.mockMvc.perform(get("/availabilities/1")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(delete("/slideshows/1")).
+        this.mockMvc.perform(delete("/availabilities/1")).
                 andExpect(status().
                         isNotFound());
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testScreenValidation() throws Exception {
-        SlideshowDto duplicateSlideshowDto = new SlideshowDto(null,3L,"New Years");
-        SlideshowDto nonExistentScreenDto = new SlideshowDto(null,4L,"New Years");
-        this.mockMvc.perform(post("/slideshows").
-                contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(duplicateSlideshowDto))).
-                andExpect(status().
-                        isBadRequest());
-        this.mockMvc.perform(post("/slideshows").
-                contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(nonExistentScreenDto))).
+    public void testUserValidation() throws Exception {
+        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null,6L,"MONDAY","10:00","10:00");
+        this.mockMvc.perform(post("/availabilities").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentUserDto))).
                 andExpect(status().
                         isNotFound());
-    }
-
-    @Test
-    public void testGetSlideshowVariables(){
-
-    }
-
-    @Test
-    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testGetSlideshowSlides() throws Exception {
-        this.mockMvc.perform(get("/slideshows/1/slides"))
-                .andExpect(status().
-                        isOk())
-                .andExpectAll(
-                        jsonPath("$.length()").
-                                value(3)
-                );
+        this.mockMvc.perform(put("/availabilities/1").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(nonExistentUserDto))).
+                andExpect(status().
+                        isNotFound());
     }
 }

@@ -2,8 +2,7 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
-import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
-import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
+import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,22 +21,20 @@ import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
-public class ConsultationHourControllerTest {
+public class SlideshowControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-
-    private HashMap<Integer, ConsultationHourDto> testDataMap;
+    private HashMap<Integer, SlideshowDto> testDataMap;
     private ObjectMapper om;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
@@ -45,17 +42,19 @@ public class ConsultationHourControllerTest {
         om = new ObjectMapper();
         testDataMap = new HashMap<>();
 
-        testDataMap.put(1, new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:15","13:00"));
-        testDataMap.put(2, new ConsultationHourDto(2L,"Morning consultation","TUESDAY","10:15","11:00"));
-        testDataMap.put(3, new ConsultationHourDto(3L,"Afternoon consultation","TUESDAY","14:15","14:45"));
+        testDataMap.put(1, new SlideshowDto(1L,3L,"Christmas"));
+        testDataMap.put(2, new SlideshowDto(2L,2L,"Period 2 2021"));
+        testDataMap.put(3, new SlideshowDto(3L,1L,"Period 3 2021"));
 
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetAll() throws Exception {
-        List<ConsultationHourDto> testDataList = new ArrayList<>(testDataMap.values());
-        this.mockMvc.perform(get("/consultation_hours")).
+
+        List<SlideshowDto> testDataList = new ArrayList<>(testDataMap.values());
+
+        this.mockMvc.perform(get("/slideshows")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
@@ -65,12 +64,14 @@ public class ConsultationHourControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws  Exception {
-        this.mockMvc.perform(get("/consultation_hours/1")).
+        String getScreenDto = "{\"id\":1,\"screenId\":3,\"name\":\"Christmas\"}";
+
+        this.mockMvc.perform(get("/slideshows/1")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
-                        json(om.writeValueAsString(testDataMap.get(1))));
-        this.mockMvc.perform(get("/consultation_hours/4")).
+                        json(getScreenDto));
+        this.mockMvc.perform(get("/slideshows/4")).
                 andExpect(status().
                         isNotFound());
     }
@@ -78,15 +79,15 @@ public class ConsultationHourControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
-        ConsultationHourDto providedDto = new ConsultationHourDto(null,"Afternoon consultation","WEDNESDAY","13:15","14:45");
-        ConsultationHourDto expectedDto = new ConsultationHourDto(4L,"Afternoon consultation","WEDNESDAY","13:15","14:45");
+        SlideshowDto providedDto = new SlideshowDto(null,3L,"New Years");
+        SlideshowDto expectedDto = new SlideshowDto(4L,3L,"New Years");
 
-        this.mockMvc.perform(post("/consultation_hours").
+        this.mockMvc.perform(post("/slideshows").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isCreated());
-        this.mockMvc.perform(get("/consultation_hours/4")).
+        this.mockMvc.perform(get("/slideshows/4")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
@@ -96,20 +97,20 @@ public class ConsultationHourControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPut() throws Exception {
-        ConsultationHourDto providedDto = new ConsultationHourDto(null,"Afternoon consultation","WEDNESDAY","13:15","14:45");
-        ConsultationHourDto expectedDto = new ConsultationHourDto(1L,"Afternoon consultation","WEDNESDAY","13:15","14:45");
+        SlideshowDto providedDto = new SlideshowDto(null,3L,"New Years");
+        SlideshowDto expectedDto = new SlideshowDto(1L,3L,"New Years");
 
-        this.mockMvc.perform(put("/consultation_hours/1").
+        this.mockMvc.perform(put("/slideshows/1").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isOk());
-        this.mockMvc.perform(get("/consultation_hours/1")).
+        this.mockMvc.perform(get("/slideshows/1")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
                         json(om.writeValueAsString(expectedDto)));
-        this.mockMvc.perform(put("/consultation_hours/4").
+        this.mockMvc.perform(put("/slideshows/4").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
@@ -120,17 +121,48 @@ public class ConsultationHourControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(get("/consultation_hours/1")).
-                andExpect(status().
-                        isOk());
-        this.mockMvc.perform(delete("/consultation_hours/1")).
+        this.mockMvc.perform(delete("/slideshows/1")).
                 andExpect(status().
                         isNoContent());
-        this.mockMvc.perform(get("/consultation_hours/1")).
+        this.mockMvc.perform(get("/slideshows/1")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(delete("/consultation_hours/1")).
+        this.mockMvc.perform(delete("/slideshows/1")).
                 andExpect(status().
                         isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testScreenValidation() throws Exception {
+        SlideshowDto duplicateSlideshowDto = new SlideshowDto(null,3L,"New Years");
+        SlideshowDto nonExistentScreenDto = new SlideshowDto(null,4L,"New Years");
+        this.mockMvc.perform(post("/slideshows").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(duplicateSlideshowDto))).
+                andExpect(status().
+                        isBadRequest());
+        this.mockMvc.perform(post("/slideshows").
+                contentType(MediaType.APPLICATION_JSON).
+                content(om.writeValueAsString(nonExistentScreenDto))).
+                andExpect(status().
+                        isNotFound());
+    }
+
+    @Test
+    public void testGetSlideshowVariables(){
+
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testGetSlideshowSlides() throws Exception {
+        this.mockMvc.perform(get("/slideshows/1/slides"))
+                .andExpect(status().
+                        isOk())
+                .andExpectAll(
+                        jsonPath("$.length()").
+                                value(3)
+                );
     }
 }

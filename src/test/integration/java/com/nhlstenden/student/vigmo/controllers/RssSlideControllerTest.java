@@ -2,11 +2,9 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
-import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
-import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
+import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -30,14 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
-public class MediaSlideControllerTest {
+public class RssSlideControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-    private HashMap<Integer, MediaSlideDto> testDataMap;
-    private ObjectMapper om;
 
+    private HashMap<Integer, RssSlideDto> testDataMap;
+    private ObjectMapper om;
 
     @BeforeEach
     public void setup(){
@@ -47,17 +45,17 @@ public class MediaSlideControllerTest {
 
         om = new ObjectMapper();
         testDataMap = new HashMap<>();
-        testDataMap.put(1, new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L));
-        testDataMap.put(2, new MediaSlideDto(4L,false,"video","/videos/2021/3/exams.mkv",true,30,null,null,null,null,2L));
+        testDataMap.put(1, new RssSlideDto( 2L,"https://www.nu.nl/rss/Algemeen","title","description","creator","category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L));
+        testDataMap.put(2, new RssSlideDto( 7L,"http://feeds.nos.nl/nosnieuwsalgemeen","title","description",null,null,null,true,30,null,"2021-12-21",null,null,2L));
 
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetAll() throws Exception {
-        List<MediaSlideDto> testDataList = new ArrayList<>(testDataMap.values());
+        List<RssSlideDto> testDataList = new ArrayList<>(testDataMap.values());
 
-        this.mockMvc.perform(get("/media_slides")).
+        this.mockMvc.perform(get("/rss_slides")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
@@ -67,35 +65,37 @@ public class MediaSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws  Exception {
-        this.mockMvc.perform(get("/media_slides/1")).
+
+        this.mockMvc.perform(get("/rss_slides/2")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
                         json(om.writeValueAsString(testDataMap.get(1))));
-        this.mockMvc.perform(get("/media_slides/2")).
+        this.mockMvc.perform(get("/rss_slides/1")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(get("/media_slides/8")).
+        this.mockMvc.perform(get("/rss_slides/8")).
                 andExpect(status().
                         isNotFound());
+
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPost() throws Exception {
-        MediaSlideDto providedDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
+        RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
-        MvcResult result = this.mockMvc.perform(post("/media_slides").
-                contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(providedDto))).
+        MvcResult result = this.mockMvc.perform(post("/rss_slides").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isCreated()).andReturn();
         int location = Integer.parseInt(Objects.requireNonNull(result.getResponse()
                         .getHeader("Location"))
-                .replace("/media_slides/", ""));
-        MediaSlideDto expectedDto =  new MediaSlideDto((long) location,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
+                .replace("/rss_slides/", ""));
+        RssSlideDto expectedDto = new RssSlideDto( (long) location,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
-        this.mockMvc.perform(get("/media_slides/" + location)).
+        this.mockMvc.perform(get("/rss_slides/" + location)).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
@@ -105,25 +105,25 @@ public class MediaSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testPut() throws Exception {
-        MediaSlideDto providedDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
-        MediaSlideDto expectedDto =  new MediaSlideDto(1L,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",2L);
+        RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
+        RssSlideDto expectedDto = new RssSlideDto( 2L,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
-        this.mockMvc.perform(put("/media_slides/1").
+        this.mockMvc.perform(put("/rss_slides/2").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isOk());
-        this.mockMvc.perform(get("/media_slides/1")).
+        this.mockMvc.perform(get("/rss_slides/2")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
                         json(om.writeValueAsString(expectedDto)));
-        this.mockMvc.perform(put("/media_slides/2").
+        this.mockMvc.perform(put("/rss_slides/1").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(put("/media_slides/8").
+        this.mockMvc.perform(put("/rss_slides/4").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
@@ -134,16 +134,16 @@ public class MediaSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
-        this.mockMvc.perform(delete("/media_slides/1")).
+        this.mockMvc.perform(delete("/rss_slides/2")).
                 andExpect(status().
                         isNoContent());
-        this.mockMvc.perform(get("/media_slides/1")).
+        this.mockMvc.perform(get("/rss_slides/2")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(delete("/media_slides/1")).
+        this.mockMvc.perform(delete("/rss_slides/2")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(delete("/media_slides/2")).
+        this.mockMvc.perform(delete("/rss_slides/1")).
                 andExpect(status().
                         isNotFound());
     }
@@ -151,13 +151,13 @@ public class MediaSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testUserValidation() throws Exception {
-        MediaSlideDto nonExistentSlideshowDto = new MediaSlideDto(null,true,"/videos/2021/2/test.mp4","video",true,80,"2021-12-24","2021-12-26","12:00","12:30",4L);
-        this.mockMvc.perform(post("/media_slides").
+        RssSlideDto nonExistentSlideshowDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,4L);
+        this.mockMvc.perform(post("/rss_slides").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(nonExistentSlideshowDto))).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(put("/media_slides/1").
+        this.mockMvc.perform(put("/rss_slides/1").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(nonExistentSlideshowDto))).
                 andExpect(status().
