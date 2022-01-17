@@ -1,6 +1,7 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers.logic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -71,7 +72,11 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(dto)))
                 .andExpect(status()
-                        .isCreated());
+                        .isCreated())
+                .andExpectAll(header()
+                        .exists("Location"),
+                        header().string("Location", //check if the location header contains a part of the current path.
+                                Matchers.containsString(path)));
     }
 
     public ResultActions postWithExistingId(DTO dto) throws Exception {

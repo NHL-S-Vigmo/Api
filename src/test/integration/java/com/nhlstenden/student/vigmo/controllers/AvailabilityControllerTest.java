@@ -6,8 +6,10 @@ import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractC
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.hamcrest.Matchers;
 
@@ -74,7 +76,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        AvailabilityDto dto = new AvailabilityDto();
+        AvailabilityDto dto = new AvailabilityDto(null, 1L, "MONDAY", "09:15", "16:00");
         super.post(dto);
     }
 
@@ -82,8 +84,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        AvailabilityDto dto = new AvailabilityDto();
-        dto.setId(1L);
+        AvailabilityDto dto = new AvailabilityDto(1L, 1L, "MONDAY", "09:15", "16:00");
         super.postWithExistingId(dto);
     }
 
@@ -91,7 +92,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        AvailabilityDto dto = new AvailabilityDto();
+        AvailabilityDto dto = new AvailabilityDto(1L, 1L, "MONDAY", "09:15", "16:00");
         super.put(dto);
     }
 
@@ -99,7 +100,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        AvailabilityDto dto = new AvailabilityDto();
+        AvailabilityDto dto = new AvailabilityDto(1L, 1L, "MONDAY", "09:15", "16:00");
         super.put(dto);
     }
 
@@ -122,7 +123,11 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @Override
     public void testModelValidationOnPost() throws Exception {
         AvailabilityDto dto = new AvailabilityDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.weekDay").exists(),
+                jsonPath("$.startTime").exists(),
+                jsonPath("$.endTime").exists()
+        );;
     }
 
     @Test
@@ -130,7 +135,11 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @Override
     public void testModelValidationOnPut() throws Exception {
         AvailabilityDto dto = new AvailabilityDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.weekDay").exists(),
+                jsonPath("$.startTime").exists(),
+                jsonPath("$.endTime").exists()
+        );;
     }
 
     @Test
@@ -144,5 +153,29 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testCreateWithUnknownUserId() throws Exception {
+        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null, 9999L, "MONDAY", "10:00", "11:00");
+        //test creating a record with an invalid user id
+        getMockMvc().perform(MockMvcRequestBuilders.post("/availabilities").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(getObjectMapper().writeValueAsString(nonExistentUserDto))).
+                andExpect(status().
+                        isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testUpdateWithUnknownUserId()throws Exception {
+        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null, 9999L, "MONDAY", "10:00", "11:00");
+
+        getMockMvc().perform(MockMvcRequestBuilders.put("/availabilities/1").
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(getObjectMapper().writeValueAsString(nonExistentUserDto))).
+                andExpect(status().
+                        isNotFound());
     }
 }
