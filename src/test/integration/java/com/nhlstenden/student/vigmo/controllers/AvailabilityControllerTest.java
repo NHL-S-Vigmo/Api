@@ -1,7 +1,7 @@
-package com.nhlstenden.student.vigmo.controllers;
+package integration.java.com.nhlstenden.student.vigmo.controllers;
 
-import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
+import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -148,11 +148,19 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
         super.unauthorized();
     }
 
-    @WithMockUser(username = "Jan_Doornbos", authorities = "UNKNOWN_ROLE")
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "UNKNOWN_ROLE")
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        AvailabilityDto dto = new AvailabilityDto();
+        super.postWithWrongMediaType(dto);
     }
 
     @Test

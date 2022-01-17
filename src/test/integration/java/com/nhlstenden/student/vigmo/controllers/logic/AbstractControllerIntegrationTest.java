@@ -87,6 +87,14 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
                         .isBadRequest());
     }
 
+    public ResultActions postWithWrongMediaType(DTO dto) throws Exception {
+        return this.mockMvc.perform(MockMvcRequestBuilders.post(path)
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(om.writeValueAsString(dto)))
+                .andExpect(status()
+                        .isUnsupportedMediaType());
+    }
+
     public ResultActions put(DTO dto) throws Exception {
         return this.mockMvc.perform(MockMvcRequestBuilders.put(path + "/" + operationId)
                         .contentType(MediaType.APPLICATION_JSON)

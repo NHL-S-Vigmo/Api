@@ -1,7 +1,8 @@
-package com.nhlstenden.student.vigmo.controllers;
+package integration.java.com.nhlstenden.student.vigmo.controllers;
 
-import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
+import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -159,5 +160,13 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
         super.modelValidationOnPost(dto).andExpectAll(
                 jsonPath("$.consultationHourDto").exists()
         );
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        ConsultationHourDto dto = new ConsultationHourDto();
+        super.postWithWrongMediaType(dto);
     }
 }

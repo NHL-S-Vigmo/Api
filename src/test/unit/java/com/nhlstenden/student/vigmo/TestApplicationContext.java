@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo;
+package unit.java.com.nhlstenden.student.vigmo;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
