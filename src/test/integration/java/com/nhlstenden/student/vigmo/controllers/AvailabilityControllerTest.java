@@ -21,8 +21,7 @@ import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
@@ -152,5 +151,23 @@ public class AvailabilityControllerTest {
                         content(om.writeValueAsString(nonExistentUserDto))).
                 andExpect(status().
                         isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testModelValidation() throws Exception {
+        AvailabilityDto providedDto = new AvailabilityDto(null, 1L, "THUDAY", "13:a0", "12-08-1999");
+
+        //test if the model is invalid
+        this.mockMvc.perform(post("/availabilities")
+                        .contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isBadRequest())
+                .andExpectAll(
+                        jsonPath("$.weekDay").exists(),
+                        jsonPath("$.startTime").exists(),
+                        jsonPath("$.endTime").exists()
+                );
     }
 }
