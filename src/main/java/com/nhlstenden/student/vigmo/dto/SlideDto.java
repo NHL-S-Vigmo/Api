@@ -1,21 +1,24 @@
 package com.nhlstenden.student.vigmo.dto;
 
+import com.nhlstenden.student.vigmo.dto.logic.StartEndDate;
+import com.nhlstenden.student.vigmo.dto.logic.StartEndTime;
+import com.nhlstenden.student.vigmo.validators.StartEndDateValidator;
+import com.nhlstenden.student.vigmo.validators.StartEndTimeValidator;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
-import java.time.LocalDate;
 
 @Generated
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class SlideDto {
+@StartEndTimeValidator
+@StartEndDateValidator
+public abstract class SlideDto implements StartEndTime, StartEndDate {
     private Long id;
 
     @Positive
