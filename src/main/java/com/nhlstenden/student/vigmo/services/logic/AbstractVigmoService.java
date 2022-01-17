@@ -3,11 +3,10 @@ package com.nhlstenden.student.vigmo.services.logic;
 import com.nhlstenden.student.vigmo.dto.LogDto;
 import com.nhlstenden.student.vigmo.exception.IdProvidedInCreateRequestException;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
+import com.nhlstenden.student.vigmo.exception.EntityIdRequirementNotMetException;
 import com.nhlstenden.student.vigmo.models.EntityId;
-import com.nhlstenden.student.vigmo.models.User;
 import com.nhlstenden.student.vigmo.services.LogService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.Instant;
@@ -55,13 +54,13 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     @Override
     public long create(DTO dto) {
         try {
-            long id = isFieldSet(dto);
+            Long id = isFieldSet(dto);
 
-            if (id != -1) {
+            if (id != null) {
                 throw new IdProvidedInCreateRequestException("Id provided in create request", id);
             }
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            throw new EntityIdRequirementNotMetException();
         }
 
         return repo.save(mapper.mapObject(dto, entityType)).getId();
@@ -110,7 +109,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      * @return returns the id that was in the object
      * @throws NoSuchFieldException
      */
-    private long isFieldSet(DTO object) throws NoSuchFieldException {
+    private Long isFieldSet(DTO object) throws NoSuchFieldException {
         //get the field from the initial object
         Optional<Field> field = Arrays.stream(object.getClass().getDeclaredFields()).filter(f -> f.getName().equals("id")).findFirst();
         if (field.isPresent()) {
@@ -134,21 +133,21 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      * @param object
      * @return returns -1 if there is no id present
      */
-    public long getGetterResult(Class<DTO> o, DTO object) {
+    public Long getGetterResult(Class<DTO> o, DTO object) {
         Optional<Method> getter = Arrays.stream(o.getMethods()).filter(method -> method.getName().equals("getId")).findFirst();
 
         if (!getter.isPresent()) {
-            return -1;
+            return null;
         }
 
         Method get = getter.get();
         try {
             Object result = get.invoke(object);
 
-            if (result == null) return -1;
+            if (result == null) return null;
             else return (Long) result;
         } catch (IllegalAccessException | InvocationTargetException e) {
-            return -1;
+            return null;
         }
     }
 

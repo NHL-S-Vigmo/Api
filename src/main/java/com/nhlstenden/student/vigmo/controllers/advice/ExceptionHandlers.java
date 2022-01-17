@@ -1,9 +1,6 @@
 package com.nhlstenden.student.vigmo.controllers.advice;
 
-import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
-import com.nhlstenden.student.vigmo.exception.GenericTypeTransformerException;
-import com.nhlstenden.student.vigmo.exception.IdProvidedInCreateRequestException;
-import com.nhlstenden.student.vigmo.exception.UserAlreadyExistsException;
+import com.nhlstenden.student.vigmo.exception.*;
 import lombok.AllArgsConstructor;
 import lombok.Generated;
 import lombok.Getter;
@@ -67,6 +64,12 @@ public class ExceptionHandlers {
     @ExceptionHandler(GenericTypeTransformerException.class)
     public ErrorResponse handleGenericTypeTransformerException(GenericTypeTransformerException exception) {
         return new ErrorResponse("Transforming of generic class went wrong: " + exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(EntityIdRequirementNotMetException.class)
+    public ErrorResponse handleEntityIdRequirementNotMetException(EntityIdRequirementNotMetException exception) {
+        return new ErrorResponse("Error getting the id of an object: " + exception.getMessage());
     }
 
     @Generated

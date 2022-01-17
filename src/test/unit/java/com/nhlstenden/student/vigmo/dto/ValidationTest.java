@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo.dto;
+package unit.java.com.nhlstenden.student.vigmo.dto;
 
 import static org.junit.Assert.assertFalse;
 
@@ -11,6 +11,10 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
+import com.nhlstenden.student.vigmo.dto.SlideDto;
+import com.nhlstenden.student.vigmo.dto.TextSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
