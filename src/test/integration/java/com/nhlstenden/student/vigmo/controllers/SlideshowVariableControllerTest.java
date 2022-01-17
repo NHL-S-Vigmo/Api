@@ -1,10 +1,10 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.models.SlideshowVariable;
+import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

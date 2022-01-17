@@ -1,8 +1,8 @@
-package com.nhlstenden.student.vigmo.controllers;
+package integration.java.com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.ScreenDto;
+import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
