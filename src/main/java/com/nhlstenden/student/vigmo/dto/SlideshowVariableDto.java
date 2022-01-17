@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 @Generated
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class SlideshowVariableDto {
     private Long id;
