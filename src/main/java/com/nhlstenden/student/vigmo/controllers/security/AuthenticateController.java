@@ -1,5 +1,6 @@
 package com.nhlstenden.student.vigmo.controllers.security;
 
+import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.security.JWTProvider;
 import com.nhlstenden.student.vigmo.security.models.LoginDto;
 import com.nhlstenden.student.vigmo.services.UserService;
@@ -39,10 +40,12 @@ public class AuthenticateController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        UserDto userByUsername = userService.findByUsername(username);
 
+        long id = userByUsername.getId();
         String role = ((UserDetails) authentication.getPrincipal()).getAuthorities().toArray()[0].toString();
-        String profilePicture = userService.findByUsername(username).getPfpLocation();
-        String token = jwtProvider.createToken(username, role, profilePicture);
+        String profilePicture = userByUsername.getPfpLocation();
+        String token = jwtProvider.createToken(id, username, role, profilePicture);
 
         return ResponseEntity.ok()
                 .header("jwt-token", token)
