@@ -2,6 +2,7 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
 import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,8 @@ import java.util.Objects;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
@@ -160,5 +161,28 @@ public class MediaSlideControllerTest {
                         content(om.writeValueAsString(nonExistentSlideshowDto))).
                 andExpect(status().
                         isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testModelValidation() throws Exception {
+        MediaSlideDto providedDto = new MediaSlideDto(null,true,"","",true,0,"2021-12-2a","2021-12-2a","12:0a","12:3a",4L);
+        //test if the model is invalid
+        this.mockMvc.perform(post("/media_slides")
+                        .contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isBadRequest())
+
+                //expect the below validation errors to exist
+                .andExpectAll(
+                        jsonPath("$.type").exists(),
+                        jsonPath("$.resource").exists(),
+                        jsonPath("$.duration").exists(),
+                        jsonPath("$.startDate").exists(),
+                        jsonPath("$.endDate").exists(),
+                        jsonPath("$.startTime").exists(),
+                        jsonPath("$.endTime").exists()
+                );
     }
 }

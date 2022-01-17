@@ -2,6 +2,7 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,8 @@ import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
@@ -131,5 +132,26 @@ public class ConsultationHourControllerTest {
         this.mockMvc.perform(delete("/consultation_hours/1")).
                 andExpect(status().
                         isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testModelValidation() throws Exception {
+        ConsultationHourDto providedDto = new ConsultationHourDto(null,"","WEDNESDA","13:15a","14:45a");
+
+        //test if the model is invalid
+        this.mockMvc.perform(post("/consultation_hours")
+                        .contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
+                andExpect(status().
+                        isBadRequest())
+
+                //expect the below validation errors to exist
+                .andExpectAll(
+                        jsonPath("$.description").exists(),
+                        jsonPath("$.weekDay").exists(),
+                        jsonPath("$.startTime").exists(),
+                        jsonPath("$.endTime").exists()
+                );
     }
 }

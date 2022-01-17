@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
@@ -28,13 +29,13 @@ public class AvailabilityDto {
     private String weekDay;
 
     @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45")
-    @NotNull
+    @NotEmpty
     @DateTimeFormat(fallbackPatterns = {"HH:mm"})
     @TimeValidator
     private String startTime;
 
     @ApiModelProperty(name = "endTime", required = true, value = "When the hour ends", example = "11:30")
-    @NotNull
+    @NotEmpty
     @DateTimeFormat(fallbackPatterns = {"HH:mm"})
     @TimeValidator
     private String endTime;

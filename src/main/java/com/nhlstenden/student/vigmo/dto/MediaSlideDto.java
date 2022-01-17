@@ -8,7 +8,6 @@ import javax.validation.constraints.*;
 @Generated
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class MediaSlideDto extends SlideDto {
     public MediaSlideDto(Long id, Boolean audioEnabled, String type,

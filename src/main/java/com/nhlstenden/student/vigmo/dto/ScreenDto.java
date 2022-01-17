@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class ScreenDto {
     private Long id;
 

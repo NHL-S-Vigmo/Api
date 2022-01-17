@@ -126,13 +126,13 @@ public class AvailabilityControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
+        //try deleting an existing availability
         this.mockMvc.perform(delete("/availabilities/1")).
                 andExpect(status().
                         isNoContent());
-        this.mockMvc.perform(get("/availabilities/1")).
-                andExpect(status().
-                        isNotFound());
-        this.mockMvc.perform(delete("/availabilities/1")).
+
+        //try deleting a non-existent availability
+        this.mockMvc.perform(delete("/availabilities/999")).
                 andExpect(status().
                         isNotFound());
     }
@@ -140,12 +140,15 @@ public class AvailabilityControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testUserValidation() throws Exception {
-        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null,6L,"MONDAY","10:00","10:00");
+        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null,999L,"MONDAY","10:00","10:00");
+        //test creating a record with an invalid user id
         this.mockMvc.perform(post("/availabilities").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(nonExistentUserDto))).
                 andExpect(status().
                         isNotFound());
+
+        //test updating a record with an invalid user id
         this.mockMvc.perform(put("/availabilities/1").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(nonExistentUserDto))).

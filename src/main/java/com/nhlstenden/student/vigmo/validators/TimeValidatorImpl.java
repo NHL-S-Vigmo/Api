@@ -17,8 +17,8 @@ public class TimeValidatorImpl implements ConstraintValidator<TimeValidator, Str
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return false;
+        if (value == null || value.isEmpty()) {
+            return true;
         }
         try {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");

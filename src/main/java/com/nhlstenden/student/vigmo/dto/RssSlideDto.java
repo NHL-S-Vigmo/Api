@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 @Generated
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class RssSlideDto extends SlideDto {
     public RssSlideDto(Long id, String url, String titleTag,
