@@ -1,5 +1,7 @@
 package com.nhlstenden.student.vigmo.dto;
 
+import com.nhlstenden.student.vigmo.dto.logic.StartEndTime;
+import com.nhlstenden.student.vigmo.validators.StartEndTimeValidator;
 import com.nhlstenden.student.vigmo.validators.TimeValidator;
 import com.nhlstenden.student.vigmo.validators.WeekdayValidator;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,7 +17,9 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConsultationHourDto {
+@StartEndTimeValidator
+@Builder
+public class ConsultationHourDto implements StartEndTime {
     private Long id;
 
     @ApiModelProperty(name = "description", value = "Description of the current hour")
@@ -27,13 +31,14 @@ public class ConsultationHourDto {
     @WeekdayValidator
     private String weekDay;
 
-    @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45:00")
+    @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45")
     @NotEmpty
     @DateTimeFormat(fallbackPatterns = {"hh:mm"})
     @TimeValidator
     private String startTime;
 
-    @ApiModelProperty(name = "endTime", required = true, value = "When the hour ends", example = "11:30:00")
+
+    @ApiModelProperty(name = "endTime", required = true, value = "When the hour ends", example = "11:30")
     @NotEmpty
     @DateTimeFormat(fallbackPatterns = {"hh:mm"})
     @TimeValidator

@@ -1,5 +1,7 @@
 package com.nhlstenden.student.vigmo.dto;
 
+import com.nhlstenden.student.vigmo.dto.logic.StartEndTime;
+import com.nhlstenden.student.vigmo.validators.StartEndTimeValidator;
 import com.nhlstenden.student.vigmo.validators.TimeValidator;
 import com.nhlstenden.student.vigmo.validators.WeekdayValidator;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,7 +18,8 @@ import javax.validation.constraints.Positive;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AvailabilityDto {
+@StartEndTimeValidator
+public class AvailabilityDto implements StartEndTime {
     private Long id;
 
     @ApiModelProperty(name = "description", value = "The user this data belongs to\nSee [user-controller](#/user-controller) for more info")
