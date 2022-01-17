@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class User implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

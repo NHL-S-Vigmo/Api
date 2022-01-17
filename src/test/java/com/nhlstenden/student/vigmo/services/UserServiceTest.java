@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -30,6 +31,9 @@ class UserServiceTest {
     @Mock
     private MappingUtility mapper;
 
+    @Mock
+    PasswordEncoder passwordEncoderMock;
+
     @InjectMocks
     UserService userService;
 
@@ -47,5 +51,29 @@ class UserServiceTest {
 
         assertThat(user)
                 .isNotNull();
+    }
+
+    @Test
+    void updatePassword(){
+        String oldPasswordString = "$2a$10$9yiz1wi41mdOTLDNeDiMqOAobStwnR4SAaLQQ6TBPOofKgT1ObOv2";
+        String newPasswordString ="$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.";
+
+        User user = new User(1L, "TestUser", oldPasswordString,true, "ROLE_ADMIN", "image_103");
+        UserDto userDto = new UserDto(1L, "TestUser","",true, "ROLE_ADMIN", "image_103");
+
+        when(passwordEncoderMock.encode(any())).thenReturn(newPasswordString);
+        when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.of(user));
+        when(mapper.mapObject(any(UserDto.class), eq(User.class))).thenReturn(user);
+
+        //Test updating without a password set (keeping the password already in the database)
+        userService.update(userDto, 1L);
+        assertThat(userDto.getPassword()).isEqualTo(oldPasswordString);
+
+        //Test updating the password
+        userDto.setPassword("password123");
+        userService.update(userDto, 1L);
+        assertThat(userDto.getPassword()).isEqualTo(newPasswordString);
+
+
     }
 }
