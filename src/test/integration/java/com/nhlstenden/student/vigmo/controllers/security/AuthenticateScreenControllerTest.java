@@ -8,5 +8,6 @@ class AuthenticateScreenControllerTest {
 
     @Test
     void login() {
+        //todo write screen auth test
     }
 }
