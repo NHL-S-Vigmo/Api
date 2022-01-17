@@ -13,7 +13,6 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class MediaSlide extends Slide {
     @Column(name = "audio_enabled", nullable = false)

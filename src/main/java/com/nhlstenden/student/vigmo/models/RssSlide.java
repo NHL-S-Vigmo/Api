@@ -13,7 +13,6 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class RssSlide extends Slide {
     @Column(name = "url", nullable = false, length = 220)

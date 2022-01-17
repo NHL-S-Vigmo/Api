@@ -12,7 +12,6 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Availability implements EntityId {
     @Id
