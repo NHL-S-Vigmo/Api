@@ -115,7 +115,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @Override
     public void testModelValidationOnPost() throws Exception {
         LogDto dto = new LogDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto); //fixme: add validation to LogDto
     }
 
     @Test
