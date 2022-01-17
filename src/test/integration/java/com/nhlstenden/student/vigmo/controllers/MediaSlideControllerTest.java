@@ -4,6 +4,7 @@ import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,29 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @Override
     public void testGetOne() throws Exception {
         super.getOne()
-                .andExpect(
-                        jsonPath("$.name").exists());
+                .andExpectAll(
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.slideshowId").exists(),
+                        jsonPath("$.isActive").exists(),
+                        jsonPath("$.duration").exists(),
+                        jsonPath("$.startDate").exists(),
+                        jsonPath("$.endDate").exists(),
+                        jsonPath("$.startTime").exists(),
+                        jsonPath("$.endTime").exists(),
+                        jsonPath("$.audioEnabled").exists(),
+                        jsonPath("$.type").exists(),
+                        jsonPath("$.resource").exists()
+                );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetNotFound() throws Exception {
-        super.getNotFound();
+        super.getNotFound().andExpectAll(
+                jsonPath("$.error").exists(),
+                jsonPath("$.error").value(Matchers.containsString("MediaSlideService could not find"))
+        );
     }
 
     @Test

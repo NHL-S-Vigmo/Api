@@ -101,7 +101,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @Override
     public void testPutNotFound() throws Exception {
         AvailabilityDto dto = new AvailabilityDto(1L, 1L, "MONDAY", "09:15", "16:00");
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
                 jsonPath("$.weekDay").exists(),
                 jsonPath("$.startTime").exists(),
                 jsonPath("$.endTime").exists()
-        );;
+        );
     }
 
     @Test
@@ -139,7 +139,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
                 jsonPath("$.weekDay").exists(),
                 jsonPath("$.startTime").exists(),
                 jsonPath("$.endTime").exists()
-        );;
+        );
     }
 
     @Test
@@ -177,7 +177,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testUpdateWithUnknownUserId()throws Exception {
+    public void testUpdateWithUnknownUserId() throws Exception {
         AvailabilityDto nonExistentUserDto = new AvailabilityDto(null, 9999L, "MONDAY", "10:00", "11:00");
 
         getMockMvc().perform(MockMvcRequestBuilders.put("/availabilities/1").
@@ -185,5 +185,14 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
                         content(getObjectMapper().writeValueAsString(nonExistentUserDto))).
                 andExpect(status().
                         isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testModelValidationWithNoChronologicalTime() throws Exception {
+        AvailabilityDto dto = new AvailabilityDto(1L, 1L, "MONDAY", "10:00", "10:00");
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.availabilityDto").exists()
+        );
     }
 }

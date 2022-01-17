@@ -4,6 +4,7 @@ import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.LogDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,24 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @Override
     public void testGetOne() throws Exception {
         super.getOne()
-                .andExpect(
-                        jsonPath("$.name").exists());
+                .andExpectAll(
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.userId").exists(),
+                        jsonPath("$.username").exists(),
+                        jsonPath("$.action").exists(),
+                        jsonPath("$.message").exists(),
+                        jsonPath("$.datetime").exists()
+                );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetNotFound() throws Exception {
-        super.getNotFound();
+        super.getNotFound().andExpectAll(
+                jsonPath("$.error").exists(),
+                jsonPath("$.error").value(Matchers.containsString("LogService could not find"))
+        );
     }
 
     @Test

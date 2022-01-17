@@ -4,6 +4,7 @@ import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.UserDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +41,24 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @Override
     public void testGetOne() throws Exception {
         super.getOne()
-                .andExpect(
-                        jsonPath("$.name").exists());
+                .andExpectAll(
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.username").exists(),
+                        jsonPath("$.password").exists(),
+                        jsonPath("$.enabled").exists(),
+                        jsonPath("$.role").exists(),
+                        jsonPath("$.pfpLocation").exists()
+                );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetNotFound() throws Exception {
-        super.getNotFound();
+        super.getNotFound().andExpectAll(
+                jsonPath("$.error").exists(),
+                jsonPath("$.error").value(Matchers.containsString("UserService could not find"))
+        );
     }
 
     @Test

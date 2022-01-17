@@ -4,6 +4,7 @@ import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,29 +38,43 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @Override
     public void testGetOne() throws Exception {
         super.getOne()
-                .andExpect(
-                        jsonPath("$.name").exists());
+                .andExpectAll(
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.description").exists(),
+                        jsonPath("$.weekDay").exists(),
+                        jsonPath("$.startTime").exists(),
+                        jsonPath("$.endTime").exists()
+                );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetNotFound() throws Exception {
-        super.getNotFound();
+        super.getNotFound().andExpectAll(
+                jsonPath("$.error").exists(),
+                jsonPath("$.error").value(Matchers.containsString("ConsultationHourService could not find"))
+        );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll().andExpectAll(
+                jsonPath("$.[:1].id").exists(),
+                jsonPath("$.[:1].description").exists(),
+                jsonPath("$.[:1].weekDay").exists(),
+                jsonPath("$.[:1].startTime").exists(),
+                jsonPath("$.[:1].endTime").exists()
+        );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto();
+        ConsultationHourDto dto = new ConsultationHourDto(null,"Noon consultation","MONDAY","12:15","13:00");
         super.post(dto);
     }
 
@@ -67,16 +82,15 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto();
-        dto.setId(1L);
-        super.post(dto);
+        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:15","13:00");
+        super.postWithExistingId(dto);
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto();
+        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:15","13:00");
         super.put(dto);
     }
 
@@ -84,8 +98,8 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto();
-        super.put(dto);
+        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:15","13:00");
+        super.putNotFound(dto);
     }
 
     @Test
@@ -107,7 +121,11 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @Override
     public void testModelValidationOnPost() throws Exception {
         ConsultationHourDto dto = new ConsultationHourDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.weekDay").exists(),
+                jsonPath("$.startTime").exists(),
+                jsonPath("$.endTime").exists()
+        );
     }
 
     @Test
@@ -115,7 +133,11 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @Override
     public void testModelValidationOnPut() throws Exception {
         ConsultationHourDto dto = new ConsultationHourDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.weekDay").exists(),
+                jsonPath("$.startTime").exists(),
+                jsonPath("$.endTime").exists()
+        );
     }
 
     @Test
@@ -129,6 +151,15 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testModelValidationWithNoChronologicalTime() throws Exception {
+        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:00","12:00");
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.consultationHourDto").exists()
+        );
     }
 
     @Test
