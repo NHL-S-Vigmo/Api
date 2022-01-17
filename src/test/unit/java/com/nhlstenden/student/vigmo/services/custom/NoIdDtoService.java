@@ -1,7 +1,5 @@
-package unit.java.com.nhlstenden.student.vigmo.services;
+package unit.java.com.nhlstenden.student.vigmo.services.custom;
 
-import com.nhlstenden.student.vigmo.models.TestEntity;
-import com.nhlstenden.student.vigmo.repositories.TestEntityRepository;
 import com.nhlstenden.student.vigmo.services.LogService;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;

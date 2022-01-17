@@ -9,7 +9,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import unit.java.com.nhlstenden.student.vigmo.TestApplicationContext;
 import unit.java.com.nhlstenden.student.vigmo.dto.TestEntityDto;
-import unit.java.com.nhlstenden.student.vigmo.services.TestEntityService;
+import unit.java.com.nhlstenden.student.vigmo.services.custom.TestEntityService;
 
 @EnableWebMvc
 @Configuration
