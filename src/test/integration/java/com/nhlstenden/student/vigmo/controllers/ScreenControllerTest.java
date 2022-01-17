@@ -23,7 +23,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     private final String USER_ROLE = "ROLE_ADMIN";
 
     public ScreenControllerTest() {
-        super("/slideshow_variables", 1, 9999);
+        super("/screens", 1, 9999);
     }
 
     @BeforeEach
