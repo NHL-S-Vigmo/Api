@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo.services;
+package unit.java.com.nhlstenden.student.vigmo.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

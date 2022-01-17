@@ -12,8 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import unit.java.com.nhlstenden.student.vigmo.dto.NoIdEntityDto;
 import unit.java.com.nhlstenden.student.vigmo.dto.TestEntityDto;
+import unit.java.com.nhlstenden.student.vigmo.services.custom.NoIdDtoService;
+import unit.java.com.nhlstenden.student.vigmo.services.custom.TestEntityService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +129,7 @@ class ServiceTest {
     void getWithNoIdField() {
         assertThatThrownBy(() -> noIdDtoService.create(noIdEntityDtoMock)).
                 isInstanceOf(EntityIdRequirementNotMetException.class);
-        verifyNoInteractions(repository);
+        verify(repository, Mockito.never()).save(any());
     }
 
     @Test
@@ -152,7 +155,7 @@ class ServiceTest {
                 isInstanceOf(IdProvidedInCreateRequestException.class);
 
         //verify that the save was not called
-        verifyNoInteractions(repository);
+        verify(repository, Mockito.never()).save(testEntityMock);
     }
 
     @Test
