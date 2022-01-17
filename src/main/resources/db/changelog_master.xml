@@ -160,6 +160,23 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <createTable tableName="files">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_files"/>
+            </column>
+            <column name="file_name" type="VARCHAR(220)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mime_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_key" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
 
         <addForeignKeyConstraint baseColumnNames="screen_id" baseTableName="slideshows" constraintName="FK_SLIDESHOWS_ON_SCREEN" referencedColumnNames="id" referencedTableName="screens"/>
         <addForeignKeyConstraint baseColumnNames="slideshow_id" baseTableName="slideshow_variables" constraintName="FK_SLIDESHOW_VARIABLES_ON_SLIDESHOW" referencedColumnNames="id" referencedTableName="slideshows"/>
