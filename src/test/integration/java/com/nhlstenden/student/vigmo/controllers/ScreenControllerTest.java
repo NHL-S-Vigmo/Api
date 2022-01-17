@@ -3,6 +3,7 @@ package com.nhlstenden.student.vigmo.controllers;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.dto.ScreenDto;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -35,15 +36,22 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @Override
     public void testGetOne() throws Exception {
         super.getOne()
-                .andExpect(
-                        jsonPath("$.name").exists());
+                .andExpectAll(
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.name").exists(),
+                        jsonPath("$.location").exists(),
+                        jsonPath("$.authKey").exists()
+                );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetNotFound() throws Exception {
-        super.getNotFound();
+        super.getNotFound().andExpectAll(
+                jsonPath("$.error").exists(),
+                jsonPath("$.error").value(Matchers.containsString("ScreenService could not find"))
+        );
     }
 
     @Test

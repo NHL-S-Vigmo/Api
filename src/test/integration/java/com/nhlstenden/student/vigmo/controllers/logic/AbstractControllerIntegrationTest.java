@@ -100,7 +100,7 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(dto)))
                 .andExpect(status()
-                        .isOk());
+                        .isNotFound());
     }
 
     public ResultActions delete() throws Exception {
@@ -135,12 +135,20 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
     public ResultActions unauthorized() throws Exception {
         return this.mockMvc.perform(get(path + "/" + operationId))
                 .andExpect(status()
-                        .isUnauthorized());
+                        .isUnauthorized())
+                .andExpectAll(
+                        jsonPath("$.message").exists(),
+                        jsonPath("$.message").value(Matchers.containsString("not authenticated"))
+                );
     }
 
     public ResultActions forbidden() throws Exception {
         return this.mockMvc.perform(get(path + "/" + operationId))
                 .andExpect(status()
-                        .isForbidden());
+                        .isForbidden())
+                .andExpectAll(
+                        jsonPath("$.message").exists(),
+                        jsonPath("$.message").value(Matchers.containsString("not allowed"))
+                );
     }
 }

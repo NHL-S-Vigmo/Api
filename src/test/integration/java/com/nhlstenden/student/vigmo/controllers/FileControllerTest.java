@@ -1,16 +1,21 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
 import com.nhlstenden.student.vigmo.dto.FileDto;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -36,29 +41,43 @@ class FileControllerTest extends AbstractControllerIntegrationTest<FileDto> {
     @Override
     public void testGetOne() throws Exception {
         super.getOne()
-                .andExpect(
-                        jsonPath("$.name").exists());
+                .andExpectAll(
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.name").exists(),
+                        jsonPath("$.mimeType").exists(),
+                        jsonPath("$.data").exists(),
+                        jsonPath("$.key").exists()
+                );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetNotFound() throws Exception {
-        super.getNotFound();
+        super.getNotFound().andExpectAll(
+                jsonPath("$.error").exists(),
+                jsonPath("$.error").value(Matchers.containsString("FileService could not find"))
+        );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll().andExpectAll(
+                jsonPath("$.[:1].id").exists(),
+                jsonPath("$.[:1].name").exists(),
+                jsonPath("$.[:1].mimeType").exists(),
+                jsonPath("$.[:1].data").exists(),
+                jsonPath("$.[:1].key").exists()
+        );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        FileDto dto = new FileDto();
+        FileDto dto = new FileDto(null, "Afbeelding1.png", "image/png", "MTIzNDU2Nzg5MDEyMzQ1Njc4OTA=", "P3MNAthDkRhJZq36gx9bp9kw5oqradw63vseAJQKPAtExnm2RjwSco5SZPiXYhBM");
         super.post(dto);
     }
 
@@ -66,16 +85,15 @@ class FileControllerTest extends AbstractControllerIntegrationTest<FileDto> {
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        FileDto dto = new FileDto();
-        dto.setId(1L);
-        super.post(dto);
+        FileDto dto = new FileDto(1L, "Afbeelding1.png", "image/png", "MTIzNDU2Nzg5MDEyMzQ1Njc4OTA=", "P3MNAthDkRhJZq36gx9bp9kw5oqradw63vseAJQKPAtExnm2RjwSco5SZPiXYhBM");
+        super.postWithExistingId(dto);
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        FileDto dto = new FileDto();
+        FileDto dto = new FileDto(1L, "Afbeelding1.png", "image/png", "MTIzNDU2Nzg5MDEyMzQ1Njc4OTA=", "P3MNAthDkRhJZq36gx9bp9kw5oqradw63vseAJQKPAtExnm2RjwSco5SZPiXYhBM");
         super.put(dto);
     }
 
@@ -83,8 +101,8 @@ class FileControllerTest extends AbstractControllerIntegrationTest<FileDto> {
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        FileDto dto = new FileDto();
-        super.put(dto);
+        FileDto dto = new FileDto(1L, "Afbeelding1.png", "image/png", "MTIzNDU2Nzg5MDEyMzQ1Njc4OTA=", "P3MNAthDkRhJZq36gx9bp9kw5oqradw63vseAJQKPAtExnm2RjwSco5SZPiXYhBM");
+        super.putNotFound(dto);
     }
 
     @Test
@@ -130,4 +148,15 @@ class FileControllerTest extends AbstractControllerIntegrationTest<FileDto> {
         super.forbidden();
     }
 
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testFileRenderContentNameAndType() throws Exception {
+        getMockMvc().perform(MockMvcRequestBuilders.get("/files/key1/render"))
+                .andExpect(status()
+                        .isOk())
+                .andExpectAll(header().exists("Content-Disposition"),
+                        header().string("Content-Disposition",
+                                Matchers.containsString("filename")))
+                .andExpect(content().contentType(MediaType.IMAGE_PNG));
+    }
 }
