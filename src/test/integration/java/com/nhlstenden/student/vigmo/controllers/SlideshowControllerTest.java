@@ -1,6 +1,8 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowDto;
+import com.nhlstenden.student.vigmo.models.Slide;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -129,5 +131,13 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        SlideshowDto dto = new SlideshowDto();
+        super.postWithWrongMediaType(dto);
     }
 }

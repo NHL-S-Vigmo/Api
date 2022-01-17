@@ -27,4 +27,6 @@ public interface ControllerTestEndpointImplementation {
 
     void testUnauthorized() throws Exception;
     void testForbidden() throws Exception;
+
+    void testInvalidMediaType() throws Exception;
 }

@@ -1,5 +1,6 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
@@ -131,4 +132,11 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
         super.forbidden();
     }
 
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        SlideshowVariableDto dto = new SlideshowVariableDto();
+        super.postWithWrongMediaType(dto);
+    }
 }

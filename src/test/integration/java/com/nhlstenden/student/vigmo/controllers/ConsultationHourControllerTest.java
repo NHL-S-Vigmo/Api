@@ -1,5 +1,6 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
@@ -128,5 +129,13 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        ConsultationHourDto dto = new ConsultationHourDto();
+        super.postWithWrongMediaType(dto);
     }
 }

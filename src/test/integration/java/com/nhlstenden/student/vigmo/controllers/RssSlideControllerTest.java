@@ -1,5 +1,6 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
@@ -129,5 +130,13 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        RssSlideDto dto = new RssSlideDto();
+        super.postWithWrongMediaType(dto);
     }
 }

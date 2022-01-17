@@ -1,5 +1,6 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.TextSlideDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.web.context.WebApplicationContext;
+import org.w3c.dom.Text;
 
 import javax.transaction.Transactional;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -128,5 +130,13 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        TextSlideDto dto = new TextSlideDto();
+        super.postWithWrongMediaType(dto);
     }
 }

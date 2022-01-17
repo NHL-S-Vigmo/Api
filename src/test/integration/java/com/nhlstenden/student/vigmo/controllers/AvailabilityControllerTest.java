@@ -139,10 +139,18 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
         super.unauthorized();
     }
 
-    @WithMockUser(username = "Jan_Doornbos", authorities = "UNKNOWN_ROLE")
     @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "UNKNOWN_ROLE")
     @Override
     public void testForbidden() throws Exception {
         super.forbidden();
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    @Override
+    public void testInvalidMediaType() throws Exception {
+        AvailabilityDto dto = new AvailabilityDto();
+        super.postWithWrongMediaType(dto);
     }
 }
