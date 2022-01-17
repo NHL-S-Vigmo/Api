@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.web.context.WebApplicationContext;
+import org.hamcrest.Matchers;
 
 import javax.transaction.Transactional;
 
@@ -37,22 +38,36 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     @Override
     public void testGetOne() throws Exception {
         super.getOne()
-                .andExpect(
-                        jsonPath("$.name").exists());
+                .andExpectAll(
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.userId").exists(),
+                        jsonPath("$.weekDay").exists(),
+                        jsonPath("$.startTime").exists(),
+                        jsonPath("$.endTime").exists()
+                );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetNotFound() throws Exception {
-        super.getNotFound();
+        super.getNotFound().andExpectAll(
+                jsonPath("$.error").exists(),
+                jsonPath("$.error").value(Matchers.containsString("AvailabilityService could not find"))
+        );
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll().andExpectAll(
+                jsonPath("$.[:1].id").exists(),
+                jsonPath("$.[:1].userId").exists(),
+                jsonPath("$.[:1].weekDay").exists(),
+                jsonPath("$.[:1].startTime").exists(),
+                jsonPath("$.[:1].endTime").exists()
+        );
     }
 
     @Test
@@ -69,7 +84,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     public void testPostWithExistingId() throws Exception {
         AvailabilityDto dto = new AvailabilityDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test
