@@ -1,12 +1,71 @@
-package com.nhlstenden.student.vigmo.controllers.security;
+package integration.java.com.nhlstenden.student.vigmo.controllers.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhlstenden.student.vigmo.security.models.LoginDto;
+import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.*;
+import javax.transaction.Transactional;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+@Transactional
+@SpringJUnitWebConfig(IntegrationTestConfig.class)
 class AuthenticateScreenControllerTest {
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    private MockMvc mockMvc;
+    private final String path = "/authenticate_screen";
+    private final String jwtTokenHeader = "jwt-token";
+
+    @BeforeEach
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
+    }
+
     @Test
-    void login() {
+    @WithMockUser(username = "Thijs_Smegen", authorities = "ROLE_ADMIN")
+    void correctScreenLogin() throws Exception {
+        this.mockMvc.perform(get(path + "/DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI"))
+                .andExpect(status().
+                        isOk()).
+                andExpect(header().
+                        exists(jwtTokenHeader));
+    }
+
+    @Test
+    @WithMockUser(username = "Thijs_Smegen", authorities = "ROLE_ADMIN")
+    void screenLoginWithNonExistentAuthToken() throws Exception {
+        //Given auth token does not belong to any screens
+        this.mockMvc.perform(get(path + "/abcdefghijklmnopq"))
+                .andExpect(status().
+                        isNotFound()).
+                andExpect(header().
+                        doesNotExist(jwtTokenHeader));
+    }
+
+    @Test
+    void screenLoginWhileNotLoggedIn() throws Exception {
+        this.mockMvc.perform(get(path + "/DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI"))
+                .andExpect(status().
+                        isUnauthorized()).
+                andExpect(header().
+                        doesNotExist(jwtTokenHeader));
     }
 }
