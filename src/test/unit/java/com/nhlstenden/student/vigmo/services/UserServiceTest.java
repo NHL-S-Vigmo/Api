@@ -44,6 +44,7 @@ class UserServiceTest {
 
     @Test
     void findByUsername() {
+        //todo: add mockito verify checks
         when(userRepositoryMock.findByUsername(anyString())).thenReturn(Optional.of(userEntityMock));
         when(mapper.mapObject(any(User.class), eq(UserDto.class))).thenReturn(userDtoMock);
 

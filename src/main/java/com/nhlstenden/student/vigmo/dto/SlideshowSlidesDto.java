@@ -5,7 +5,6 @@ import lombok.*;
 @Generated
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class SlideshowSlidesDto {
     private Long slideId;

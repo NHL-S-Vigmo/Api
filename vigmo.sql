@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 17, 2021 at 05:40 PM
+-- Generation Time: Jan 14, 2022 at 04:40 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -85,12 +85,19 @@ CREATE TABLE `databasechangeloglock` (
                                          `LOCKEDBY` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `databasechangeloglock`
+-- Table structure for table `files`
 --
 
-INSERT INTO `databasechangeloglock` (`ID`, `LOCKED`, `LOCKGRANTED`, `LOCKEDBY`) VALUES
-    (1, b'0', NULL, NULL);
+CREATE TABLE `files` (
+                         `id` bigint(20) NOT NULL,
+                         `file_name` varchar(220) NOT NULL,
+                         `mime_type` varchar(100) NOT NULL,
+                         `file` mediumblob NOT NULL COMMENT '16mb',
+                         `file_key` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -242,6 +249,13 @@ ALTER TABLE `databasechangeloglock`
     ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `files`
+--
+ALTER TABLE `files`
+    ADD PRIMARY KEY (`id`),
+  ADD KEY `file_key` (`file_key`);
+
+--
 -- Indexes for table `logs`
 --
 ALTER TABLE `logs`
@@ -313,6 +327,12 @@ ALTER TABLE `availabilities`
 -- AUTO_INCREMENT for table `consultation_hours`
 --
 ALTER TABLE `consultation_hours`
+    MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `files`
+--
+ALTER TABLE `files`
     MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --

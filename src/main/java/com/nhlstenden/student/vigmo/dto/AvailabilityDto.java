@@ -2,12 +2,15 @@ package com.nhlstenden.student.vigmo.dto;
 
 import com.nhlstenden.student.vigmo.dto.logic.StartEndTime;
 import com.nhlstenden.student.vigmo.validators.StartEndTimeValidator;
+import com.nhlstenden.student.vigmo.validators.TimeValidator;
 import com.nhlstenden.student.vigmo.validators.WeekdayValidator;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 @Generated
@@ -28,13 +31,15 @@ public class AvailabilityDto implements StartEndTime {
     @WeekdayValidator
     private String weekDay;
 
-    @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45:00")
-    @NotNull
-    @DateTimeFormat(fallbackPatterns = {"hh:mm"})
+    @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45")
+    @NotEmpty
+    @DateTimeFormat(fallbackPatterns = {"HH:mm"})
+    @TimeValidator
     private String startTime;
 
-    @ApiModelProperty(name = "endTime", required = true, value = "When the hour ends", example = "11:30:00")
-    @NotNull
-    @DateTimeFormat(fallbackPatterns = {"hh:mm"})
+    @ApiModelProperty(name = "endTime", required = true, value = "When the hour ends", example = "11:30")
+    @NotEmpty
+    @DateTimeFormat(fallbackPatterns = {"HH:mm"})
+    @TimeValidator
     private String endTime;
 }

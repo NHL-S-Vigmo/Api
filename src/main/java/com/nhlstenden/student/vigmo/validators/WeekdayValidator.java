@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @NotNull(message = "Weekday must be set")
 @ReportAsSingleViolation
 public @interface WeekdayValidator {
-    String message() default "Value is not valid";
+    String message() default "Not a valid weekday, use either one of 'MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'";
 
     Class<?>[] groups() default {};
 

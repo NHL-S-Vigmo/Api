@@ -1,10 +1,13 @@
 package com.nhlstenden.student.vigmo.config;
 
+import lombok.SneakyThrows;
 import org.modelmapper.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -19,11 +22,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 @EnableWebMvc
 @Configuration
@@ -93,9 +96,8 @@ public class ApiConfig implements WebMvcConfigurer {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setFieldMatchingEnabled(true);
 
-        return modelMapperDateParser(modelMapperTimeParser(modelMapper));
+        return modelMapperDateParser(modelMapperTimeParser(modelMapperStringToBase64Parser(modelMapper)));
     }
-
 
     private ModelMapper modelMapperDateParser(ModelMapper modelMapper) {
         Provider<LocalDate> localDateProvider = new AbstractProvider<LocalDate>() {
@@ -121,7 +123,6 @@ public class ApiConfig implements WebMvcConfigurer {
         return modelMapper;
     }
 
-
     private ModelMapper modelMapperTimeParser(ModelMapper modelMapper) {
         Provider<LocalTime> localTimeProvider = new AbstractProvider<LocalTime>() {
             @Override
@@ -142,6 +143,30 @@ public class ApiConfig implements WebMvcConfigurer {
         modelMapper.createTypeMap(String.class, LocalTime.class);
         modelMapper.addConverter(toStringTime);
         modelMapper.getTypeMap(String.class, LocalTime.class).setProvider(localTimeProvider);
+
+        return modelMapper;
+    }
+
+    private ModelMapper modelMapperStringToBase64Parser(ModelMapper modelMapper){
+        Provider<byte[]> localByteArrayProvider = new AbstractProvider<>() {
+            @Override
+            public byte[] get() {
+                return new byte[0];
+            }
+        };
+
+        Converter<String, byte[]> toStringTime = new AbstractConverter<>() {
+            @SneakyThrows
+            @Override
+            protected byte[] convert(String source) {
+                if(source == null || source.isEmpty()) return null;
+                return Base64.getDecoder().decode(source.getBytes(StandardCharsets.UTF_8));
+            }
+        };
+
+        modelMapper.createTypeMap(String.class, byte[].class);
+        modelMapper.addConverter(toStringTime);
+        modelMapper.getTypeMap(String.class, byte[].class).setProvider(localByteArrayProvider);
 
         return modelMapper;
     }

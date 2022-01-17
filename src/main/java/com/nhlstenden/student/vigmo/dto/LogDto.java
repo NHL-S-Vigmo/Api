@@ -6,9 +6,6 @@ import java.time.Instant;
 
 @Generated
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class LogDto {
     public LogDto(Long userId, String username, String action, String message, Instant datetime) {
         this.userId = userId;

@@ -20,20 +20,20 @@ public class SlideshowVariableService extends AbstractVigmoService<SlideshowVari
     }
 
     @Override
-    public long create(SlideshowVariableDto slideshowVariableDto, long userId, String username) {
+    public long create(SlideshowVariableDto slideshowVariableDto) {
         //Will throw a data not found runtime exception if screen does not exist
         if(slideshowService.existsById(slideshowVariableDto.getSlideshowId())){
-            return super.create(slideshowVariableDto, userId, username);
+            return super.create(slideshowVariableDto);
         }else{
             throw new DataNotFoundException("Slideshow service could not find " + slideshowVariableDto.getSlideshowId());
         }
     }
 
     @Override
-    public void update(SlideshowVariableDto rssSlideDto, long id, long userId, String username) {
+    public void update(SlideshowVariableDto rssSlideDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
         if(slideshowService.existsById(rssSlideDto.getSlideshowId())){
-            super.update(rssSlideDto, id, userId, username);
+            super.update(rssSlideDto, id);
         }else{
             throw new DataNotFoundException("Slideshow service could not find " + rssSlideDto.getSlideshowId());
         }

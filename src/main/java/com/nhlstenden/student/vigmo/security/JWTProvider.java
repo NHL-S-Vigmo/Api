@@ -26,9 +26,10 @@ public class JWTProvider {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, String role, String profilePicture) {
+    public String createToken(long id, String username, String role, String profilePicture) {
 
         HashMap<String, Object> claimMap = new HashMap<>();
+        claimMap.put("id", id);
         claimMap.put("pfp_location", profilePicture);
         claimMap.put("role", role);
 
@@ -81,12 +82,13 @@ public class JWTProvider {
         String user = claims.getSubject();
 
         //todo: maybe get these refreshed from the database.
+        long id = claims.get("id", Long.class);
         String role = claims.get("role", String.class);
         String pfp_location = claims.get("pfp_location", String.class);
 
         Date expiration = claims.getExpiration();
         if (new Date(new Date().getTime() + validityInMilliseconds / 10).after(expiration)) {
-            return createToken(user, role, pfp_location);
+            return createToken(id, user, role, pfp_location);
         }
         return null;
     }

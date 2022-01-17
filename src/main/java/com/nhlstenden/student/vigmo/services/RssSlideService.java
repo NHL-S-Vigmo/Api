@@ -20,20 +20,20 @@ public class RssSlideService extends AbstractVigmoService<RssSlideRepository, Rs
         this.slideshowService = slideshowService;
     }
     @Override
-    public long create(RssSlideDto rssSlideDto, long userId, String username) {
+    public long create(RssSlideDto rssSlideDto) {
         //Will throw a data not found runtime exception if screen does not exist
         if(slideshowService.existsById(rssSlideDto.getSlideshowId())){
-            return super.create(rssSlideDto, userId, username);
+            return super.create(rssSlideDto);
         }else{
             throw new DataNotFoundException("Slideshow service could not find " + rssSlideDto.getSlideshowId());
         }
     }
 
     @Override
-    public void update(RssSlideDto rssSlideDto, long id, long userId, String username) {
+    public void update(RssSlideDto rssSlideDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
         if(slideshowService.existsById(rssSlideDto.getSlideshowId())){
-            super.update(rssSlideDto, id, userId, username);
+            super.update(rssSlideDto, id);
         }else{
             throw new DataNotFoundException("Slideshow service could not find " + rssSlideDto.getSlideshowId());
         }

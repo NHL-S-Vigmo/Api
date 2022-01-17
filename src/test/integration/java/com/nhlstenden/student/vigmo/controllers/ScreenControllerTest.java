@@ -2,14 +2,11 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhlstenden.student.vigmo.IntegrationTestConfig;
-import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
-import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.dto.ScreenDto;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,7 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

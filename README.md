@@ -1,3 +1,5 @@
+[![Java CI with Maven](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml/badge.svg)](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml)
+
 # Vigmo Cool
 *Project for Advanced Java Minor, made by Students*
 
