@@ -56,6 +56,7 @@ public class RssSlideControllerTest {
     public void testGetAll() throws Exception {
         List<RssSlideDto> testDataList = new ArrayList<>(testDataMap.values());
 
+        //TODO: Make comment describe action
         this.mockMvc.perform(get("/rss_slides")).
                 andExpect(status().
                         isOk()).
@@ -66,7 +67,7 @@ public class RssSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws  Exception {
-
+        //TODO: Make comment describe action
         this.mockMvc.perform(get("/rss_slides/2")).
                 andExpect(status().
                         isOk()).
@@ -75,7 +76,8 @@ public class RssSlideControllerTest {
         this.mockMvc.perform(get("/rss_slides/1")).
                 andExpect(status().
                         isNotFound());
-        this.mockMvc.perform(get("/rss_slides/8")).
+        // checks if the request returns that the file is not found
+        this.mockMvc.perform(get("/rss_slides/9999")).
                 andExpect(status().
                         isNotFound());
 
@@ -86,6 +88,7 @@ public class RssSlideControllerTest {
     public void testPost() throws Exception {
         RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
+        //TODO: Should only check for Location header
         MvcResult result = this.mockMvc.perform(post("/rss_slides").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(providedDto))).
@@ -96,6 +99,7 @@ public class RssSlideControllerTest {
                 .replace("/rss_slides/", ""));
         RssSlideDto expectedDto = new RssSlideDto( (long) location,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
+        //TODO: Make comment describe action
         this.mockMvc.perform(get("/rss_slides/" + location)).
                 andExpect(status().
                         isOk()).
@@ -109,21 +113,25 @@ public class RssSlideControllerTest {
         RssSlideDto providedDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
         RssSlideDto expectedDto = new RssSlideDto( 2L,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
 
+        //TODO: Make comment describe action
         this.mockMvc.perform(put("/rss_slides/2").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isOk());
+        //TODO: Make comment describe action
         this.mockMvc.perform(get("/rss_slides/2")).
                 andExpect(status().
                         isOk()).
                 andExpect(content().
                         json(om.writeValueAsString(expectedDto)));
+        //TODO: Make comment describe action
         this.mockMvc.perform(put("/rss_slides/1").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isNotFound());
+        //TODO: Make comment describe action
         this.mockMvc.perform(put("/rss_slides/4").
                 contentType(MediaType.APPLICATION_JSON).
                 content(om.writeValueAsString(providedDto))).
@@ -135,15 +143,19 @@ public class RssSlideControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testDelete() throws Exception {
+        //TODO: Make comment describe action
         this.mockMvc.perform(delete("/rss_slides/2")).
                 andExpect(status().
                         isNoContent());
+        //TODO: Make comment describe action
         this.mockMvc.perform(get("/rss_slides/2")).
                 andExpect(status().
                         isNotFound());
+        //TODO: Make comment describe action
         this.mockMvc.perform(delete("/rss_slides/2")).
                 andExpect(status().
                         isNotFound());
+        //TODO: Make comment describe action
         this.mockMvc.perform(delete("/rss_slides/1")).
                 andExpect(status().
                         isNotFound());
@@ -153,11 +165,14 @@ public class RssSlideControllerTest {
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testUserValidation() throws Exception {
         RssSlideDto nonExistentSlideshowDto = new RssSlideDto( null,"https://www.telegraaf.nl/nieuws/rss","title","description",null,"category","enclosure",true,30,"2021-12-21",null,"12:00",null,4L);
+
+        //TODO: Make comment describe action
         this.mockMvc.perform(post("/rss_slides").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(nonExistentSlideshowDto))).
                 andExpect(status().
                         isNotFound());
+        //TODO: Make comment describe action
         this.mockMvc.perform(put("/rss_slides/1").
                         contentType(MediaType.APPLICATION_JSON).
                         content(om.writeValueAsString(nonExistentSlideshowDto))).

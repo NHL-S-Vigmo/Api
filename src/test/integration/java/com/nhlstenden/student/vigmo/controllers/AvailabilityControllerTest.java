@@ -36,24 +36,24 @@ public class AvailabilityControllerTest {
 
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
 
         om = new ObjectMapper();
         testDataMap = new HashMap<>();
-        testDataMap.put(1, new AvailabilityDto(1L,5L,"MONDAY","09:15","16:00"));
-        testDataMap.put(2, new AvailabilityDto(2L,5L,"TUESDAY","10:15","11:00"));
-        testDataMap.put(3, new AvailabilityDto(3L,5L,"TUESDAY","14:15","16:45"));
-        testDataMap.put(4, new AvailabilityDto(4L,5L,"FRIDAY","10:15","11:00"));
-        testDataMap.put(5, new AvailabilityDto(5L,2L,"MONDAY","11:15","13:00"));
-        testDataMap.put(6, new AvailabilityDto(6L,2L,"THURSDAY","10:15","11:00"));
-        testDataMap.put(7, new AvailabilityDto(7L,2L,"THURSDAY","14:15","16:45"));
-        testDataMap.put(8, new AvailabilityDto(8L,2L,"FRIDAY","09:15","14:00"));
-        testDataMap.put(9, new AvailabilityDto(9L,2L,"FRIDAY","15:15","17:00"));
-        testDataMap.put(10, new AvailabilityDto(10L,4L,"MONDAY","10:15","14:00"));
-        testDataMap.put(11, new AvailabilityDto(11L,1L,"FRIDAY","09:00","17:00"));
+        testDataMap.put(1, new AvailabilityDto(1L, 5L, "MONDAY", "09:15", "16:00"));
+        testDataMap.put(2, new AvailabilityDto(2L, 5L, "TUESDAY", "10:15", "11:00"));
+        testDataMap.put(3, new AvailabilityDto(3L, 5L, "TUESDAY", "14:15", "16:45"));
+        testDataMap.put(4, new AvailabilityDto(4L, 5L, "FRIDAY", "10:15", "11:00"));
+        testDataMap.put(5, new AvailabilityDto(5L, 2L, "MONDAY", "11:15", "13:00"));
+        testDataMap.put(6, new AvailabilityDto(6L, 2L, "THURSDAY", "10:15", "11:00"));
+        testDataMap.put(7, new AvailabilityDto(7L, 2L, "THURSDAY", "14:15", "16:45"));
+        testDataMap.put(8, new AvailabilityDto(8L, 2L, "FRIDAY", "09:15", "14:00"));
+        testDataMap.put(9, new AvailabilityDto(9L, 2L, "FRIDAY", "15:15", "17:00"));
+        testDataMap.put(10, new AvailabilityDto(10L, 4L, "MONDAY", "10:15", "14:00"));
+        testDataMap.put(11, new AvailabilityDto(11L, 1L, "FRIDAY", "09:00", "17:00"));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class AvailabilityControllerTest {
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testGetOne() throws  Exception {
+    public void testGetOne() throws Exception {
         this.mockMvc.perform(get("/availabilities/1"))
                 .andExpect(status()
                         .isOk())
@@ -88,8 +88,8 @@ public class AvailabilityControllerTest {
         AvailabilityDto expectedDto = new AvailabilityDto(12L, 1L, "THURSDAY", "13:00", "17:00");
 
         this.mockMvc.perform(post("/availabilities")
-                .contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(providedDto))).
+                        .contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isCreated());
         this.mockMvc.perform(get("/availabilities/12")).
@@ -106,8 +106,8 @@ public class AvailabilityControllerTest {
         AvailabilityDto expectedDto = new AvailabilityDto(1L, 1L, "THURSDAY", "13:00", "17:00");
 
         this.mockMvc.perform(put("/availabilities/1").
-                contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(providedDto))).
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isOk());
         this.mockMvc.perform(get("/availabilities/1")).
@@ -116,8 +116,8 @@ public class AvailabilityControllerTest {
                 andExpect(content().
                         json(om.writeValueAsString(expectedDto)));
         this.mockMvc.perform(put("/availabilities/12").
-                contentType(MediaType.APPLICATION_JSON).
-                content(om.writeValueAsString(providedDto))).
+                        contentType(MediaType.APPLICATION_JSON).
+                        content(om.writeValueAsString(providedDto))).
                 andExpect(status().
                         isNotFound());
 
@@ -140,7 +140,7 @@ public class AvailabilityControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testUserValidation() throws Exception {
-        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null,999L,"MONDAY","10:00","10:00");
+        AvailabilityDto nonExistentUserDto = new AvailabilityDto(null, 999L, "MONDAY", "10:00", "10:00");
         //test creating a record with an invalid user id
         this.mockMvc.perform(post("/availabilities").
                         contentType(MediaType.APPLICATION_JSON).
@@ -164,8 +164,8 @@ public class AvailabilityControllerTest {
         //test if the model is invalid
         this.mockMvc.perform(post("/availabilities")
                         .contentType(MediaType.APPLICATION_JSON).
-                        content(om.writeValueAsString(providedDto))).
-                andExpect(status().
+                        content(om.writeValueAsString(providedDto)))
+                .andExpect(status().
                         isBadRequest())
                 .andExpectAll(
                         jsonPath("$.weekDay").exists(),

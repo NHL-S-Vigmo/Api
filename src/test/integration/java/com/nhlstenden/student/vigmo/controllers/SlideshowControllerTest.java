@@ -64,6 +64,7 @@ public class SlideshowControllerTest {
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testGetOne() throws  Exception {
+        //TODO: Use DTO, not the json
         String getScreenDto = "{\"id\":1,\"screenId\":3,\"name\":\"Christmas\"}";
 
         //try to get a slideshow with id 1

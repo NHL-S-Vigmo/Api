@@ -1,24 +1,17 @@
 package com.nhlstenden.student.vigmo.services;
 
-import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowSlidesDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.Slide;
 import com.nhlstenden.student.vigmo.models.Slideshow;
-import com.nhlstenden.student.vigmo.models.SlideshowVariable;
-import com.nhlstenden.student.vigmo.models.TextSlide;
 import com.nhlstenden.student.vigmo.repositories.SlideshowRepository;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
-import liquibase.pro.packaged.O;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
