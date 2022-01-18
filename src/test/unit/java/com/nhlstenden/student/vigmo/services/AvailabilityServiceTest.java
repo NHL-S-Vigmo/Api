@@ -1,6 +1,7 @@
 package unit.java.com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
+import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.exception.IdProvidedInCreateRequestException;
 import com.nhlstenden.student.vigmo.models.Availability;
@@ -39,6 +40,9 @@ public class AvailabilityServiceTest {
     private AvailabilityDto availabilityDtoMock;
 
     @Mock
+    private UserDto userMock;
+
+    @Mock
     private Availability availabilityMock;
 
     @InjectMocks
@@ -50,8 +54,8 @@ public class AvailabilityServiceTest {
         openMocks(this);
 
         //mocks for user service
-        when(userServiceMock.existsById(1L)).thenReturn(true);
-        when(userServiceMock.existsById(999L)).thenReturn(false);
+        when(userServiceMock.get(1L)).thenReturn(userMock);
+        when(userServiceMock.get(999L)).thenThrow(DataNotFoundException.class);
 
         //mocks for the repo
         when(repository.save(any(Availability.class))).
@@ -107,7 +111,7 @@ public class AvailabilityServiceTest {
         verify(repository).
                 save(any());
         verify(userServiceMock).
-                existsById(anyLong());
+                get(anyLong());
         verify(mapper).
                 mapObject(availabilityDto, Availability.class);
     }
@@ -121,7 +125,7 @@ public class AvailabilityServiceTest {
         assertThatThrownBy(() -> availabilityService.update(availabilityDto, 1L)).isInstanceOf(DataNotFoundException.class);
 
         verify(userServiceMock).
-                existsById(anyLong());
+                get(anyLong());
         verify(repository, Mockito.never()).
                 save(any());
     }

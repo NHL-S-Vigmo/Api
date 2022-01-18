@@ -53,7 +53,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     public void testGetNotFound() throws Exception {
         super.getNotFound().andExpectAll(
                 jsonPath("$.error").exists(),
-                jsonPath("$.error").value(Matchers.containsString("SlideshowVariablesService could not find"))
+                jsonPath("$.error").value(Matchers.containsString("SlideshowVariableService could not find"))
         );
     }
 
@@ -100,7 +100,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @Override
     public void testPutNotFound() throws Exception {
         SlideshowVariableDto dto = new SlideshowVariableDto();
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test

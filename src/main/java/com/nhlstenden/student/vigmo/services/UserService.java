@@ -36,7 +36,7 @@ public class UserService extends AbstractVigmoService<UserRepository, UserDto, U
     public List<UserDto> getList() {
         List<UserDto> returnList = super.getList();
 
-        for(UserDto user: returnList){
+        for (UserDto user : returnList) {
             user.setPassword("");
         }
 

@@ -153,8 +153,4 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
             return null;
         }
     }
-
-    public boolean existsById(long id) {
-        return repo.existsById(id);
-    }
 }

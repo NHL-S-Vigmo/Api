@@ -25,7 +25,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     private final String USER_ROLE = "ROLE_ADMIN";
 
     public TextSlideControllerTest() {
-        super("/text_slides", 1, 9999);
+        super("/text_slides", 3, 9999);
     }
 
     @BeforeEach
@@ -112,7 +112,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @Override
     public void testPutNotFound() throws Exception {
         TextSlideDto dto = new TextSlideDto();
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test

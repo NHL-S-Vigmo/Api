@@ -114,7 +114,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @Override
     public void testPutNotFound() throws Exception {
         MediaSlideDto dto = new MediaSlideDto();
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test

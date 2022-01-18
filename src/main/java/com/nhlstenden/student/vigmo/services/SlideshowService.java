@@ -25,14 +25,14 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
         this.screenService = screenService;
     }
 
-    public List<SlideshowVariableDto> getVariables(Long id){
+    public List<SlideshowVariableDto> getVariables(Long id) {
         Slideshow slideshow = repo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
 
         return mapper.mapList(slideshow.getSlideshowVariableList(), SlideshowVariableDto.class);
     }
 
-    public List<SlideshowSlidesDto> getSlides(Long id){
+    public List<SlideshowSlidesDto> getSlides(Long id) {
         Slideshow slideshow = repo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
 
@@ -40,7 +40,7 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
 
         List<SlideshowSlidesDto> returnList = new ArrayList<>();
         //go through each slide and add details about it.
-        for(Slide slide: slides){
+        for (Slide slide : slides) {
             SlideshowSlidesDto slideDto = new SlideshowSlidesDto();
             slideDto.setSlideId(slide.getId());
             slideDto.setDuration(slide.getDuration());
@@ -57,20 +57,14 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
     @Override
     public long create(SlideshowDto slideshowDto) {
         //Will throw a data not found runtime exception if screen does not exist
-        if(screenService.existsById(slideshowDto.getScreenId())){
-            return super.create(slideshowDto);
-        }else{
-            throw new DataNotFoundException("Screen service could not find " + slideshowDto.getScreenId());
-        }
+        screenService.get(slideshowDto.getScreenId());
+        return super.create(slideshowDto);
     }
 
     @Override
     public void update(SlideshowDto slideshowDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
-        if(screenService.existsById(slideshowDto.getScreenId())){
-            super.update(slideshowDto, id);
-        }else{
-            throw new DataNotFoundException("Screen service could not find " + slideshowDto.getScreenId());
-        }
+        screenService.get(slideshowDto.getScreenId());
+        super.update(slideshowDto, id);
     }
 }

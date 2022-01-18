@@ -102,7 +102,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @Override
     public void testPutNotFound() throws Exception {
         LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test
