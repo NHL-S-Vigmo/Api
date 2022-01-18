@@ -23,6 +23,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -89,6 +91,7 @@ public class ApiConfig implements WebMvcConfigurer {
     /**
      * Bean for {@link ModelMapper} to transform models into dtos.
      * Creates a custom converter for {@link LocalTime time} to transform time to a string
+     *
      * @return A ModelMapper instance wrapped by Spring
      */
     @Bean
@@ -96,7 +99,10 @@ public class ApiConfig implements WebMvcConfigurer {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setFieldMatchingEnabled(true);
 
-        return modelMapperDateParser(modelMapperTimeParser(modelMapperStringToBase64Parser(modelMapper)));
+        return modelMapperDateParser(
+                modelMapperTimeParser(
+                        modelMapperStringToBase64Parser(
+                                modelMapperStringTimeInstantParser(modelMapper))));
     }
 
     private ModelMapper modelMapperDateParser(ModelMapper modelMapper) {
@@ -110,7 +116,7 @@ public class ApiConfig implements WebMvcConfigurer {
         Converter<String, LocalDate> toStringDate = new AbstractConverter<String, LocalDate>() {
             @Override
             protected LocalDate convert(String source) {
-                if(source == null || source.isEmpty()) return null;
+                if (source == null || source.isEmpty()) return null;
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 return LocalDate.parse(source, format);
             }
@@ -134,7 +140,7 @@ public class ApiConfig implements WebMvcConfigurer {
         Converter<String, LocalTime> toStringTime = new AbstractConverter<String, LocalTime>() {
             @Override
             protected LocalTime convert(String source) {
-                if(source == null || source.isEmpty()) return null;
+                if (source == null || source.isEmpty()) return null;
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
                 return LocalTime.parse(source, format);
             }
@@ -147,7 +153,7 @@ public class ApiConfig implements WebMvcConfigurer {
         return modelMapper;
     }
 
-    private ModelMapper modelMapperStringToBase64Parser(ModelMapper modelMapper){
+    private ModelMapper modelMapperStringToBase64Parser(ModelMapper modelMapper) {
         Provider<byte[]> localByteArrayProvider = new AbstractProvider<>() {
             @Override
             public byte[] get() {
@@ -159,7 +165,7 @@ public class ApiConfig implements WebMvcConfigurer {
             @SneakyThrows
             @Override
             protected byte[] convert(String source) {
-                if(source == null || source.isEmpty()) return null;
+                if (source == null || source.isEmpty()) return null;
                 return Base64.getDecoder().decode(source.getBytes(StandardCharsets.UTF_8));
             }
         };
@@ -167,6 +173,30 @@ public class ApiConfig implements WebMvcConfigurer {
         modelMapper.createTypeMap(String.class, byte[].class);
         modelMapper.addConverter(toStringTime);
         modelMapper.getTypeMap(String.class, byte[].class).setProvider(localByteArrayProvider);
+
+        return modelMapper;
+    }
+
+    private ModelMapper modelMapperStringTimeInstantParser(ModelMapper modelMapper) {
+        Provider<Instant> localByteArrayProvider = new AbstractProvider<>() {
+            @Override
+            public Instant get() {
+                return Instant.now();
+            }
+        };
+
+        Converter<Double, Instant> doubleToInstantConverter = new AbstractConverter<>() {
+            @SneakyThrows
+            @Override
+            protected Instant convert(Double source) {
+                if (source == null) return null;
+                return Instant.ofEpochSecond(source.longValue());
+            }
+        };
+
+        modelMapper.createTypeMap(Double.class, Instant.class);
+        modelMapper.addConverter(doubleToInstantConverter);
+        modelMapper.getTypeMap(Double.class, Instant.class).setProvider(localByteArrayProvider);
 
         return modelMapper;
     }
