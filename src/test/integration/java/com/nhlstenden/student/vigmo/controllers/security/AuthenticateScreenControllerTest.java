@@ -40,7 +40,6 @@ class AuthenticateScreenControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Thijs_Smegen", authorities = "ROLE_ADMIN")
     void correctScreenLogin() throws Exception {
         this.mockMvc.perform(get(path + "/DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI"))
                 .andExpect(status().
@@ -50,21 +49,11 @@ class AuthenticateScreenControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "Thijs_Smegen", authorities = "ROLE_ADMIN")
     void screenLoginWithNonExistentAuthToken() throws Exception {
         //Given auth token does not belong to any screens
         this.mockMvc.perform(get(path + "/abcdefghijklmnopq"))
                 .andExpect(status().
                         isNotFound()).
-                andExpect(header().
-                        doesNotExist(jwtTokenHeader));
-    }
-
-    @Test
-    void screenLoginWhileNotLoggedIn() throws Exception {
-        this.mockMvc.perform(get(path + "/DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI"))
-                .andExpect(status().
-                        isUnauthorized()).
                 andExpect(header().
                         doesNotExist(jwtTokenHeader));
     }

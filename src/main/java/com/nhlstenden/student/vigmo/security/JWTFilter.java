@@ -24,6 +24,8 @@ public class JWTFilter extends GenericFilterBean {
         // Get the token from the request
         String token = jwtProvider.getToken((HttpServletRequest) request);
         try {
+            //todo: Write a test that follows the actual authentication procedure for both. (do a request to /authenticate, and then request any resource with the token)
+
             // If there was a token, and it is valid (e.g.: not expired)
             if (token != null && jwtProvider.validateToken(token)) {
                 // Get the authentication instance and set it in the SecurityContext
