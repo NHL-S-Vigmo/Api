@@ -14,7 +14,9 @@ import org.mockito.Mock;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,17 +46,23 @@ class ScreenServiceTest {
 
     @Test
     void getScreenByAuthKey() {
+        //Auth key belongs to a screen
         when(repo.findByAuthKey(anyString())).thenReturn(Optional.of(screenMock));
 
         assertThat(screenService.getScreenByAuthKey("abc")).isNotNull();
-        //TODO: add verify
+        //verify that the repository got checked and the screen mapped to a dto
+        verify(repo).findByAuthKey(anyString());
+        verify(mapper).mapObject(screenMock,ScreenDto.class);
     }
 
     @Test
     void getNonExistentScreenByAuthKey() {
+        //Auth key does not belong to a screen
         when(repo.findByAuthKey(anyString())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> screenService.getScreenByAuthKey("abc")).isInstanceOf(DataNotFoundException.class);
-        //TODO: add verify
+
+        //verify that the repository got checked
+        verify(repo).findByAuthKey(anyString());
     }
 }
