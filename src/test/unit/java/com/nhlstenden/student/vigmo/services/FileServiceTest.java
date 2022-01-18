@@ -1,43 +1,138 @@
 package unit.java.com.nhlstenden.student.vigmo.services;
 
+import com.nhlstenden.student.vigmo.dto.FileDto;
+import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
+import com.nhlstenden.student.vigmo.models.File;
+import com.nhlstenden.student.vigmo.repositories.FileRepository;
+import com.nhlstenden.student.vigmo.services.FileService;
+import com.nhlstenden.student.vigmo.transformers.MappingUtility;
+import liquibase.repackaged.org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class FileServiceTest {
+    @Mock
+    private FileRepository repo;
+
+    @Mock
+    private MappingUtility mapper;
+
+    @Mock
+    private File fileMock;
+
+    @Mock
+    private FileDto fileDtoMockWithoutId;
+    @Mock
+    private FileDto fileDtoMockWithId;
+
+    @InjectMocks
+    FileService fileService;
+
+    private final String randomKey = "6bee29d663436193f2ecf49869fca7f0c265c9e14b2dacdcace5af70cb59693d";
 
     @BeforeEach
     void setUp() {
+        openMocks(this);
+
+        //Mock mapper functions
+        when(mapper.mapObject(any(File.class), eq(FileDto.class))).thenReturn(fileDtoMockWithId);
+        when(mapper.mapObject(any(FileDto.class), eq(File.class))).thenReturn(fileMock);
+        //Mock repository functions
+        when(repo.findById(anyLong())).thenReturn(Optional.of(fileMock));
+        when(repo.save(fileMock)).thenReturn(fileMock);
+        //Make sure the id is not set in dto and is set in de entity
+        when(fileDtoMockWithoutId.getId()).thenReturn(null);
+        when(fileMock.getId()).thenReturn(1L);
+        when(fileDtoMockWithId.getId()).thenReturn(1L);
+
+
+        //when(RandomStringUtils.random(64,true,true)).thenReturn(randomKey);
+        when(fileDtoMockWithId.getKey()).thenReturn(randomKey);
     }
 
     @Test
     void getList() {
-        //todo: add mockito verify checks
-        //todo: write test
+        //Make the mapper return a list with a file with binary data
+        List<FileDto> fileDtoList = new ArrayList<>();
+        fileDtoList.add(fileDtoMockWithoutId);
+
+        when(repo.findAll()).thenReturn(new ArrayList<>());
+        when(mapper.mapList(anyList(), eq(FileDto.class))).
+                thenReturn(fileDtoList);
+
+        fileService.getList();
+
+        verify(repo).findAll();
+        verify(mapper).mapList(anyList(), eq(FileDto.class));
+        //verify that the data has been removed
+        verify(fileDtoMockWithoutId).setData("<removed-binary-data>");
     }
 
     @Test
     void get() {
-        //todo: add mockito verify checks
-        //todo: write test
+        assertThat(fileService.get(1L)).isEqualTo(fileDtoMockWithId);
+
+        verify(repo).findById(anyLong());
+        verify(mapper).mapObject(any(File.class), eq(FileDto.class));
+        //verify that the data has been removed
+        verify(fileDtoMockWithId).setData("<removed-binary-data>");
     }
 
     @Test
     void create() {
-        //todo: add mockito verify checks
-        //todo: write test
+        try (MockedStatic<RandomStringUtils> theMock = Mockito.mockStatic(RandomStringUtils.class)) {
+            theMock.when(() -> RandomStringUtils.random(64,true,true))
+                    .thenReturn(randomKey);
+            assertThat(fileService.create(fileDtoMockWithoutId)).isEqualTo(1L);
+        }
+
+        //verify object was saved in the database and the key was set
+        verify(repo).save(any(File.class));
+        verify(fileDtoMockWithoutId).setKey(anyString());
     }
 
     @Test
     void update() {
-        //todo: add mockito verify checks
-        //todo: write test
+        try (MockedStatic<RandomStringUtils> theMock = Mockito.mockStatic(RandomStringUtils.class)) {
+            theMock.when(() -> RandomStringUtils.random(64,true,true))
+                    .thenReturn(randomKey);
+            //Test updating a file
+            fileService.update(fileDtoMockWithoutId, 1L);
+        }
+
+        //verify object was saved in the database
+        verify(repo).save(any(File.class));
+        verify(fileDtoMockWithoutId).setKey(anyString());
     }
 
     @Test
-    void getRawEntityByKey() {
-        //todo: add mockito verify checks
-        //todo: write test
+    void getExistingRawEntityByKey() {
+        when(repo.findByKey(anyString())).thenReturn(Optional.of(fileMock));
+        assertThat(fileService.getRawEntityByKey("abc")).isEqualTo(fileMock);
+
+        verify(repo).findByKey(anyString());
+    }
+
+    @Test
+    void getNonExistingRawEntityByKey() {
+        when(repo.findByKey(anyString())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> fileService.getRawEntityByKey("abc")).isInstanceOf(DataNotFoundException.class);
+        verify(repo).findByKey(anyString());
     }
 }

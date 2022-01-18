@@ -59,35 +59,46 @@ class UserServiceTest {
          newPasswordString ="$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.";
         //Encrypted password string currently in database for the user
         oldPasswordString = "$2a$10$9yiz1wi41mdOTLDNeDiMqOAobStwnR4SAaLQQ6TBPOofKgT1ObOv2";
+        //Mock password functions
         when(passwordEncoderMock.encode(any())).thenReturn(newPasswordString);
         when(userMock.getPassword()).thenReturn(oldPasswordString);
+        //Mock repository functions
         when(repo.findById(anyLong())).thenReturn(Optional.of(userMock));
         when(repo.save(userMock)).thenReturn(userMock);
+        //Make sure the id is not set in dto and is set in de entity
         when(userDtoMock.getId()).thenReturn(null);
         when(userMock.getId()).thenReturn(1L);
+        //Mock mapper functions
         when(mapper.mapObject(any(User.class), eq(UserDto.class))).thenReturn(userDtoMock);
         when(mapper.mapObject(any(UserDto.class), eq(User.class))).thenReturn(userMock);
     }
 
     @Test
-    void testFindExistingUsername() {
-        when(repo.findByUsername(anyString())).thenReturn(Optional.of(userEntityMock));
+    void testGetList(){
+        //Make the mapper return a list with a user with the password set
+        List<UserDto> userDtoList = new ArrayList<>();
+        userDtoList.add(userDtoMock);
 
-        UserDto user = userService.findByUsername("username");
+        when(repo.findAll()).thenReturn(new ArrayList<>());
+        when(mapper.mapList(anyList(), eq(UserDto.class))).
+                thenReturn(userDtoList);
 
-        assertThat(user)
-                .isNotNull();
+        userService.getList();
 
-        verify(repo).findByUsername(anyString());
+        verify(repo).findAll();
+        verify(mapper).mapList(anyList(), eq(UserDto.class));
+        //verify that the password has been set to an empty string
+        verify(userDtoMock).setPassword("");
     }
 
     @Test
-    void testFindNonExistingUsername() {
-        when(repo.findByUsername(anyString())).thenReturn(Optional.empty());
+    void testGet(){
+        userService.get(1L);
 
-        assertThatThrownBy(() ->userService.findByUsername("username")).isInstanceOf(DataNotFoundException.class);
-
-        verify(repo).findByUsername(anyString());
+        verify(repo).findById(anyLong());
+        verify(mapper).mapObject(any(User.class), eq(UserDto.class));
+        //verify that the password has been set to an empty string
+        verify(userDtoMock).setPassword("");
     }
 
     @Test
@@ -130,30 +141,23 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetList(){
-        //Make the mapper return a list with a user with the password set
-        List<UserDto> userDtoList = new ArrayList<>();
-        userDtoList.add(userDtoMock);
+    void testFindExistingUsername() {
+        when(repo.findByUsername(anyString())).thenReturn(Optional.of(userEntityMock));
 
-        when(repo.findAll()).thenReturn(new ArrayList<>());
-        when(mapper.mapList(anyList(), eq(UserDto.class))).
-                thenReturn(userDtoList);
+        UserDto user = userService.findByUsername("username");
 
-        userService.getList();
+        assertThat(user)
+                .isNotNull();
 
-        verify(repo).findAll();
-        verify(mapper).mapList(anyList(), eq(UserDto.class));
-        //verify that the password has been set to an empty string
-        verify(userDtoMock).setPassword("");
+        verify(repo).findByUsername(anyString());
     }
 
     @Test
-    void testGet(){
-        userService.get(1L);
+    void testFindNonExistingUsername() {
+        when(repo.findByUsername(anyString())).thenReturn(Optional.empty());
 
-        verify(repo).findById(anyLong());
-        verify(mapper).mapObject(any(User.class), eq(UserDto.class));
-        //verify that the password has been set to an empty string
-        verify(userDtoMock).setPassword("");
+        assertThatThrownBy(() ->userService.findByUsername("username")).isInstanceOf(DataNotFoundException.class);
+
+        verify(repo).findByUsername(anyString());
     }
 }
