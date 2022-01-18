@@ -74,7 +74,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        SlideshowVariableDto dto = new SlideshowVariableDto();
+        SlideshowVariableDto dto = new SlideshowVariableDto(null, 1L, "Setting", "setting");
         super.post(dto);
     }
 
@@ -82,8 +82,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        SlideshowVariableDto dto = new SlideshowVariableDto();
-        dto.setId(1L);
+        SlideshowVariableDto dto = new SlideshowVariableDto(1L, 1L, "Setting", "setting");
         super.postWithExistingId(dto);
     }
 
@@ -91,7 +90,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        SlideshowVariableDto dto = new SlideshowVariableDto();
+        SlideshowVariableDto dto = new SlideshowVariableDto(1L, 1L, "Setting", "setting");
         super.put(dto);
     }
 
@@ -99,7 +98,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        SlideshowVariableDto dto = new SlideshowVariableDto();
+        SlideshowVariableDto dto = new SlideshowVariableDto(1L, 1L, "Setting", "setting");
         super.putNotFound(dto);
     }
 

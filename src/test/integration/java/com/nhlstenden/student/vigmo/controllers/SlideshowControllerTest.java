@@ -171,12 +171,7 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     public void testGetVariablesFromNonExistentSlideshow() throws Exception {
         getMockMvc().perform(get(getPath() + "/999/variables"))
                 .andExpect(status()
-                        .isOk()).andExpectAll(
-                        jsonPath("$.[:1].id").exists(),
-                        jsonPath("$.[:1].slideshowId").exists(),
-                        jsonPath("$.[:1].name").exists(),
-                        jsonPath("$.[:1].value").exists()
-                );
+                        .isNotFound());
     }
 
     @Test
