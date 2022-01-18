@@ -104,7 +104,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     public void testPostWithExistingId() throws Exception {
         RssSlideDto dto = new RssSlideDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

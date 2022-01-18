@@ -84,7 +84,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     public void testPostWithExistingId() throws Exception {
         SlideshowVariableDto dto = new SlideshowVariableDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

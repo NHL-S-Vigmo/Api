@@ -12,6 +12,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.Instant;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
@@ -74,7 +76,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        LogDto dto = new LogDto();
+        LogDto dto = new LogDto(null, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
         super.post(dto);
     }
 
@@ -82,16 +84,16 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        LogDto dto = new LogDto();
+        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        LogDto dto = new LogDto();
+        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
         super.put(dto);
     }
 
@@ -99,7 +101,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        LogDto dto = new LogDto();
+        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
         super.put(dto);
     }
 

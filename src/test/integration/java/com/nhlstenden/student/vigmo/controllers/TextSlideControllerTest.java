@@ -96,7 +96,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     public void testPostWithExistingId() throws Exception {
         TextSlideDto dto = new TextSlideDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

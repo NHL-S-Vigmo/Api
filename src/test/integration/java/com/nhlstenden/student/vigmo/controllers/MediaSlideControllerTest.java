@@ -98,7 +98,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     public void testPostWithExistingId() throws Exception {
         MediaSlideDto dto = new MediaSlideDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

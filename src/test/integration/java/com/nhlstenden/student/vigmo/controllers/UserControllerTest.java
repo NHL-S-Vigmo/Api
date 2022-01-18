@@ -90,7 +90,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     public void testPostWithExistingId() throws Exception {
         UserDto dto = new UserDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

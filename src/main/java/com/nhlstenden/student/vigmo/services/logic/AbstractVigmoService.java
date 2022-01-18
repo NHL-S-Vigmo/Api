@@ -83,23 +83,26 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     @Override
     public final long create(DTO dto, long userId, String username) {
         long id = create(dto);
-        LogDto logDto = new LogDto(userId, username, ACTION_CREATE,"", Instant.now());
-        logService.create(logDto);
+        LogDto logDto = new LogDto(userId, username, ACTION_CREATE, "", Instant.now());
+        if (logService != null)
+            logService.create(logDto);
         return id;
     }
 
     @Override
     public final void update(DTO dto, long id, long userId, String username) {
         update(dto, id);
-        LogDto logDto = new LogDto(userId, username ,ACTION_UPDATE,"", Instant.now());
-        logService.create(logDto);
+        LogDto logDto = new LogDto(userId, username, ACTION_UPDATE, "", Instant.now());
+        if (logService != null)
+            logService.create(logDto);
     }
 
     @Override
     public final void delete(long id, long userId, String username) {
         delete(id);
         LogDto logDto = new LogDto(userId, username, ACTION_DELETE, "", Instant.now());
-        logService.create(logDto);
+        if (logService != null)
+            logService.create(logDto);
     }
 
     /**
@@ -151,7 +154,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
         }
     }
 
-    public boolean existsById(long id){
+    public boolean existsById(long id) {
         return repo.existsById(id);
     }
 }

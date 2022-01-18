@@ -82,7 +82,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     public void testPostWithExistingId() throws Exception {
         ScreenDto dto = new ScreenDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

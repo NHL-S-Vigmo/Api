@@ -83,7 +83,7 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     public void testPostWithExistingId() throws Exception {
         SlideshowDto dto = new SlideshowDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test
