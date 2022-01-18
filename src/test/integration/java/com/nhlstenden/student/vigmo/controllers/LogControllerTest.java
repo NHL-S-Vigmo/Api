@@ -60,7 +60,14 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll().andExpectAll(
+                jsonPath("$.[:1].id").exists(),
+                jsonPath("$.[:1].userId").exists(),
+                jsonPath("$.[:1].username").exists(),
+                jsonPath("$.[:1].action").exists(),
+                jsonPath("$.[:1].message").exists(),
+                jsonPath("$.[:1].datetime").exists()
+        );
     }
 
     @Test

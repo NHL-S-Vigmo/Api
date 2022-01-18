@@ -11,6 +11,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.SlideDto;
@@ -68,4 +69,13 @@ class ValidationTest {
         isValid = validator.validate(textSlideDto).isEmpty();
         assertThat(isValid).isFalse();
     }
+
+    @Test
+    void testThrowsDateTimeParseException(){
+        //test that both date and time cannot be parsed
+        SlideDto textSlideDto = new TextSlideDto(null, "Title", "Message", 1L, true, 1300, "2022-01-50", "2022-01-50", "09:aa", "10:AA");
+        boolean isValid = validator.validate(textSlideDto).isEmpty();
+        assertThat(isValid).isFalse();
+    }
+
 }

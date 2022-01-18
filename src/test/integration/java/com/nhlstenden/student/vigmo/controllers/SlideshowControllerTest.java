@@ -61,7 +61,12 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll()
+                .andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].screenId").exists(),
+                        jsonPath("$.[:1].name").exists()
+                );
     }
 
     @Test

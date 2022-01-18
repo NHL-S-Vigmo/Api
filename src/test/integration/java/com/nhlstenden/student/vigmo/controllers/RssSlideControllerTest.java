@@ -71,7 +71,23 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll()
+                .andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].slideshowId").exists(),
+                        jsonPath("$.[:1].isActive").exists(),
+                        jsonPath("$.[:1].duration").exists(),
+                        jsonPath("$.[:1].startDate").exists(),
+                        jsonPath("$.[:1].endDate").exists(),
+                        jsonPath("$.[:1].startTime").exists(),
+                        jsonPath("$.[:1].endTime").exists(),
+                        jsonPath("$.[:1].url").exists(),
+                        jsonPath("$.[:1].titleTag").exists(),
+                        jsonPath("$.[:1].descriptionTag").exists(),
+                        jsonPath("$.[:1].authorTag").exists(),
+                        jsonPath("$.[:1].categoryTag").exists(),
+                        jsonPath("$.[:1].imageTag").exists()
+                );
     }
 
     @Test
