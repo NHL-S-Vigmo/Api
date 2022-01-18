@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 
 @Service
 public class LogService extends AbstractVigmoService<LogRepository, LogDto, Log> {
@@ -26,6 +27,7 @@ public class LogService extends AbstractVigmoService<LogRepository, LogDto, Log>
     public long create(LogDto logDto) {
         //Will throw a data not found runtime exception if screen does not exist
         findUser(logDto.getUserId());
+        if(logDto.getDatetime() == null) logDto.setDatetime((double) Instant.now().getEpochSecond());
         return super.create(logDto);
     }
 
@@ -33,6 +35,7 @@ public class LogService extends AbstractVigmoService<LogRepository, LogDto, Log>
     public void update(LogDto logDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
         findUser(logDto.getUserId());
+        if(logDto.getDatetime() == null) logDto.setDatetime((double) Instant.now().getEpochSecond());
         super.update(logDto, id);
     }
 

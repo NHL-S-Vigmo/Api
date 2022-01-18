@@ -76,7 +76,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        LogDto dto = new LogDto(null, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
+        LogDto dto = new LogDto(null, 1L, "Jan_Doornbos", "Create log", "created a log", null);
         super.post(dto);
     }
 
@@ -84,7 +84,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
+        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", null);
         dto.setId(1L);
         super.postWithExistingId(dto);
     }
@@ -93,7 +93,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
+        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", null);
         super.put(dto);
     }
 
@@ -101,7 +101,7 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", Instant.now());
+        LogDto dto = new LogDto(1L, 1L, "Jan_Doornbos", "Create log", "created a log", null);
         super.putNotFound(dto);
     }
 
@@ -124,7 +124,10 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @Override
     public void testModelValidationOnPost() throws Exception {
         LogDto dto = new LogDto();
-        super.modelValidationOnPost(dto); //fixme: add validation to LogDto
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.action").exists(),
+                jsonPath("$.username").exists()
+        );
     }
 
     @Test
@@ -132,7 +135,10 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     @Override
     public void testModelValidationOnPut() throws Exception {
         LogDto dto = new LogDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.action").exists(),
+                jsonPath("$.username").exists()
+        );
     }
 
     @Test
