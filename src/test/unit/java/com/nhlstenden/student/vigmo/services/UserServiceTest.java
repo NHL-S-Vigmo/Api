@@ -2,6 +2,7 @@ package unit.java.com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
+import com.nhlstenden.student.vigmo.exception.UserAlreadyExistsException;
 import com.nhlstenden.student.vigmo.models.User;
 import com.nhlstenden.student.vigmo.repositories.UserRepository;
 import com.nhlstenden.student.vigmo.services.UserService;
@@ -10,8 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import unit.java.com.nhlstenden.student.vigmo.dto.TestEntityDto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,19 +47,31 @@ class UserServiceTest {
     UserService userService;
 
     String oldPasswordString;
+    String newPasswordString;
+    @Mock
+    User userMock;
 
     @BeforeEach
     void setup() {
         openMocks(this);
 
+        //Encrypted string of the new password
+         newPasswordString ="$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.";
         //Encrypted password string currently in database for the user
         oldPasswordString = "$2a$10$9yiz1wi41mdOTLDNeDiMqOAobStwnR4SAaLQQ6TBPOofKgT1ObOv2";
+        when(passwordEncoderMock.encode(any())).thenReturn(newPasswordString);
+        when(userMock.getPassword()).thenReturn(oldPasswordString);
+        when(repo.findById(anyLong())).thenReturn(Optional.of(userMock));
+        when(repo.save(userMock)).thenReturn(userMock);
+        when(userDtoMock.getId()).thenReturn(null);
+        when(userMock.getId()).thenReturn(1L);
+        when(mapper.mapObject(any(User.class), eq(UserDto.class))).thenReturn(userDtoMock);
+        when(mapper.mapObject(any(UserDto.class), eq(User.class))).thenReturn(userMock);
     }
 
     @Test
     void testFindExistingUsername() {
         when(repo.findByUsername(anyString())).thenReturn(Optional.of(userEntityMock));
-        when(mapper.mapObject(any(User.class), eq(UserDto.class))).thenReturn(userDtoMock);
 
         UserDto user = userService.findByUsername("username");
 
@@ -75,36 +92,68 @@ class UserServiceTest {
 
     @Test
     void testUpdatePassword(){
-        //Encrypted string of the new password
-        String newPasswordString ="$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.";
-
-        User user = new User(1L, "TestUser", oldPasswordString,true, "ROLE_ADMIN", "image_103");
-        UserDto userDto = new UserDto(1L, "TestUser","password123",true, "ROLE_ADMIN", "image_103");
-
-        when(passwordEncoderMock.encode(any())).thenReturn(newPasswordString);
-        when(repo.findById(anyLong())).thenReturn(Optional.of(user));
-        when(mapper.mapObject(any(UserDto.class), eq(User.class))).thenReturn(user);
-
+        when(userDtoMock.getPassword()).thenReturn("password123");
         //Test updating the password
-        userService.update(userDto, 1L);
-        assertThat(userDto.getPassword()).isEqualTo(newPasswordString);
+        userService.update(userDtoMock, 1L);
 
+        //verify object was saved in the database
+        verify(repo).save(any(User.class));
+        verify(userDtoMock).setPassword(newPasswordString);
+    }
+
+    @Test
+    void testUpdateWithNoPassword(){
+        when(userDtoMock.getPassword()).thenReturn("");
+
+        userService.update(userDtoMock, 1L);
+        //verify object was saved in the database
+        verify(repo).save(any(User.class));
+        //Password after updating should remain the same as the password currently in the database
+        verify(userDtoMock).setPassword(oldPasswordString);
+    }
+
+    @Test
+    void testCreate(){
+        when(repo.findByUsername(anyString())).thenReturn(Optional.empty());
+
+        userService.create(userDtoMock);
         //verify object was saved in the database
         verify(repo).save(any(User.class));
     }
 
     @Test
-    void testUpdateWithNoPassword(){
-        User user = new User(1L, "TestUser", oldPasswordString,true, "ROLE_ADMIN", "image_103");
-        UserDto userDto = new UserDto(1L, "TestUser","",true, "ROLE_ADMIN", "image_103");
+    void testCreateWithDuplicateUsername(){
+        when(repo.findByUsername(any())).thenReturn(Optional.of(userMock));
+        assertThatThrownBy(() -> userService.create(userDtoMock)).isInstanceOf(UserAlreadyExistsException.class);
+        //verify object was not saved in the database
+        verify(repo, Mockito.never()).save(any(User.class));
+    }
 
-        when(repo.findById(anyLong())).thenReturn(Optional.of(user));
-        when(mapper.mapObject(any(UserDto.class), eq(User.class))).thenReturn(user);
+    @Test
+    void testGetList(){
+        //Make the mapper return a list with a user with the password set
+        List<UserDto> userDtoList = new ArrayList<>();
+        userDtoList.add(userDtoMock);
 
-        userService.update(userDto, 1L);
-        //Password after updating should remain the same as the password currently in the database
-        assertThat(userDto.getPassword()).isEqualTo(oldPasswordString);
-        //verify object was saved in the database
-        verify(repo).save(any(User.class));
+        when(repo.findAll()).thenReturn(new ArrayList<>());
+        when(mapper.mapList(anyList(), eq(UserDto.class))).
+                thenReturn(userDtoList);
+
+        userService.getList();
+
+        verify(repo).findAll();
+        verify(mapper).mapList(anyList(), eq(UserDto.class));
+        //verify that the password has been set to an empty string
+        verify(userDtoMock).setPassword("");
+    }
+
+    @Test
+    void testGet(){
+        userService.get(1L);
+
+        verify(repo).findById(anyLong());
+        verify(mapper).mapObject(any(User.class), eq(UserDto.class));
+        //verify that the password has been set to an empty string
+        verify(userDtoMock).setPassword("");
     }
 }
