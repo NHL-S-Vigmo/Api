@@ -14,7 +14,9 @@ import org.mockito.Mock;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,7 +49,9 @@ class ScreenServiceTest {
         when(repo.findByAuthKey(anyString())).thenReturn(Optional.of(screenMock));
 
         assertThat(screenService.getScreenByAuthKey("abc")).isNotNull();
-        //TODO: add verify
+
+        verify(repo).findByAuthKey(anyString());
+        verify(mapper).mapObject(screenMock,ScreenDto.class);
     }
 
     @Test
@@ -55,6 +59,7 @@ class ScreenServiceTest {
         when(repo.findByAuthKey(anyString())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> screenService.getScreenByAuthKey("abc")).isInstanceOf(DataNotFoundException.class);
-        //TODO: add verify
+
+        verify(repo).findByAuthKey(anyString());
     }
 }
