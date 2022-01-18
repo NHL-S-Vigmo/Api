@@ -42,11 +42,8 @@ public class TextSlideServiceTest {
     @BeforeEach
     void setUp() {
         openMocks(this);
-
-        //mocks for the slideshow service
-        when(slideshowService.existsById(1L)).thenReturn(true);
-        when(slideshowService.existsById(999L)).thenReturn(false);
-
+        //Throw exception when trying to retrieve a non-existing slideshow
+        when(slideshowService.get(999L)).thenThrow(DataNotFoundException.class);
         //mocks for the repo
         when(repo.save(any(TextSlide.class))).
                 thenReturn(textSlideMock);
