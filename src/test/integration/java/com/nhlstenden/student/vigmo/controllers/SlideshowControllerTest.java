@@ -15,6 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -151,5 +152,53 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     public void testInvalidMediaType() throws Exception {
         SlideshowDto dto = new SlideshowDto();
         super.postWithWrongMediaType(dto);
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    public void testGetVariables() throws Exception {
+        getMockMvc().perform(get(getPath() + "/1/variables"))
+                .andExpect(status()
+                        .isOk()).andExpectAll(
+                jsonPath("$.[:1].id").exists(),
+                jsonPath("$.[:1].slideshowId").exists(),
+                jsonPath("$.[:1].name").exists(),
+                jsonPath("$.[:1].value").exists()
+        );
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    public void testGetVariablesFromNonExistentSlideshow() throws Exception {
+        getMockMvc().perform(get(getPath() + "/999/variables"))
+                .andExpect(status()
+                        .isOk()).andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].slideshowId").exists(),
+                        jsonPath("$.[:1].name").exists(),
+                        jsonPath("$.[:1].value").exists()
+                );
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    public void testGetSlides() throws Exception {
+        getMockMvc().perform(get(getPath() + "/1/slides"))
+                .andExpect(status()
+                        .isOk()).andExpectAll(
+                        jsonPath("$.[:1].slideId").exists(),
+                        jsonPath("$.[:1].isActive").exists(),
+                        jsonPath("$.[:1].duration").exists(),
+                        jsonPath("$.[:1].path").exists()
+                );
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
+    public void testGetSlidesFromNonExistentSlideshow() throws Exception {
+        getMockMvc().perform(get(getPath() + "/999/slides"))
+                .andExpect(status()
+                        .isNotFound()
+                );
     }
 }
