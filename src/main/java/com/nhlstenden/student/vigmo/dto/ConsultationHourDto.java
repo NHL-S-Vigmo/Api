@@ -24,7 +24,6 @@ public class ConsultationHourDto implements StartEndTime {
 
     @ApiModelProperty(name = "description", value = "Description of the current hour")
     @Size(max = 220)
-    @NotEmpty
     private String description;
 
     @ApiModelProperty(name = "weekDay", required = true, value = "The day this hour falls on")

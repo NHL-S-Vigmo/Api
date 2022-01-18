@@ -1,4 +1,4 @@
-package com.nhlstenden.student.vigmo.dto;
+package unit.java.com.nhlstenden.student.vigmo.dto;
 
 import lombok.*;
 

@@ -167,7 +167,7 @@
             <column name="file_name" type="VARCHAR(220)">
                 <constraints nullable="false"/>
             </column>
-            <column name="mime_type" type="VARCHAR(50)">
+            <column name="mime_type" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="file" type="BLOB">

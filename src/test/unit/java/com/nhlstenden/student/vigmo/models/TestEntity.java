@@ -12,7 +12,6 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class TestEntity implements EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

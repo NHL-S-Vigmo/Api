@@ -1,10 +1,11 @@
-package com.nhlstenden.student.vigmo.services;
+package unit.java.com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.models.Slide;
 import com.nhlstenden.student.vigmo.models.Slideshow;
 import com.nhlstenden.student.vigmo.models.SlideshowVariable;
 import com.nhlstenden.student.vigmo.repositories.SlideshowRepository;
+import com.nhlstenden.student.vigmo.services.SlideshowService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

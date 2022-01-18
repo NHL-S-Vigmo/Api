@@ -1,7 +1,7 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
-import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
+import com.nhlstenden.student.vigmo.dto.LogDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
 import org.hamcrest.Matchers;
@@ -12,19 +12,17 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
-public class ConsultationHourControllerTest extends AbstractControllerIntegrationTest<ConsultationHourDto> {
+public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto> {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private final String USER_ROLE = "ROLE_ADMIN";
 
-    public ConsultationHourControllerTest() {
-        super("/consultation_hours", 1, 9999);
+    public LogControllerTest() {
+        super("/logs", 1, 9999);
     }
 
     @BeforeEach
@@ -40,10 +38,11 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
         super.getOne()
                 .andExpectAll(
                         jsonPath("$.id").exists(),
-                        jsonPath("$.description").exists(),
-                        jsonPath("$.weekDay").exists(),
-                        jsonPath("$.startTime").exists(),
-                        jsonPath("$.endTime").exists()
+                        jsonPath("$.userId").exists(),
+                        jsonPath("$.username").exists(),
+                        jsonPath("$.action").exists(),
+                        jsonPath("$.message").exists(),
+                        jsonPath("$.datetime").exists()
                 );
     }
 
@@ -53,7 +52,7 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     public void testGetNotFound() throws Exception {
         super.getNotFound().andExpectAll(
                 jsonPath("$.error").exists(),
-                jsonPath("$.error").value(Matchers.containsString("ConsultationHourService could not find"))
+                jsonPath("$.error").value(Matchers.containsString("LogService could not find"))
         );
     }
 
@@ -61,20 +60,14 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll().andExpectAll(
-                jsonPath("$.[:1].id").exists(),
-                jsonPath("$.[:1].description").exists(),
-                jsonPath("$.[:1].weekDay").exists(),
-                jsonPath("$.[:1].startTime").exists(),
-                jsonPath("$.[:1].endTime").exists()
-        );
+        super.getAll();
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto(null,"Noon consultation","MONDAY","12:15","13:00");
+        LogDto dto = new LogDto();
         super.post(dto);
     }
 
@@ -82,15 +75,16 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:15","13:00");
-        super.postWithExistingId(dto);
+        LogDto dto = new LogDto();
+        dto.setId(1L);
+        super.post(dto);
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:15","13:00");
+        LogDto dto = new LogDto();
         super.put(dto);
     }
 
@@ -98,8 +92,8 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:15","13:00");
-        super.putNotFound(dto);
+        LogDto dto = new LogDto();
+        super.put(dto);
     }
 
     @Test
@@ -120,24 +114,16 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testModelValidationOnPost() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto();
-        super.modelValidationOnPost(dto).andExpectAll(
-                jsonPath("$.weekDay").exists(),
-                jsonPath("$.startTime").exists(),
-                jsonPath("$.endTime").exists()
-        );
+        LogDto dto = new LogDto();
+        super.modelValidationOnPost(dto); //fixme: add validation to LogDto
     }
 
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testModelValidationOnPut() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto();
-        super.modelValidationOnPut(dto).andExpectAll(
-                jsonPath("$.weekDay").exists(),
-                jsonPath("$.startTime").exists(),
-                jsonPath("$.endTime").exists()
-        );
+        LogDto dto = new LogDto();
+        super.modelValidationOnPut(dto);
     }
 
     @Test
@@ -154,19 +140,10 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     }
 
     @Test
-    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
-    public void testModelValidationWithNoChronologicalTime() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto(1L,"Noon consultation","MONDAY","12:00","12:00");
-        super.modelValidationOnPost(dto).andExpectAll(
-                jsonPath("$.consultationHourDto").exists()
-        );
-    }
-
-    @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testInvalidMediaType() throws Exception {
-        ConsultationHourDto dto = new ConsultationHourDto();
+        LogDto dto = new LogDto();
         super.postWithWrongMediaType(dto);
     }
 }

@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @ReportAsSingleViolation
 public @interface StartEndTimeValidator {
-    String message() default "Start time needs to be lower than the end time";
+    String message() default "Start time needs to be before than the end time";
 
     Class<?>[] groups() default {};
 

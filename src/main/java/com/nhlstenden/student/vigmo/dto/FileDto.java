@@ -26,7 +26,7 @@ public class FileDto {
 
     @ApiModelProperty(name = "File Key", value = "Base64 representation of your file.")
     @Size(min = 10)
-    @NotEmpty
+    @NotEmpty //todo: needs a base64 validator
     private String data;
 
     @ApiModelProperty(name = "File Key", value = "Should be left empty, this is generated on the server. Use this to request a rendered file.")
