@@ -23,17 +23,17 @@ public class LogService extends AbstractVigmoService<LogRepository, LogDto, Log>
     }
 
     @Override
-    public long create(LogDto availabilityDto) {
+    public long create(LogDto logDto) {
         //Will throw a data not found runtime exception if screen does not exist
-        findUser(availabilityDto.getUserId());
-        return super.create(availabilityDto);
+        findUser(logDto.getUserId());
+        return super.create(logDto);
     }
 
     @Override
-    public void update(LogDto availabilityDto, long id) {
+    public void update(LogDto logDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
-        findUser(availabilityDto.getUserId());
-        super.update(availabilityDto, id);
+        findUser(logDto.getUserId());
+        super.update(logDto, id);
     }
 
     private void findUser(long userId){

@@ -3,11 +3,8 @@ package unit.java.com.nhlstenden.student.vigmo.services;
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
-import com.nhlstenden.student.vigmo.exception.IdProvidedInCreateRequestException;
 import com.nhlstenden.student.vigmo.models.Availability;
-import com.nhlstenden.student.vigmo.models.TestEntity;
 import com.nhlstenden.student.vigmo.repositories.AvailabilityRepository;
-import com.nhlstenden.student.vigmo.repositories.TestEntityRepository;
 import com.nhlstenden.student.vigmo.services.AvailabilityService;
 import com.nhlstenden.student.vigmo.services.UserService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
@@ -40,7 +37,7 @@ public class AvailabilityServiceTest {
     private AvailabilityDto availabilityDtoMock;
 
     @Mock
-    private UserDto userMock;
+    private UserDto userDtoMock;
 
     @Mock
     private Availability availabilityMock;
@@ -54,7 +51,7 @@ public class AvailabilityServiceTest {
         openMocks(this);
 
         //mocks for user service
-        when(userServiceMock.get(1L)).thenReturn(userMock);
+        when(userServiceMock.get(1L)).thenReturn(userDtoMock);
         when(userServiceMock.get(999L)).thenThrow(DataNotFoundException.class);
 
         //mocks for the repo
