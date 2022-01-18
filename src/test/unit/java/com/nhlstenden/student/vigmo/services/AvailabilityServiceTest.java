@@ -58,8 +58,6 @@ public class AvailabilityServiceTest {
                 thenReturn(availabilityMock);
         when(repository.findById(1L)).
                 thenReturn(Optional.of(availabilityMock));
-        when(repository.findById(2L)).
-                thenReturn(Optional.empty());
 
         //mocks for the mapper
         when(mapper.mapObject(any(Availability.class), eq(AvailabilityDto.class))).
@@ -70,9 +68,9 @@ public class AvailabilityServiceTest {
 
     @Test
     void testCreateAvailabilityWithValidUserId() {
-        AvailabilityDto availabilityDto = new AvailabilityDto();
-        availabilityDto.setUserId(1L);
-        Long id = availabilityService.create(availabilityDto);
+        when(availabilityDtoMock.getUserId()).thenReturn(1L);
+        when(availabilityDtoMock.getId()).thenReturn(null);
+        Long id = availabilityService.create(availabilityDtoMock);
 
         assertThat(id)
                 .isNotNull();
@@ -80,16 +78,14 @@ public class AvailabilityServiceTest {
         verify(repository).
                 save(any());
         verify(mapper).
-                mapObject(availabilityDto, Availability.class);
+                mapObject(availabilityDtoMock, Availability.class);
     }
 
     @Test
     void testCreateAvailabilityWithInvalidUserId() {
-        AvailabilityDto availabilityDto = new AvailabilityDto();
-        //setting user id to a non-existent user
-        availabilityDto.setUserId(999L);
+        when(availabilityDtoMock.getUserId()).thenReturn(999L);
 
-        assertThatThrownBy(() -> availabilityService.create(availabilityDto)).isInstanceOf(DataNotFoundException.class);
+        assertThatThrownBy(() -> availabilityService.create(availabilityDtoMock)).isInstanceOf(DataNotFoundException.class);
 
         verify(repository, Mockito.never())
                 .save(any());
@@ -97,10 +93,9 @@ public class AvailabilityServiceTest {
 
     @Test
     void testUpdateAvailabilityWithValidUserId() {
-        AvailabilityDto availabilityDto = new AvailabilityDto();
-        availabilityDto.setUserId(1L);
+        when(availabilityDtoMock.getUserId()).thenReturn(1L);
 
-        availabilityService.update(availabilityDto, 1L);
+        availabilityService.update(availabilityDtoMock, 1L);
 
         verify(repository).
                 findById(anyLong());
@@ -109,16 +104,14 @@ public class AvailabilityServiceTest {
         verify(userServiceMock).
                 existsById(anyLong());
         verify(mapper).
-                mapObject(availabilityDto, Availability.class);
+                mapObject(availabilityDtoMock, Availability.class);
     }
 
     @Test
     void testUpdateAvailabilityWithInvalidUserId() {
-        AvailabilityDto availabilityDto = new AvailabilityDto();
-        //setting user id to a non-existent user
-        availabilityDto.setUserId(999L);
-        
-        assertThatThrownBy(() -> availabilityService.update(availabilityDto, 1L)).isInstanceOf(DataNotFoundException.class);
+        when(availabilityDtoMock.getUserId()).thenReturn(999L);
+
+        assertThatThrownBy(() -> availabilityService.update(availabilityDtoMock, 1L)).isInstanceOf(DataNotFoundException.class);
 
         verify(userServiceMock).
                 existsById(anyLong());

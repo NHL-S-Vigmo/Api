@@ -9,10 +9,7 @@ import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import liquibase.repackaged.org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import org.mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,35 +93,28 @@ class FileServiceTest {
 
     @Test
     void create() {
-        try (MockedStatic<RandomStringUtils> theMock = Mockito.mockStatic(RandomStringUtils.class)) {
-            theMock.when(() -> RandomStringUtils.random(64,true,true))
-                    .thenReturn(randomKey);
-            assertThat(fileService.create(fileDtoMockWithoutId)).isEqualTo(1L);
-        }
-
+        assertThat(fileService.create(fileDtoMockWithoutId)).isEqualTo(1L);
         //verify object was saved in the database and the key was set
         verify(repo).save(any(File.class));
-        verify(fileDtoMockWithoutId).setKey(anyString());
+        //capture set key and check that the size is equal to 64
+        ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+        verify(fileDtoMockWithoutId).setKey(argument.capture());
+        assertThat(argument.getValue()).hasSize(64);
     }
 
     @Test
     void update() {
-        try (MockedStatic<RandomStringUtils> theMock = Mockito.mockStatic(RandomStringUtils.class)) {
-            theMock.when(() -> RandomStringUtils.random(64,true,true))
-                    .thenReturn(randomKey);
-            //Test updating a file
-            fileService.update(fileDtoMockWithoutId, 1L);
-        }
-
+        fileService.update(fileDtoMockWithoutId, 1L);
         //verify object was saved in the database
         verify(repo).save(any(File.class));
         verify(fileDtoMockWithoutId).setKey(anyString());
+
     }
 
     @Test
     void getExistingRawEntityByKey() {
         when(repo.findByKey(anyString())).thenReturn(Optional.of(fileMock));
-        assertThat(fileService.getRawEntityByKey("abc")).isEqualTo(fileMock);
+        assertThat(fileService.getRawEntityByKey(randomKey)).isEqualTo(fileMock);
 
         verify(repo).findByKey(anyString());
     }
@@ -132,7 +122,7 @@ class FileServiceTest {
     @Test
     void getNonExistingRawEntityByKey() {
         when(repo.findByKey(anyString())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> fileService.getRawEntityByKey("abc")).isInstanceOf(DataNotFoundException.class);
+        assertThatThrownBy(() -> fileService.getRawEntityByKey(randomKey)).isInstanceOf(DataNotFoundException.class);
         verify(repo).findByKey(anyString());
     }
 }
