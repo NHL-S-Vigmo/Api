@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MediaSlideService extends AbstractVigmoService<MediaSlideRepository, MediaSlideDto, MediaSlide> {
 
-    SlideshowService slideshowService;
+    private final SlideshowService slideshowService;
 
     public MediaSlideService(MediaSlideRepository repo, MappingUtility mapper, LogService logService, SlideshowService slideshowService) {
         super(repo, mapper, MediaSlideDto.class, MediaSlide.class, logService);
@@ -22,20 +22,14 @@ public class MediaSlideService extends AbstractVigmoService<MediaSlideRepository
     @Override
     public long create(MediaSlideDto mediaSlideDto) {
         //Will throw a data not found runtime exception if screen does not exist
-        if(slideshowService.existsById(mediaSlideDto.getSlideshowId())){
-            return super.create(mediaSlideDto);
-        }else{
-            throw new DataNotFoundException("Slideshow service could not find " + mediaSlideDto.getSlideshowId());
-        }
+        slideshowService.get(mediaSlideDto.getSlideshowId());
+        return super.create(mediaSlideDto);
     }
 
     @Override
     public void update(MediaSlideDto mediaSlideDto, long id) {
         //Will throw a data not found runtime exception if screen does not exist
-        if(slideshowService.existsById(mediaSlideDto.getSlideshowId())){
-            super.update(mediaSlideDto, id);
-        }else{
-            throw new DataNotFoundException("Slideshow service could not find " + mediaSlideDto.getSlideshowId());
-        }
+        slideshowService.get(mediaSlideDto.getSlideshowId());
+        super.update(mediaSlideDto, id);
     }
 }

@@ -106,7 +106,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @Override
     public void testPutNotFound() throws Exception {
         UserDto dto = new UserDto();
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test

@@ -99,7 +99,7 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @Override
     public void testPutNotFound() throws Exception {
         SlideshowDto dto = new SlideshowDto();
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test

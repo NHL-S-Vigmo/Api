@@ -13,29 +13,24 @@ import javax.transaction.Transactional;
 
 @Service
 public class RssSlideService extends AbstractVigmoService<RssSlideRepository, RssSlideDto, RssSlide> {
-    SlideshowService slideshowService;
+    private final SlideshowService slideshowService;
 
     public RssSlideService(RssSlideRepository repo, MappingUtility mapper, LogService logService, SlideshowService slideshowService) {
         super(repo, mapper, RssSlideDto.class, RssSlide.class, logService);
         this.slideshowService = slideshowService;
     }
+
     @Override
     public long create(RssSlideDto rssSlideDto) {
-        //Will throw a data not found runtime exception if screen does not exist
-        if(slideshowService.existsById(rssSlideDto.getSlideshowId())){
-            return super.create(rssSlideDto);
-        }else{
-            throw new DataNotFoundException("Slideshow service could not find " + rssSlideDto.getSlideshowId());
-        }
+        //Will throw a data not found runtime exception if slideshow does not exist
+        slideshowService.get(rssSlideDto.getSlideshowId());
+        return super.create(rssSlideDto);
     }
 
     @Override
     public void update(RssSlideDto rssSlideDto, long id) {
-        //Will throw a data not found runtime exception if screen does not exist
-        if(slideshowService.existsById(rssSlideDto.getSlideshowId())){
-            super.update(rssSlideDto, id);
-        }else{
-            throw new DataNotFoundException("Slideshow service could not find " + rssSlideDto.getSlideshowId());
-        }
+        //Will throw a data not found runtime exception if slideshow does not exist
+        slideshowService.get(rssSlideDto.getSlideshowId());
+        super.update(rssSlideDto, id);
     }
 }

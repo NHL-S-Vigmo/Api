@@ -98,7 +98,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @Override
     public void testPutNotFound() throws Exception {
         ScreenDto dto = new ScreenDto();
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test

@@ -25,7 +25,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     private final String USER_ROLE = "ROLE_ADMIN";
 
     public RssSlideControllerTest() {
-        super("/rss_slides", 1, 9999);
+        super("/rss_slides", 2, 9999);
     }
 
     @BeforeEach
@@ -120,7 +120,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @Override
     public void testPutNotFound() throws Exception {
         RssSlideDto dto = new RssSlideDto();
-        super.put(dto);
+        super.putNotFound(dto);
     }
 
     @Test
