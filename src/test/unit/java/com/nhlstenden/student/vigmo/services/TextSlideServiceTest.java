@@ -40,7 +40,7 @@ public class TextSlideServiceTest {
     private TextSlideService textSlideServiceMock;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         openMocks(this);
         //Throw exception when trying to retrieve a non-existing slideshow
         when(slideshowService.get(999L)).thenThrow(DataNotFoundException.class);
