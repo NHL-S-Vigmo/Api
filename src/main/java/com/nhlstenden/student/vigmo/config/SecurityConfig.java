@@ -93,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private HttpSecurity enableRESTAuthentication(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/authenticate").permitAll()
+                .mvcMatchers("/authenticate", "/authenticate_screen/*").permitAll()
                 .antMatchers(HttpMethod.GET, "/files/*/render").permitAll()
                 .and()
                 .exceptionHandling()

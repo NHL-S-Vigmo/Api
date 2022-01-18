@@ -16,7 +16,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin(exposedHeaders = "X-Total-Count, Location")
+@CrossOrigin(exposedHeaders = "X-Total-Count, Location, jwt-new-token")
 public abstract class AbstractVigmoController<Service extends VigmoService<DTO>, DTO> implements VigmoController<DTO> {
     protected final Service service;
     private final UserService userService;
