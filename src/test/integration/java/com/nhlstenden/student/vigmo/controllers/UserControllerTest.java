@@ -80,7 +80,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        UserDto dto = new UserDto();
+        UserDto dto = new UserDto(null,"Thijs_Smegen1","",true,"ROLE_ADMIN","/image_013.jpg");
         super.post(dto);
     }
 
@@ -88,8 +88,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        UserDto dto = new UserDto();
-        dto.setId(1L);
+        UserDto dto = new UserDto(1L,"Thijs_Smegen2","",true,"ROLE_ADMIN","/image_013.jpg");
         super.postWithExistingId(dto);
     }
 
@@ -97,7 +96,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        UserDto dto = new UserDto();
+        UserDto dto = new UserDto(1L,"Thijs_Smegen3","",true,"ROLE_ADMIN","/image_013.jpg");
         super.put(dto);
     }
 
@@ -105,7 +104,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        UserDto dto = new UserDto();
+        UserDto dto = new UserDto(1L,"Thijs_Smegen4","",true,"ROLE_ADMIN","/image_013.jpg");
         super.putNotFound(dto);
     }
 

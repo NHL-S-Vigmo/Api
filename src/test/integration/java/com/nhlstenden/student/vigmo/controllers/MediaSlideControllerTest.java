@@ -88,7 +88,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto();
+        MediaSlideDto dto = new MediaSlideDto(null,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
         super.post(dto);
     }
 
@@ -96,7 +96,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto();
+        MediaSlideDto dto = new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
         dto.setId(1L);
         super.postWithExistingId(dto);
     }
@@ -105,7 +105,8 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto();
+        MediaSlideDto dto = new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
+
         super.put(dto);
     }
 
@@ -113,7 +114,8 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto();
+        MediaSlideDto dto = new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
+
         super.putNotFound(dto);
     }
 

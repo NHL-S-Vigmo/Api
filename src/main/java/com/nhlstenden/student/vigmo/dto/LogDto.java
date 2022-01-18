@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogDto {
-    public LogDto(Long userId, String username, String action, String message, Double datetime) {
+    public LogDto(Long userId, String username, String action, String message, Long datetime) {
         this.userId = userId;
         this.username = username;
         this.action = action;
@@ -35,5 +35,5 @@ public class LogDto {
     @Size(max = 220)
     private String message;
 
-    private Double datetime;
+    private Long datetime;
 }

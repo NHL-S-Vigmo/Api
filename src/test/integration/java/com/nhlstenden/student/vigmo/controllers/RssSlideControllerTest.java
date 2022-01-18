@@ -14,6 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import static org.modelmapper.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Transactional
@@ -94,7 +95,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        RssSlideDto dto = new RssSlideDto();
+        RssSlideDto dto = new RssSlideDto( null,"https://www.nu.nl/rss/Algemeen","title","description","creator","category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
         super.post(dto);
     }
 
@@ -102,8 +103,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        RssSlideDto dto = new RssSlideDto();
-        dto.setId(1L);
+        RssSlideDto dto = new RssSlideDto( 2L,"https://www.nu.nl/rss/Algemeen","title","description","creator","category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
         super.postWithExistingId(dto);
     }
 
@@ -111,7 +111,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        RssSlideDto dto = new RssSlideDto();
+        RssSlideDto dto = new RssSlideDto( 2L,"https://www.nu.nl/rss/Algemeen","title","description","creator","category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
         super.put(dto);
     }
 
@@ -119,7 +119,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        RssSlideDto dto = new RssSlideDto();
+        RssSlideDto dto = new RssSlideDto( 2L,"https://www.nu.nl/rss/Algemeen","title","description","creator","category","enclosure",true,30,"2021-12-21",null,"12:00",null,1L);
         super.putNotFound(dto);
     }
 

@@ -86,7 +86,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        TextSlideDto dto = new TextSlideDto();
+        TextSlideDto dto = new TextSlideDto(null,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
         super.post(dto);
     }
 
@@ -94,8 +94,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        TextSlideDto dto = new TextSlideDto();
-        dto.setId(1L);
+        TextSlideDto dto = new TextSlideDto(3L,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
         super.postWithExistingId(dto);
     }
 
@@ -103,7 +102,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        TextSlideDto dto = new TextSlideDto();
+        TextSlideDto dto = new TextSlideDto(3L,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
         super.put(dto);
     }
 
@@ -111,7 +110,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        TextSlideDto dto = new TextSlideDto();
+        TextSlideDto dto = new TextSlideDto(3L,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
         super.putNotFound(dto);
     }
 

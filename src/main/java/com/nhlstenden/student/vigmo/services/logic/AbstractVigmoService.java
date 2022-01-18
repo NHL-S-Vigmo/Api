@@ -83,7 +83,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     @Override
     public final long create(DTO dto, long userId, String username) {
         long id = create(dto);
-        LogDto logDto = new LogDto(userId, username, ACTION_CREATE, "", (double) Instant.now().getEpochSecond());
+        LogDto logDto = new LogDto(userId, username, ACTION_CREATE, "", Instant.now().getEpochSecond());
 
         if (logService != null)
             logService.create(logDto);
@@ -93,7 +93,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     @Override
     public final void update(DTO dto, long id, long userId, String username) {
         update(dto, id);
-        LogDto logDto = new LogDto(userId, username, ACTION_UPDATE, "", (double) Instant.now().getEpochSecond());
+        LogDto logDto = new LogDto(userId, username, ACTION_UPDATE, "", Instant.now().getEpochSecond());
         if (logService != null)
             logService.create(logDto);
     }
@@ -101,7 +101,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     @Override
     public final void delete(long id, long userId, String username) {
         delete(id);
-        LogDto logDto = new LogDto(userId, username, ACTION_DELETE, "", (double) Instant.now().getEpochSecond());
+        LogDto logDto = new LogDto(userId, username, ACTION_DELETE, "", Instant.now().getEpochSecond());
         if (logService != null)
             logService.create(logDto);
     }

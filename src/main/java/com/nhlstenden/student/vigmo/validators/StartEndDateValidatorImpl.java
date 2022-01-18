@@ -15,6 +15,10 @@ public class StartEndDateValidatorImpl implements ConstraintValidator<StartEndDa
 
     @Override
     public boolean isValid(StartEndDate startEndTimeData, ConstraintValidatorContext constraintValidatorContext) {
+        if(startEndTimeData.getEndDate() == null) return true;
+
+        if(startEndTimeData.getStartDate() == null ) return true;
+
         try{
             DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate startDate = LocalDate.parse(startEndTimeData.getStartDate(), format);

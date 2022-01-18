@@ -6,9 +6,6 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -23,7 +20,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -102,7 +98,12 @@ public class ApiConfig implements WebMvcConfigurer {
         return modelMapperDateParser(
                 modelMapperTimeParser(
                         modelMapperStringToBase64Parser(
-                                modelMapperStringTimeInstantParser(modelMapper))));
+                                modelMapperLongTimeInstantParser(
+                                        modelMapperInstantToLongParser(modelMapper)
+                                )
+                        )
+                )
+        );
     }
 
     private ModelMapper modelMapperDateParser(ModelMapper modelMapper) {
@@ -177,7 +178,7 @@ public class ApiConfig implements WebMvcConfigurer {
         return modelMapper;
     }
 
-    private ModelMapper modelMapperStringTimeInstantParser(ModelMapper modelMapper) {
+    private ModelMapper modelMapperLongTimeInstantParser(ModelMapper modelMapper) {
         Provider<Instant> localByteArrayProvider = new AbstractProvider<>() {
             @Override
             public Instant get() {
@@ -185,18 +186,43 @@ public class ApiConfig implements WebMvcConfigurer {
             }
         };
 
-        Converter<Double, Instant> doubleToInstantConverter = new AbstractConverter<>() {
+        Converter<Long, Instant> longToInstantConverter = new AbstractConverter<>() {
             @SneakyThrows
             @Override
-            protected Instant convert(Double source) {
+            protected Instant convert(Long source) {
                 if (source == null) return null;
-                return Instant.ofEpochSecond(source.longValue());
+                return Instant.ofEpochSecond(source);
             }
         };
 
-        modelMapper.createTypeMap(Double.class, Instant.class);
-        modelMapper.addConverter(doubleToInstantConverter);
-        modelMapper.getTypeMap(Double.class, Instant.class).setProvider(localByteArrayProvider);
+        modelMapper.createTypeMap(Long.class, Instant.class);
+        modelMapper.addConverter(longToInstantConverter);
+        modelMapper.getTypeMap(Long.class, Instant.class).setProvider(localByteArrayProvider);
+
+        return modelMapper;
+    }
+
+    private ModelMapper modelMapperInstantToLongParser(ModelMapper modelMapper) {
+        Provider<Long> localByteArrayProvider = new AbstractProvider<>() {
+            @Override
+            public Long get() {
+                return Long.MIN_VALUE;
+            }
+        };
+
+        Converter<Instant, Long> instantToLongConverter = new AbstractConverter<>() {
+            @SneakyThrows
+            @Override
+            protected Long convert(Instant source) {
+                if (source == null) return null;
+
+                return source.getEpochSecond();
+            }
+        };
+
+        modelMapper.createTypeMap(Instant.class, Long.class);
+        modelMapper.addConverter(instantToLongConverter);
+        modelMapper.getTypeMap(Instant.class, Long.class).setProvider(localByteArrayProvider);
 
         return modelMapper;
     }

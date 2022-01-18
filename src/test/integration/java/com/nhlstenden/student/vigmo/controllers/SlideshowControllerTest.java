@@ -73,7 +73,7 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        SlideshowDto dto = new SlideshowDto();
+        SlideshowDto dto = new SlideshowDto(null,3L,"Christmas");
         super.post(dto);
     }
 
@@ -81,8 +81,7 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        SlideshowDto dto = new SlideshowDto();
-        dto.setId(1L);
+        SlideshowDto dto = new SlideshowDto(1L,3L,"Christmas");
         super.postWithExistingId(dto);
     }
 
@@ -90,7 +89,7 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        SlideshowDto dto = new SlideshowDto();
+        SlideshowDto dto = new SlideshowDto(1L,3L,"Christmas");
         super.put(dto);
     }
 
@@ -98,7 +97,7 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        SlideshowDto dto = new SlideshowDto();
+        SlideshowDto dto = new SlideshowDto(1L,3L,"Christmas");
         super.putNotFound(dto);
     }
 

@@ -72,7 +72,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        ScreenDto dto = new ScreenDto();
+        ScreenDto dto = new ScreenDto(null, "Screen_103", "Upstairs south wall", "DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI");
         super.post(dto);
     }
 
@@ -80,8 +80,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        ScreenDto dto = new ScreenDto();
-        dto.setId(1L);
+        ScreenDto dto = new ScreenDto(1L, "Screen_103", "Upstairs south wall", "DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI");
         super.postWithExistingId(dto);
     }
 
@@ -89,7 +88,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        ScreenDto dto = new ScreenDto();
+        ScreenDto dto = new ScreenDto(1L, "Screen_103", "Upstairs south wall", "DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI");
         super.put(dto);
     }
 
@@ -97,7 +96,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        ScreenDto dto = new ScreenDto();
+        ScreenDto dto = new ScreenDto(1L, "Screen_103", "Upstairs south wall", "DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI");
         super.putNotFound(dto);
     }
 
