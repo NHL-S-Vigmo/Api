@@ -61,7 +61,13 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll()
+                .andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].slideshowId").exists(),
+                        jsonPath("$.[:1].name").exists(),
+                        jsonPath("$.[:1].value").exists()
+                );
     }
 
     @Test
@@ -78,7 +84,7 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     public void testPostWithExistingId() throws Exception {
         SlideshowVariableDto dto = new SlideshowVariableDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

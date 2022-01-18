@@ -68,7 +68,20 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll()
+                .andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].slideshowId").exists(),
+                        jsonPath("$.[:1].isActive").exists(),
+                        jsonPath("$.[:1].duration").exists(),
+                        jsonPath("$.[:1].startDate").exists(),
+                        jsonPath("$.[:1].endDate").exists(),
+                        jsonPath("$.[:1].startTime").exists(),
+                        jsonPath("$.[:1].endTime").exists(),
+                        jsonPath("$.[:1].audioEnabled").exists(),
+                        jsonPath("$.[:1].type").exists(),
+                        jsonPath("$.[:1].resource").exists()
+                );
     }
 
     @Test
@@ -85,7 +98,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     public void testPostWithExistingId() throws Exception {
         MediaSlideDto dto = new MediaSlideDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

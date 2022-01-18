@@ -59,7 +59,13 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll()
+                .andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].name").exists(),
+                        jsonPath("$.[:1].location").exists(),
+                        jsonPath("$.[:1].authKey").exists()
+                );
     }
 
     @Test
@@ -76,7 +82,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     public void testPostWithExistingId() throws Exception {
         ScreenDto dto = new ScreenDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

@@ -2,6 +2,9 @@ package com.nhlstenden.student.vigmo.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Generated
@@ -19,9 +22,18 @@ public class LogDto {
     }
 
     private Long id;
+
+    @Positive
     private Long userId;
+
+    @NotEmpty @Size(max = 50)
     private String username;
+
+    @NotEmpty @Size(max = 50)
     private String action;
+
+    @Size(max = 220)
     private String message;
+
     private Instant datetime;
 }

@@ -65,7 +65,15 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testGetAll() throws Exception {
-        super.getAll();
+        super.getAll()
+                .andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].username").exists(),
+                        jsonPath("$.[:1].password").exists(),
+                        jsonPath("$.[:1].enabled").exists(),
+                        jsonPath("$.[:1].role").exists(),
+                        jsonPath("$.[:1].pfpLocation").exists()
+                );
     }
 
     @Test
@@ -82,7 +90,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     public void testPostWithExistingId() throws Exception {
         UserDto dto = new UserDto();
         dto.setId(1L);
-        super.post(dto);
+        super.postWithExistingId(dto);
     }
 
     @Test

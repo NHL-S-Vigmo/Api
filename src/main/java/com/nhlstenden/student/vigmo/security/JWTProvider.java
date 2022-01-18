@@ -17,9 +17,13 @@ import java.util.HashMap;
 
 public class JWTProvider {
     private static final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS256;
+    private static final long validityInMilliseconds = 3600000; // 1 hour
+    private static final long refreshTokenTimeRequiredInMilliSeconds = 2700000; //45 minutes
+    private static final long validityScreenInMilliseconds = 900000; // 15 minutes
+    private static final long refreshTokenScreenTimeRequiredInMilliSeconds = 600000; //10 minutes
+
     private final UserDetailsService userDetailsService;
     private final String secretKey;
-    private final long validityInMilliseconds = 600000000; // 7 days
 
     public JWTProvider(UserDetailsService userDetailsService, String secretKey) {
         this.userDetailsService = userDetailsService;
@@ -27,7 +31,6 @@ public class JWTProvider {
     }
 
     public String createToken(long id, String username, String role, String profilePicture) {
-
         HashMap<String, Object> claimMap = new HashMap<>();
         claimMap.put("id", id);
         claimMap.put("pfp_location", profilePicture);
@@ -50,7 +53,7 @@ public class JWTProvider {
         claimMap.put("role", role);
 
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + validityInMilliseconds);
+        Date expiration = new Date(now.getTime() + validityScreenInMilliseconds);
         return Jwts.builder()
                 .setSubject(screenName)
                 .setIssuedAt(now)
@@ -61,16 +64,14 @@ public class JWTProvider {
     }
 
 
-
     public Authentication getAuthentication(String tokenString) {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
 
         String role = claims.get("role", String.class);
-        if(role.equals("ROLE_SCREEN")){
+        if (role.equals("ROLE_SCREEN")) {
             return new ScreenAuthenticationToken(AuthorityUtils.createAuthorityList("ROLE_SCREEN"));
-        }
-        else{
+        } else {
             UserDetails userDetails = userDetailsService.loadUserByUsername(user);
             return new UsernamePasswordAuthenticationToken(userDetails, "",
                     userDetails.getAuthorities());
@@ -87,9 +88,14 @@ public class JWTProvider {
         String pfp_location = claims.get("pfp_location", String.class);
 
         Date expiration = claims.getExpiration();
-        if (new Date(new Date().getTime() + validityInMilliseconds / 10).after(expiration)) {
-            return createToken(id, user, role, pfp_location);
+        if (role.equals("ROLE_SCREEN")) {
+            if (new Date(new Date().getTime() + refreshTokenScreenTimeRequiredInMilliSeconds).after(expiration))
+                return createScreenToken(user, role);
+        } else {
+            if (new Date(new Date().getTime() + refreshTokenTimeRequiredInMilliSeconds).after(expiration))
+                return createToken(id, user, role, pfp_location);
         }
+
         return null;
     }
 
