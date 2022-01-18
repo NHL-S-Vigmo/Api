@@ -68,13 +68,14 @@ public class AvailabilityServiceTest {
 
     @Test
     void testCreateAvailabilityWithValidUserId() {
+        //User id belongs to an existing user
         when(availabilityDtoMock.getUserId()).thenReturn(1L);
         when(availabilityDtoMock.getId()).thenReturn(null);
         Long id = availabilityService.create(availabilityDtoMock);
 
         assertThat(id)
                 .isNotNull();
-
+        //verify that the availability got saved and mapped correctly
         verify(repository).
                 save(any());
         verify(mapper).
@@ -83,20 +84,24 @@ public class AvailabilityServiceTest {
 
     @Test
     void testCreateAvailabilityWithInvalidUserId() {
+        //User id doesn't belong to an existing user
         when(availabilityDtoMock.getUserId()).thenReturn(999L);
 
         assertThatThrownBy(() -> availabilityService.create(availabilityDtoMock)).isInstanceOf(DataNotFoundException.class);
 
+        //verify that the availability didn't get saved
         verify(repository, Mockito.never())
                 .save(any());
     }
 
     @Test
     void testUpdateAvailabilityWithValidUserId() {
+        //User id belongs to an existing user
         when(availabilityDtoMock.getUserId()).thenReturn(1L);
 
         availabilityService.update(availabilityDtoMock, 1L);
 
+        //verify that the availability got saved and mapped correctly and compared to the right objects
         verify(repository).
                 findById(anyLong());
         verify(repository).
@@ -109,10 +114,11 @@ public class AvailabilityServiceTest {
 
     @Test
     void testUpdateAvailabilityWithInvalidUserId() {
+        //User id doesn't belong to an existing user
         when(availabilityDtoMock.getUserId()).thenReturn(999L);
 
         assertThatThrownBy(() -> availabilityService.update(availabilityDtoMock, 1L)).isInstanceOf(DataNotFoundException.class);
-
+        //verify that the availability got saved correctly
         verify(userServiceMock).
                 existsById(anyLong());
         verify(repository, Mockito.never()).

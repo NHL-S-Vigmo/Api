@@ -46,20 +46,23 @@ class ScreenServiceTest {
 
     @Test
     void getScreenByAuthKey() {
+        //Auth key belongs to a screen
         when(repo.findByAuthKey(anyString())).thenReturn(Optional.of(screenMock));
 
         assertThat(screenService.getScreenByAuthKey("abc")).isNotNull();
-
+        //verify that the repository got checked and the screen mapped to a dto
         verify(repo).findByAuthKey(anyString());
         verify(mapper).mapObject(screenMock,ScreenDto.class);
     }
 
     @Test
     void getNonExistentScreenByAuthKey() {
+        //Auth key does not belong to a screen
         when(repo.findByAuthKey(anyString())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> screenService.getScreenByAuthKey("abc")).isInstanceOf(DataNotFoundException.class);
 
+        //verify that the repository got checked
         verify(repo).findByAuthKey(anyString());
     }
 }

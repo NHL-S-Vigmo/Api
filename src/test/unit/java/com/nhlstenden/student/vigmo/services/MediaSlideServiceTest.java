@@ -60,6 +60,8 @@ public class MediaSlideServiceTest {
 
     @Test
     void testMediaSlideCreateWithExistingSlideshow(){
+        //TODO: replace dto with a mocked dto, however mocking a child of slide dto causes isFieldSet
+        //      from AbstractVigmoService to no longer be able to find the id field
         MediaSlideDto mediaSlideDto = new MediaSlideDto();
         //Slideshow id is of an existing slideshow
         mediaSlideDto.setSlideshowId(1L);
@@ -78,7 +80,7 @@ public class MediaSlideServiceTest {
 
         assertThatThrownBy(() -> mediaSlideServiceMock.create(mediaSlideDto)).isInstanceOf(DataNotFoundException.class);
 
-        //verify that the save was not called
+        //verify that the object was not saved
         verify(repo, Mockito.never()).save(mediaSlideMock);
     }
 

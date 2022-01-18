@@ -30,7 +30,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 class ServiceTest {
     @Mock
-    private TestEntityRepository repository;
+    private TestEntityRepository repo;
 
     @Mock
     private MappingUtility mapper;
@@ -58,11 +58,11 @@ class ServiceTest {
         openMocks(this);
 
         //mocks for the repo
-        when(repository.save(any(TestEntity.class))).
+        when(repo.save(any(TestEntity.class))).
                 thenReturn(testEntityMock);
-        when(repository.findById(1L)).
+        when(repo.findById(1L)).
                 thenReturn(Optional.of(testEntityMock));
-        when(repository.findById(2L)).
+        when(repo.findById(2L)).
                 thenReturn(Optional.empty());
 
         //mocks for the mapper
@@ -74,6 +74,7 @@ class ServiceTest {
 
     @Test
     void testGetEntities() {
+        //create list of entities that will be returned from getList
         List<TestEntityDto> testEntityDtoList = new ArrayList<>();
         testEntityDtoList.add(testEntityDtoMock);
         when(mapper.mapList(anyList(), eq(TestEntityDto.class))).
@@ -83,8 +84,8 @@ class ServiceTest {
 
         assertThat(entities.isEmpty())
                 .isFalse();
-
-        verify(repository).
+        //verify that the list got retrieved from the database and mapped to dtos
+        verify(repo).
                 findAll();
         verify(mapper).
                 mapList(anyList(), eq(TestEntityDto.class));
@@ -92,7 +93,8 @@ class ServiceTest {
 
     @Test
     void testGetEntitiesWhenEmpty() {
-        when(repository.findAll()).
+        //return an empty list from the repository
+        when(repo.findAll()).
                 thenReturn(new ArrayList<>());
         when(mapper.mapList(anyList(), eq(TestEntityDto.class))).
                 thenReturn(new ArrayList<>());
@@ -100,9 +102,9 @@ class ServiceTest {
 
         assertThat(entities.isEmpty())
                 .isTrue();
-        verify(mapper).
-                mapList(anyList(), eq(TestEntityDto.class));
-        verify(repository).
+
+        //verify that the list got retrieved from the database
+        verify(repo).
                 findAll();
     }
 
@@ -112,8 +114,8 @@ class ServiceTest {
 
         assertThat(entity)
                 .isNotNull();
-        //verify that the find and mapper functions were called
-        verify(repository).
+        //verify that the entity got retrieved from the repository and mapped to a dto
+        verify(repo).
                 findById(anyLong());
         verify(mapper).
                 mapObject(any(), eq(TestEntityDto.class));
@@ -129,7 +131,8 @@ class ServiceTest {
     void getWithNoIdField() {
         assertThatThrownBy(() -> noIdDtoService.create(noIdEntityDtoMock)).
                 isInstanceOf(EntityIdRequirementNotMetException.class);
-        verify(repository, Mockito.never()).save(any());
+        //Make sure that the entity did not get saved
+        verify(repo, Mockito.never()).save(any());
     }
 
     @Test
@@ -140,8 +143,8 @@ class ServiceTest {
 
         assertThat(id)
                 .isNotNull();
-        //verify that the save and mapper functions were called
-        verify(repository).
+        //verify that the entity got saved and the object was mapped to an entity
+        verify(repo).
                 save(testEntityMock);
         verify(mapper).
                 mapObject(testEntityDtoMock, TestEntity.class);
@@ -154,20 +157,20 @@ class ServiceTest {
         assertThatThrownBy(() -> testEntityService.create(testEntityDtoMock)).
                 isInstanceOf(IdProvidedInCreateRequestException.class);
 
-        //verify that the save was not called
-        verify(repository, Mockito.never()).save(testEntityMock);
+        //verify that the object was not saved
+        verify(repo, Mockito.never()).save(testEntityMock);
     }
 
     @Test
     void testUpdateEntity() {
         testEntityService.update(testEntityDtoMock, 1L);
 
-        //verify that the find, mapper and save functions were called
-        verify(repository).
+        //verify that the entity got retrieved from the repository, got mapped to an entity and saved in the database
+        verify(repo).
                 findById(anyLong());
         verify(mapper).
                 mapObject(testEntityDtoMock, TestEntity.class);
-        verify(repository).
+        verify(repo).
                 save(testEntityMock);
 
         //assert that when you update a non-existing item, it throws a data not found exception.
@@ -180,9 +183,9 @@ class ServiceTest {
         testEntityService.delete(1L);
 
         //verify that the delete method and the find method were called on the repository
-        verify(repository).
+        verify(repo).
                 findById(anyLong());
-        verify(repository).
+        verify(repo).
                 deleteById(anyLong());
 
         //assert that when you delete a non-existing item, it throws a data not found exception.
@@ -199,7 +202,7 @@ class ServiceTest {
         //verify that the create log, save and mapper functions were called
         verify(logServiceMock).
                 create(any(LogDto.class));
-        verify(repository).
+        verify(repo).
                 save(testEntityMock);
         verify(mapper).
                 mapObject(testEntityDtoMock, TestEntity.class);
@@ -212,11 +215,11 @@ class ServiceTest {
         //verify that the create log, find, mapper and save functions were called
         verify(logServiceMock).
                 create(any(LogDto.class));
-        verify(repository).
+        verify(repo).
                 findById(anyLong());
         verify(mapper).
                 mapObject(testEntityDtoMock, TestEntity.class);
-        verify(repository).
+        verify(repo).
                 save(testEntityMock);
     }
 
@@ -227,9 +230,9 @@ class ServiceTest {
         //verify that the create log method, delete method and the find method were called on the repository
         verify(logServiceMock).
                 create(any(LogDto.class));
-        verify(repository).
+        verify(repo).
                 findById(anyLong());
-        verify(repository).
+        verify(repo).
                 deleteById(anyLong());
 
     }

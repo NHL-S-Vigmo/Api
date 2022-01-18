@@ -105,24 +105,27 @@ class FileServiceTest {
     @Test
     void update() {
         fileService.update(fileDtoMockWithoutId, 1L);
-        //verify object was saved in the database
+        //verify object was saved in the database and the key got set
         verify(repo).save(any(File.class));
-        verify(fileDtoMockWithoutId).setKey(anyString());
+        verify(fileDtoMockWithoutId).setKey(randomKey);
 
     }
 
     @Test
     void getExistingRawEntityByKey() {
+        //repository will return a key when asked for one
         when(repo.findByKey(anyString())).thenReturn(Optional.of(fileMock));
         assertThat(fileService.getRawEntityByKey(randomKey)).isEqualTo(fileMock);
-
+        //verify that the key got collected from the repository
         verify(repo).findByKey(anyString());
     }
 
     @Test
     void getNonExistingRawEntityByKey() {
+        //repository will return no key when asked for one
         when(repo.findByKey(anyString())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> fileService.getRawEntityByKey(randomKey)).isInstanceOf(DataNotFoundException.class);
+        //verify that the key got collected from the repository
         verify(repo).findByKey(anyString());
     }
 }
