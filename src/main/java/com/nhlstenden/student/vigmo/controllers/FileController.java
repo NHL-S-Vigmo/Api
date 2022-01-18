@@ -25,7 +25,7 @@ public class FileController extends AbstractVigmoController<FileService, FileDto
     }
 
     @ApiOperation(value = "Gets the related variables for the requested slideshow")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Invalid slideshow id")})
+    @ApiResponses(value = {@ApiResponse(code = 404, message = "Invalid file_key")})
     @GetMapping("/{file_key}/render")
     ResponseEntity<byte[]> renderFile(@PathVariable("file_key") final String file_key){
         HttpHeaders headers = new HttpHeaders();
