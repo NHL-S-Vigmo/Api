@@ -40,6 +40,10 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
         return this.mockMvc;
     }
 
+    public String getPath(){
+        return this.path;
+    }
+
     public ObjectMapper getObjectMapper(){
         return this.om;
     }
