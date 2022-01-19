@@ -106,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/media_slides",
                         "/media_slides/*",
                         "/rss_slides",
-                        "/rss_slides/*",
+                        "/rss_slides/**",
                         "/text_slides",
                         "/text_slides/*")
                 .hasAnyRole("ADMIN", "DOCENT", "SCREEN")
