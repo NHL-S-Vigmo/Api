@@ -71,11 +71,11 @@ public class JWTProvider {
         if (role.equals("ROLE_SCREEN")) {
 
             //UserDetails userDetails = userDetailsService.loadUserByUsername(user);
-            return new ScreenAuthenticationToken(null, "",
+            return new ScreenAuthenticationToken(null, claims,
                     AuthorityUtils.createAuthorityList("ROLE_SCREEN"));
         } else {
             UserDetails userDetails = userDetailsService.loadUserByUsername(user);
-            return new UsernamePasswordAuthenticationToken(userDetails, "",
+            return new UsernamePasswordAuthenticationToken(userDetails, claims,
                     userDetails.getAuthorities());
         }
     }

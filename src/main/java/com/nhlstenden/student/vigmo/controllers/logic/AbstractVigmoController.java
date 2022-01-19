@@ -2,6 +2,7 @@ package com.nhlstenden.student.vigmo.controllers.logic;
 
 import com.nhlstenden.student.vigmo.services.UserService;
 import com.nhlstenden.student.vigmo.services.logic.VigmoService;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -53,6 +54,12 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
     @Override
     public ResponseEntity<Void> put(final long id, @Valid DTO putObject, Authentication authentication) {
         String username = authentication.getName();
+
+        //fixme, needs further work.
+        if(authentication.getCredentials() != null){
+            Claims creds = (Claims) authentication.getCredentials();
+        }
+
         long userId = userService.findByUsername(username).getId(); //TODO: replace with id from jwtToken
         service.update(putObject, id, userId, username);
         return ResponseEntity.ok().build();
