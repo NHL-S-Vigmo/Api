@@ -37,7 +37,6 @@ public class FileService extends AbstractVigmoService<FileRepository, FileDto, F
 
     @Override
     public long create(FileDto fileDto) {
-        //check if there is a fileKey provided
         fileDto.setKey(generateRandom64LengthKey());
         return super.create(fileDto);
     }

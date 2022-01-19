@@ -24,7 +24,5 @@ public class ScreenDto {
     private String location;
 
     @ApiModelProperty(notes = "Authentication key of the screen", name = "authKey", required = true, value = "random-string-with-enough-length")
-    @Size(min = 20, max = 255)
-    @NotEmpty
     private String authKey;
 }

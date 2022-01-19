@@ -122,7 +122,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
         super.modelValidationOnPost(dto).andExpectAll(
                 jsonPath("$.name").exists(),
                 jsonPath("$.location").doesNotExist(),
-                jsonPath("$.authKey").exists()
+                jsonPath("$.authKey").doesNotExist()
         );
     }
 
@@ -134,7 +134,7 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
         super.modelValidationOnPut(dto).andExpectAll(
                 jsonPath("$.name").exists(),
                 jsonPath("$.location").doesNotExist(),
-                jsonPath("$.authKey").exists()
+                jsonPath("$.authKey").doesNotExist()
         );
     }
 

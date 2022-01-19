@@ -6,7 +6,7 @@
 
     <groupId>com.nhlstenden.student.vigmo</groupId>
     <artifactId>NHLSVigmo</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -19,7 +19,7 @@
     </properties>
 
     <name>NHL-S Vigmo WebApp</name>
-    <url>http://vigmo.nhlstenden.com</url>
+    <url>https://vigmo.nhlstenden.com</url>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -266,7 +266,7 @@
 
     </dependencies>
     <build>
-        <finalName>VigmoWebBuild</finalName>
+        <finalName>VigmoRelease</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
