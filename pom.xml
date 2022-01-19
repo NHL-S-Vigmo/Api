@@ -6,7 +6,7 @@
 
     <groupId>com.nhlstenden.student.vigmo</groupId>
     <artifactId>NHLSVigmo</artifactId>
-    <version>1.3-RELEASE</version>
+    <version>1.4-RELEASE</version>
     <packaging>war</packaging>
 
     <properties>
