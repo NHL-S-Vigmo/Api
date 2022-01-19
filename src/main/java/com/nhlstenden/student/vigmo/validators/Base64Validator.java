@@ -7,10 +7,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = BcryptValidatorImpl.class)
+@Constraint(validatedBy = Base64ValidatorImpl.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface BcryptValidator {
+public @interface Base64Validator {
     String message() default "Not a valid bcrypt encrypted string";
 
     Class<?>[] groups() default {};

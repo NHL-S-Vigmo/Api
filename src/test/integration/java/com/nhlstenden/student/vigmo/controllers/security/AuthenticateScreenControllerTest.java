@@ -54,7 +54,7 @@ class AuthenticateScreenControllerTest {
         //Given auth token does not belong to any screens
         this.mockMvc.perform(get(path + "/abcdefghijklmnopq"))
                 .andExpect(status().
-                        isNotFound()).
+                        isUnauthorized()).
                 andExpect(header().
                         doesNotExist(jwtTokenHeader));
     }
@@ -73,7 +73,7 @@ class AuthenticateScreenControllerTest {
                 .getHeader(jwtTokenHeader);
 
         //use the jwt response from above to make a request below.
-        this.mockMvc.perform(get("/screens")
+        this.mockMvc.perform(get("/slideshows")
                         .header("Authorization", "Bearer " + jwt))
                 .andExpect(status()
                         .isOk());
