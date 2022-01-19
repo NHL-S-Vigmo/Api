@@ -12,7 +12,6 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Log implements EntityId {
     @Id

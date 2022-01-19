@@ -61,12 +61,6 @@ public class ExceptionHandlers {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(GenericTypeTransformerException.class)
-    public ErrorResponse handleGenericTypeTransformerException(GenericTypeTransformerException exception) {
-        return new ErrorResponse("Transforming of generic class went wrong: " + exception.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(EntityIdRequirementNotMetException.class)
     public ErrorResponse handleEntityIdRequirementNotMetException(EntityIdRequirementNotMetException exception) {
         return new ErrorResponse("Error getting the id of an object: " + exception.getMessage());

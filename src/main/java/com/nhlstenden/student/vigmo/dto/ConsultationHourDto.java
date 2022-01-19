@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @StartEndTimeValidator
-@Builder
 public class ConsultationHourDto implements StartEndTime {
     private Long id;
 
