@@ -204,12 +204,22 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
 
     @Test
     public void testGetSlideshowsBelongingToScreenOnly() throws Exception {
-        super.getAll()
-                //todo: rewrite this test to sign in as Screen (with actual JWT method)
-                .andExpectAll(
-                        jsonPath("$.[:1].id").exists(),
-                        jsonPath("$.[:1].screenId").exists(),
-                        jsonPath("$.[:1].name").exists()
-                );
+        //get a correct JWT from the signin key of a screen.
+        String jwt = getMockMvc().perform(get("/authenticate_screen/DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI"))
+                .andExpect(status().
+                        isOk()).
+                andExpect(header().
+                        exists("jwt-token"))
+                .andReturn()
+                .getResponse()
+                .getHeader("jwt-token");
+
+        //use the jwt response from above to make a request below.
+        getMockMvc().perform(get("/slideshows")
+                        .header("Authorization", "Bearer " + jwt))
+                .andExpect(status()
+                        .isOk())
+                .andExpect(jsonPath("$.length()")
+                        .value(1));
     }
 }

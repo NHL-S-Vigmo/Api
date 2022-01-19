@@ -1,6 +1,5 @@
 package com.nhlstenden.student.vigmo.dto;
 
-import com.nhlstenden.student.vigmo.validators.BcryptValidator;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;

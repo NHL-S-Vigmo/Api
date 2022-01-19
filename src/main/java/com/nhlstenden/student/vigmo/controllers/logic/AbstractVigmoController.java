@@ -55,11 +55,6 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
     public ResponseEntity<Void> put(final long id, @Valid DTO putObject, Authentication authentication) {
         String username = authentication.getName();
 
-        //fixme, needs further work.
-        if(authentication.getCredentials() != null && !(authentication.getCredentials() instanceof String)){
-            Claims creds = (Claims) authentication.getCredentials();
-        }
-
         long userId = userService.findByUsername(username).getId(); //TODO: replace with id from jwtToken
         service.update(putObject, id, userId, username);
         return ResponseEntity.ok().build();
