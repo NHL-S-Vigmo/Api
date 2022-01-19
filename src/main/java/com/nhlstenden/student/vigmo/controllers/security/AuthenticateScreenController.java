@@ -1,6 +1,7 @@
 package com.nhlstenden.student.vigmo.controllers.security;
 
 import com.nhlstenden.student.vigmo.dto.ScreenDto;
+import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.security.JWTProvider;
 import com.nhlstenden.student.vigmo.security.models.LoginDto;
 import com.nhlstenden.student.vigmo.services.ScreenService;
@@ -36,10 +37,13 @@ public class AuthenticateScreenController {
     })
     @GetMapping("/{authToken}")
     public ResponseEntity<Void> login(@PathVariable("authToken") String authToken) {
-        ScreenDto screen = screenService.getScreenByAuthKey(authToken);
+        ScreenDto screen;
 
-        if(screen == null) //throw bad credentials exception
-            return ResponseEntity.badRequest().build();
+        try {
+            screen = screenService.getScreenByAuthKey(authToken);
+        } catch (DataNotFoundException dnf) {
+            return ResponseEntity.status(401).build();
+        }
 
         //create the new JWT with static role ROLE_SCREEN
         String token = jwtProvider.createScreenToken(screen.getName(), "ROLE_SCREEN");

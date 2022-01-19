@@ -63,14 +63,16 @@ public class JWTProvider {
                 .compact();
     }
 
-
     public Authentication getAuthentication(String tokenString) {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
 
         String role = claims.get("role", String.class);
         if (role.equals("ROLE_SCREEN")) {
-            return new ScreenAuthenticationToken(AuthorityUtils.createAuthorityList("ROLE_SCREEN"));
+
+            //UserDetails userDetails = userDetailsService.loadUserByUsername(user);
+            return new ScreenAuthenticationToken(null, "",
+                    AuthorityUtils.createAuthorityList("ROLE_SCREEN"));
         } else {
             UserDetails userDetails = userDetailsService.loadUserByUsername(user);
             return new UsernamePasswordAuthenticationToken(userDetails, "",
@@ -81,17 +83,15 @@ public class JWTProvider {
     public String getRefreshToken(String tokenString) {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
-
-        //todo: maybe get these refreshed from the database.
-        long id = claims.get("id", Long.class);
         String role = claims.get("role", String.class);
-        String pfp_location = claims.get("pfp_location", String.class);
 
         Date expiration = claims.getExpiration();
         if (role.equals("ROLE_SCREEN")) {
             if (new Date(new Date().getTime() + refreshTokenScreenTimeRequiredInMilliSeconds).after(expiration))
                 return createScreenToken(user, role);
         } else {
+            long id = claims.get("id", Long.class);
+            String pfp_location = claims.get("pfp_location", String.class);
             if (new Date(new Date().getTime() + refreshTokenTimeRequiredInMilliSeconds).after(expiration))
                 return createToken(id, user, role, pfp_location);
         }

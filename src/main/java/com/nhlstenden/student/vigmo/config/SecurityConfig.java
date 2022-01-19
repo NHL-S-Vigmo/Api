@@ -1,9 +1,6 @@
 package com.nhlstenden.student.vigmo.config;
 
-import com.nhlstenden.student.vigmo.security.JWTFilter;
-import com.nhlstenden.student.vigmo.security.JWTProvider;
-import com.nhlstenden.student.vigmo.security.UnauthenticatedHandler;
-import com.nhlstenden.student.vigmo.security.UserAccessDeniedHandler;
+import com.nhlstenden.student.vigmo.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -81,10 +78,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
 
-        disableAuthOnSwagger(enableRESTAuthentication(http))
+        disableAuthOnSwagger(
+                enableRESTAuthentication(http))
                 .authorizeRequests()
                 .anyRequest()
-                .hasAnyRole("USER", "ADMIN", "DOCENT")
+                .hasAnyRole("ADMIN", "DOCENT")
                 .and()
                 .csrf()
                 .disable();
@@ -93,12 +91,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private HttpSecurity enableRESTAuthentication(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/authenticate", "/authenticate_screen/*").permitAll()
-                .antMatchers(HttpMethod.GET, "/files/*/render").permitAll()
+                .mvcMatchers("/authenticate", "/authenticate_screen/*")
+                    .permitAll()
+
+                //allow /files to be rendered
+                .antMatchers(HttpMethod.GET, "/files/*/render")
+                    .permitAll()
+
+                // Allow get of the screens by the SCREEN role.
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/slideshows",
+                        "/slideshows/**",
+                        "/media_slides",
+                        "/media_slides/*",
+                        "/rss_slides",
+                        "/rss_slides/*",
+                        "/text_slides",
+                        "/text_slides/*")
+                    .hasAnyAuthority("ROLE_SCREEN")
+
                 .and()
-                .exceptionHandling()
-                .accessDeniedHandler(new UserAccessDeniedHandler())
-                .authenticationEntryPoint(new UnauthenticatedHandler());
+                    .exceptionHandling()
+                    .accessDeniedHandler(new UserAccessDeniedHandler())
+                    .authenticationEntryPoint(new UnauthenticatedHandler());
         http.addFilterBefore(new JWTFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http;

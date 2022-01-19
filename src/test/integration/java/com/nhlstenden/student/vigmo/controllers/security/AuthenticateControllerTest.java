@@ -12,15 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
@@ -46,10 +47,10 @@ class AuthenticateControllerTest {
 
     @Test
     void correctLogin() throws Exception {
-        LoginDto loginDto = new LoginDto("Thijs_Smegen","password123");
+        LoginDto loginDto = new LoginDto("Thijs_Smegen", "password123");
         this.mockMvc.perform(post(path).
                         contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(loginDto)))
+                        .content(om.writeValueAsString(loginDto)))
                 .andExpect(status().
                         isOk()).
                 andExpect(header().
@@ -58,7 +59,7 @@ class AuthenticateControllerTest {
 
     @Test
     void invalidPasswordLogin() throws Exception {
-        LoginDto loginDto = new LoginDto("Thijs_Smegen","123456");
+        LoginDto loginDto = new LoginDto("Thijs_Smegen", "123456");
         this.mockMvc.perform(post(path).
                         contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(loginDto)))
@@ -70,7 +71,7 @@ class AuthenticateControllerTest {
 
     @Test
     void nonExistentUserLogin() throws Exception {
-        LoginDto loginDto = new LoginDto("NonExistentUser","password123");
+        LoginDto loginDto = new LoginDto("NonExistentUser", "password123");
         this.mockMvc.perform(post(path).
                         contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(loginDto)))
@@ -82,7 +83,7 @@ class AuthenticateControllerTest {
 
     @Test
     void disabledUserLogin() throws Exception {
-        LoginDto loginDto = new LoginDto("Jan_Doornbos","password321");
+        LoginDto loginDto = new LoginDto("Jan_Doornbos", "password321");
         this.mockMvc.perform(post(path).
                         contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(loginDto)))
@@ -95,7 +96,7 @@ class AuthenticateControllerTest {
     //TODO: Is this test necessary?
     @Test
     void disabledUserLoginWithWrongPassword() throws Exception {
-        LoginDto loginDto = new LoginDto("Jan_Doornbos","123456");
+        LoginDto loginDto = new LoginDto("Jan_Doornbos", "123456");
         this.mockMvc.perform(post(path).
                         contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(loginDto)))
@@ -107,7 +108,7 @@ class AuthenticateControllerTest {
 
     @Test
     void loginWithWrongMediaType() throws Exception {
-        LoginDto loginDto = new LoginDto("Thijs_Smegen","password123");
+        LoginDto loginDto = new LoginDto("Thijs_Smegen", "password123");
         this.mockMvc.perform(post(path).
                         contentType(MediaType.TEXT_PLAIN)
                         .content(om.writeValueAsString(loginDto)))
@@ -115,5 +116,27 @@ class AuthenticateControllerTest {
                         .isUnsupportedMediaType())
                 .andExpect(header()
                         .doesNotExist(jwtTokenHeader));
+    }
+
+    @Test
+    void loginWithUsernameAndPasswordAndRequestAResource() throws Exception {
+        LoginDto loginDto = new LoginDto("Thijs_Smegen", "password123");
+
+        //sign in with the above model
+        String jwt = this.mockMvc.perform(post(path).
+                        contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsString(loginDto)))
+                .andExpect(status().
+                        isOk()).
+                andExpect(header().
+                        exists(jwtTokenHeader))
+                .andReturn().getResponse().getHeader(jwtTokenHeader);
+
+        //use the jwt response from above to make a request below.
+        this.mockMvc.perform(get("/users")
+                        .header("Authorization", "Bearer " + jwt))
+                .andExpect(status()
+                        .isOk())
+                .andExpect(jsonPath("$").isArray());
     }
 }

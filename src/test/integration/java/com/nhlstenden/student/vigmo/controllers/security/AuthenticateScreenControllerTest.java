@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,5 +57,25 @@ class AuthenticateScreenControllerTest {
                         isNotFound()).
                 andExpect(header().
                         doesNotExist(jwtTokenHeader));
+    }
+
+
+    @Test
+    void loginWithUsernameAndPasswordAndRequestAResource() throws Exception {
+        //get a correct JWT from the signin key of a screen.
+        String jwt = this.mockMvc.perform(get(path + "/DMIrM5V5A8dt7QwJ9jk9Q9By4s1351jI"))
+                .andExpect(status().
+                        isOk()).
+                andExpect(header().
+                        exists(jwtTokenHeader))
+                .andReturn()
+                .getResponse()
+                .getHeader(jwtTokenHeader);
+
+        //use the jwt response from above to make a request below.
+        this.mockMvc.perform(get("/screens")
+                        .header("Authorization", "Bearer " + jwt))
+                .andExpect(status()
+                        .isOk());
     }
 }
