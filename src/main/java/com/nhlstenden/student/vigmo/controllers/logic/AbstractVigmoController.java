@@ -56,7 +56,7 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
         String username = authentication.getName();
 
         //fixme, needs further work.
-        if(authentication.getCredentials() != null){
+        if(authentication.getCredentials() != null && !(authentication.getCredentials() instanceof String)){
             Claims creds = (Claims) authentication.getCredentials();
         }
 
