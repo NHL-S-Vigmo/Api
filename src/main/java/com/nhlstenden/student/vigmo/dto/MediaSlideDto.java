@@ -28,7 +28,7 @@ public class MediaSlideDto extends SlideDto {
 
     @ApiModelProperty(name = "type", value = "The media type the slide uses")
     @NotEmpty
-    @Size(max = 50)
+    @Size(max = 100)
     private String type;
 
     @ApiModelProperty(name = "resource", value = "The url the resource is located")
