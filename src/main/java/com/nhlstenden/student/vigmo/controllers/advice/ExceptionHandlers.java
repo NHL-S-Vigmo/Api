@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,9 +50,10 @@ public class ExceptionHandlers {
     }
 
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public ErrorResponse handleHttpMediaTypeNotAcceptableException() {
-        return new ErrorResponse("acceptable MIME type:" + MediaType.APPLICATION_JSON_VALUE);
+    @ExceptionHandler(HttpMediaTypeException.class)
+    public ErrorResponse handleHttpMediaTypeNotAcceptableException(HttpServletRequest request) {
+        return new ErrorResponse(request.getContentType() +
+                "is not an acceptable MIME type. Acceptable MIME types are:" + MediaType.APPLICATION_JSON_VALUE);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
