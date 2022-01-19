@@ -49,64 +49,12 @@ public class RssSlideController extends AbstractVigmoController<RssSlideService,
 
     @ApiOperation(value = "Gets the latest rss item from the requested rss feed")
     @ApiResponses(value = {@ApiResponse(code = 404, message = "Invalid RssSlide id")})
-    @GetMapping("/{id}/render")
-    ResponseEntity<RssItemDto> renderFile(@PathVariable("id") final long id) throws URISyntaxException, IOException, InterruptedException, SAXException, ParserConfigurationException {
-        RssSlideDto rssSlide = service.get(id);
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(rssSlide.getUrl()))
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        DocumentBuilder db = documentBuilderFactory.newDocumentBuilder();
-        InputSource inStream = new InputSource();
-        inStream.setCharacterStream(new StringReader(response.body()));
-        Document doc = db.parse(inStream);
-        NodeList list = doc.getElementsByTagName("item");
-        Node node = list.item(0);
-        ArrayList<String> latestNews = new ArrayList<String>();
-        RssItemDto rssItemDto = new RssItemDto();
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            Element element = (Element) node;
-            //TODO: Check if tag exsist
-            //TODO: Check if tag is not null
-
-            NodeList titleNode = element.getElementsByTagName(rssSlide.getTitleTag());
-            if (titleNode.getLength() > 0) {
-                rssItemDto.setTitle(titleNode.item(0).getTextContent());
-            }
-
-            NodeList descriptionNode = element.getElementsByTagName(rssSlide.getDescriptionTag());
-            if (descriptionNode.getLength() > 0) {
-                rssItemDto.setDescription(descriptionNode.item(0).getTextContent());
-            }
-
-            NodeList categoryNode = element.getElementsByTagName(rssSlide.getCategoryTag());
-            if (categoryNode.getLength() > 0) {
-                rssItemDto.setCategory(categoryNode.item(0).getTextContent());
-            }
-
-            NodeList authorNode = element.getElementsByTagName(rssSlide.getAuthorTag());
-            if (authorNode.getLength() > 0) {
-                rssItemDto.setAuthor(authorNode.item(0).getTextContent());
-            }
-
-            NodeList imageNode = element.getElementsByTagName(rssSlide.getImageTag());
-            if (imageNode.getLength() > 0) {
-//                if(imageNode.item(0).getAttributes().getNamedItem("zieketest")) {
-//                    getAttributes().getNamedItem("url")
-//                }
-//                .getNodeValue()
-                //TODO: check if attribute exist.
-                imageNode.item(0).getAttributes().getNamedItem("zieketest");
-                rssItemDto.setImage(imageNode.item(0).getAttributes().getNamedItem("url").getNodeValue());
-            }
-
-        }
+    @GetMapping("/{id}/latest")
+    ResponseEntity<RssItemDto> latestFeedItem(@PathVariable("id") final long id) {
+        //get the current rss slide info
+        RssItemDto rssSlide = service.getLatestFeedItem(id);
 
         return ResponseEntity.ok()
-                .body(rssItemDto);
+                .body(rssSlide);
     }
 }

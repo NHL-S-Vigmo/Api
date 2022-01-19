@@ -171,7 +171,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @Test
     @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
     public void testFileRenderContentNameAndType() throws Exception {
-        getMockMvc().perform(MockMvcRequestBuilders.get("/rss_slides/2/render"))
+        getMockMvc().perform(MockMvcRequestBuilders.get("/rss_slides/2/latest"))
                 .andExpect(status()
                         .isOk());
     }
