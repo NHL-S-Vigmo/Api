@@ -277,7 +277,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>
         <pluginManagement>
             <plugins>
                 <plugin>
