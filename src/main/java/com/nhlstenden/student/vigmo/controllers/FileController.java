@@ -34,6 +34,7 @@ public class FileController extends AbstractVigmoController<FileService, FileDto
         File media = service.getRawEntityByKey(file_key);
         headers.setContentType(MediaType.parseMediaType(media.getMimeType()));
         headers.setContentDisposition(ContentDisposition.inline().filename(media.getName()).build());
+        headers.set("X-File-Id", Long.toString(media.getId()));
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(media.getData());

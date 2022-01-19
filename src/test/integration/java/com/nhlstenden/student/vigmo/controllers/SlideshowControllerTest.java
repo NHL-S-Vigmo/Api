@@ -195,4 +195,15 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
                         .isNotFound()
                 );
     }
+
+    @Test
+    public void testGetSlideshowsBelongingToScreenOnly() throws Exception {
+        super.getAll()
+                //todo: rewrite this test to sign in as Screen (with actual JWT method)
+                .andExpectAll(
+                        jsonPath("$.[:1].id").exists(),
+                        jsonPath("$.[:1].screenId").exists(),
+                        jsonPath("$.[:1].name").exists()
+                );
+    }
 }

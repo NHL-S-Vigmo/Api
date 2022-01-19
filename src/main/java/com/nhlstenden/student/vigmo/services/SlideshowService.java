@@ -9,6 +9,9 @@ import com.nhlstenden.student.vigmo.models.Slideshow;
 import com.nhlstenden.student.vigmo.repositories.SlideshowRepository;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
+import io.jsonwebtoken.Claims;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +26,25 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
     public SlideshowService(SlideshowRepository repo, MappingUtility mapper, LogService logService, ScreenService screenService) {
         super(repo, mapper, SlideshowDto.class, Slideshow.class, logService);
         this.screenService = screenService;
+    }
+
+    @Override
+    public List<SlideshowDto> getList() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //check if list must be filtered on screen.
+        if(authentication.getCredentials() != null && !(authentication.getCredentials() instanceof String)){
+            Claims claims = (Claims) authentication.getCredentials();
+            if(claims.get("role", String.class).equals("ROLE_SCREEN")){
+                //get only the slideshows related to this screen
+                List<Slideshow> slideshows = repo.findSlideshowsByScreenName(claims.getSubject());
+
+                return mapper.mapList(slideshows, SlideshowDto.class);
+            }
+        }
+
+        //return all items
+        return super.getList();
     }
 
     public List<SlideshowVariableDto> getVariables(Long id) {
