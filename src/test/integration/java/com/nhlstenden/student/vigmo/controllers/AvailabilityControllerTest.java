@@ -124,6 +124,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     public void testModelValidationOnPost() throws Exception {
         AvailabilityDto dto = new AvailabilityDto();
         super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.description").doesNotExist(),
                 jsonPath("$.weekDay").exists(),
                 jsonPath("$.startTime").exists(),
                 jsonPath("$.endTime").exists()
@@ -136,6 +137,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
     public void testModelValidationOnPut() throws Exception {
         AvailabilityDto dto = new AvailabilityDto();
         super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.description").doesNotExist(),
                 jsonPath("$.weekDay").exists(),
                 jsonPath("$.startTime").exists(),
                 jsonPath("$.endTime").exists()

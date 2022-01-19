@@ -88,7 +88,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto(null,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
+        MediaSlideDto dto = new MediaSlideDto(null, true, "video", "/videos/2021/2/christmas.mp4", true, 60, "2021-12-20", "2021-12-20", "10:00", "11:00", 1L);
         super.post(dto);
     }
 
@@ -96,7 +96,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
+        MediaSlideDto dto = new MediaSlideDto(1L, true, "video", "/videos/2021/2/christmas.mp4", true, 60, "2021-12-20", "2021-12-20", "10:00", "11:00", 1L);
         dto.setId(1L);
         super.postWithExistingId(dto);
     }
@@ -105,7 +105,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
+        MediaSlideDto dto = new MediaSlideDto(1L, true, "video", "/videos/2021/2/christmas.mp4", true, 60, "2021-12-20", "2021-12-20", "10:00", "11:00", 1L);
 
         super.put(dto);
     }
@@ -114,7 +114,7 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        MediaSlideDto dto = new MediaSlideDto(1L,true,"video","/videos/2021/2/christmas.mp4",true,60,"2021-12-20","2021-12-20","10:00","11:00",1L);
+        MediaSlideDto dto = new MediaSlideDto(1L, true, "video", "/videos/2021/2/christmas.mp4", true, 60, "2021-12-20", "2021-12-20", "10:00", "11:00", 1L);
 
         super.putNotFound(dto);
     }
@@ -138,7 +138,18 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @Override
     public void testModelValidationOnPost() throws Exception {
         MediaSlideDto dto = new MediaSlideDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.isActive").exists(),
+                jsonPath("$.duration").exists(),
+                jsonPath("$.startDate").doesNotExist(),
+                jsonPath("$.endDate").doesNotExist(),
+                jsonPath("$.startTime").doesNotExist(),
+                jsonPath("$.endTime").doesNotExist(),
+                jsonPath("$.audioEnabled").exists(),
+                jsonPath("$.type").exists(),
+                jsonPath("$.resource").exists()
+        );
     }
 
     @Test
@@ -146,7 +157,18 @@ public class MediaSlideControllerTest extends AbstractControllerIntegrationTest<
     @Override
     public void testModelValidationOnPut() throws Exception {
         MediaSlideDto dto = new MediaSlideDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.isActive").exists(),
+                jsonPath("$.duration").exists(),
+                jsonPath("$.startDate").doesNotExist(),
+                jsonPath("$.endDate").doesNotExist(),
+                jsonPath("$.startTime").doesNotExist(),
+                jsonPath("$.endTime").doesNotExist(),
+                jsonPath("$.audioEnabled").exists(),
+                jsonPath("$.type").exists(),
+                jsonPath("$.resource").exists()
+        );
     }
 
     @Test

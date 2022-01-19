@@ -144,7 +144,21 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @Override
     public void testModelValidationOnPost() throws Exception {
         RssSlideDto dto = new RssSlideDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.isActive").exists(),
+                jsonPath("$.duration").exists(),
+                jsonPath("$.startDate").doesNotExist(),
+                jsonPath("$.endDate").doesNotExist(),
+                jsonPath("$.startTime").doesNotExist(),
+                jsonPath("$.endTime").doesNotExist(),
+                jsonPath("$.url").exists(),
+                jsonPath("$.titleTag").doesNotExist(),
+                jsonPath("$.descriptionTag").doesNotExist(),
+                jsonPath("$.authorTag").doesNotExist(),
+                jsonPath("$.categoryTag").doesNotExist(),
+                jsonPath("$.imageTag").doesNotExist()
+        );
     }
 
     @Test
@@ -152,7 +166,21 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @Override
     public void testModelValidationOnPut() throws Exception {
         RssSlideDto dto = new RssSlideDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.isActive").exists(),
+                jsonPath("$.duration").exists(),
+                jsonPath("$.startDate").doesNotExist(),
+                jsonPath("$.endDate").doesNotExist(),
+                jsonPath("$.startTime").doesNotExist(),
+                jsonPath("$.endTime").doesNotExist(),
+                jsonPath("$.url").exists(),
+                jsonPath("$.titleTag").doesNotExist(),
+                jsonPath("$.descriptionTag").doesNotExist(),
+                jsonPath("$.authorTag").doesNotExist(),
+                jsonPath("$.categoryTag").doesNotExist(),
+                jsonPath("$.imageTag").doesNotExist()
+        );
     }
 
     @Test

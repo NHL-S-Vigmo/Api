@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -119,7 +120,11 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @Override
     public void testModelValidationOnPost() throws Exception {
         ScreenDto dto = new ScreenDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.name").exists(),
+                jsonPath("$.location").doesNotExist(),
+                jsonPath("$.authKey").exists()
+        );
     }
 
     @Test
@@ -127,7 +132,11 @@ public class ScreenControllerTest extends AbstractControllerIntegrationTest<Scre
     @Override
     public void testModelValidationOnPut() throws Exception {
         ScreenDto dto = new ScreenDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.name").exists(),
+                jsonPath("$.location").doesNotExist(),
+                jsonPath("$.authKey").exists()
+        );
     }
 
     @Test

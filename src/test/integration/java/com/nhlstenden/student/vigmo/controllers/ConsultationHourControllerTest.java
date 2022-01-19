@@ -122,6 +122,7 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     public void testModelValidationOnPost() throws Exception {
         ConsultationHourDto dto = new ConsultationHourDto();
         super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.description").doesNotExist(),
                 jsonPath("$.weekDay").exists(),
                 jsonPath("$.startTime").exists(),
                 jsonPath("$.endTime").exists()
@@ -134,6 +135,7 @@ public class ConsultationHourControllerTest extends AbstractControllerIntegratio
     public void testModelValidationOnPut() throws Exception {
         ConsultationHourDto dto = new ConsultationHourDto();
         super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.description").doesNotExist(),
                 jsonPath("$.weekDay").exists(),
                 jsonPath("$.startTime").exists(),
                 jsonPath("$.endTime").exists()

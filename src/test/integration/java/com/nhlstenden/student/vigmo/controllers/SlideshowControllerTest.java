@@ -121,7 +121,10 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @Override
     public void testModelValidationOnPost() throws Exception {
         SlideshowDto dto = new SlideshowDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.screenId").doesNotExist(),
+                jsonPath("$.name").exists()
+        );
     }
 
     @Test
@@ -129,7 +132,10 @@ public class SlideshowControllerTest extends AbstractControllerIntegrationTest<S
     @Override
     public void testModelValidationOnPut() throws Exception {
         SlideshowDto dto = new SlideshowDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.screenId").doesNotExist(),
+                jsonPath("$.name").exists()
+        );
     }
 
     @Test

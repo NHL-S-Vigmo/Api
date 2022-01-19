@@ -80,7 +80,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        UserDto dto = new UserDto(null,"Thijs_Smegen1","",true,"ROLE_ADMIN","/image_013.jpg");
+        UserDto dto = new UserDto(null, "Thijs_Smegen1", "", true, "ROLE_ADMIN", "/image_013.jpg");
         super.post(dto);
     }
 
@@ -88,7 +88,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        UserDto dto = new UserDto(1L,"Thijs_Smegen2","",true,"ROLE_ADMIN","/image_013.jpg");
+        UserDto dto = new UserDto(1L, "Thijs_Smegen2", "", true, "ROLE_ADMIN", "/image_013.jpg");
         super.postWithExistingId(dto);
     }
 
@@ -96,7 +96,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        UserDto dto = new UserDto(1L,"Thijs_Smegen3","",true,"ROLE_ADMIN","/image_013.jpg");
+        UserDto dto = new UserDto(1L, "Thijs_Smegen3", "", true, "ROLE_ADMIN", "/image_013.jpg");
         super.put(dto);
     }
 
@@ -104,7 +104,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        UserDto dto = new UserDto(1L,"Thijs_Smegen4","",true,"ROLE_ADMIN","/image_013.jpg");
+        UserDto dto = new UserDto(1L, "Thijs_Smegen4", "", true, "ROLE_ADMIN", "/image_013.jpg");
         super.putNotFound(dto);
     }
 
@@ -127,7 +127,13 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @Override
     public void testModelValidationOnPost() throws Exception {
         UserDto dto = new UserDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.username").exists(),
+                jsonPath("$.password").doesNotExist(),
+                jsonPath("$.enabled").exists(),
+                jsonPath("$.role").exists(),
+                jsonPath("$.pfpLocation").doesNotExist()
+        );
     }
 
     @Test
@@ -135,7 +141,13 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     @Override
     public void testModelValidationOnPut() throws Exception {
         UserDto dto = new UserDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.username").exists(),
+                jsonPath("$.password").doesNotExist(),
+                jsonPath("$.enabled").exists(),
+                jsonPath("$.role").exists(),
+                jsonPath("$.pfpLocation").doesNotExist()
+        );
     }
 
     @Test

@@ -125,8 +125,11 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     public void testModelValidationOnPost() throws Exception {
         LogDto dto = new LogDto();
         super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.user_id").doesNotExist(),
+                jsonPath("$.username").exists(),
                 jsonPath("$.action").exists(),
-                jsonPath("$.username").exists()
+                jsonPath("$.message").doesNotExist(),
+                jsonPath("$.datetime").doesNotExist()
         );
     }
 
@@ -136,8 +139,11 @@ public class LogControllerTest extends AbstractControllerIntegrationTest<LogDto>
     public void testModelValidationOnPut() throws Exception {
         LogDto dto = new LogDto();
         super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.user_id").doesNotExist(),
+                jsonPath("$.username").exists(),
                 jsonPath("$.action").exists(),
-                jsonPath("$.username").exists()
+                jsonPath("$.message").doesNotExist(),
+                jsonPath("$.datetime").doesNotExist()
         );
     }
 

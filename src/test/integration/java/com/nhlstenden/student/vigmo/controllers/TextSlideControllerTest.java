@@ -14,6 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.w3c.dom.Text;
 
 import javax.transaction.Transactional;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -86,7 +87,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPost() throws Exception {
-        TextSlideDto dto = new TextSlideDto(null,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
+        TextSlideDto dto = new TextSlideDto(null, "Title", "Message", 1L, true, 30, null, "2021-12-19", null, "12:00");
         super.post(dto);
     }
 
@@ -94,7 +95,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPostWithExistingId() throws Exception {
-        TextSlideDto dto = new TextSlideDto(3L,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
+        TextSlideDto dto = new TextSlideDto(3L, "Title", "Message", 1L, true, 30, null, "2021-12-19", null, "12:00");
         super.postWithExistingId(dto);
     }
 
@@ -102,7 +103,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPut() throws Exception {
-        TextSlideDto dto = new TextSlideDto(3L,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
+        TextSlideDto dto = new TextSlideDto(3L, "Title", "Message", 1L, true, 30, null, "2021-12-19", null, "12:00");
         super.put(dto);
     }
 
@@ -110,7 +111,7 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     @Override
     public void testPutNotFound() throws Exception {
-        TextSlideDto dto = new TextSlideDto(3L,"Title","Message",1L,true,30,null,"2021-12-19",null,"12:00");
+        TextSlideDto dto = new TextSlideDto(3L, "Title", "Message", 1L, true, 30, null, "2021-12-19", null, "12:00");
         super.putNotFound(dto);
     }
 
@@ -133,7 +134,17 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @Override
     public void testModelValidationOnPost() throws Exception {
         TextSlideDto dto = new TextSlideDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.isActive").exists(),
+                jsonPath("$.duration").exists(),
+                jsonPath("$.startDate").doesNotExist(),
+                jsonPath("$.endDate").doesNotExist(),
+                jsonPath("$.startTime").doesNotExist(),
+                jsonPath("$.endTime").doesNotExist(),
+                jsonPath("$.title").exists(),
+                jsonPath("$.message").exists()
+        );
     }
 
     @Test
@@ -141,7 +152,17 @@ public class TextSlideControllerTest extends AbstractControllerIntegrationTest<T
     @Override
     public void testModelValidationOnPut() throws Exception {
         TextSlideDto dto = new TextSlideDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.isActive").exists(),
+                jsonPath("$.duration").exists(),
+                jsonPath("$.startDate").doesNotExist(),
+                jsonPath("$.endDate").doesNotExist(),
+                jsonPath("$.startTime").doesNotExist(),
+                jsonPath("$.endTime").doesNotExist(),
+                jsonPath("$.title").exists(),
+                jsonPath("$.message").exists()
+        );
     }
 
     @Test

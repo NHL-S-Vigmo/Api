@@ -13,11 +13,12 @@ import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @SpringJUnitWebConfig(IntegrationTestConfig.class)
-class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<SlideshowVariableDto>  {
+class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<SlideshowVariableDto> {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -121,7 +122,11 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @Override
     public void testModelValidationOnPost() throws Exception {
         SlideshowVariableDto dto = new SlideshowVariableDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.name").exists(),
+                jsonPath("$.value").exists()
+        );
     }
 
     @Test
@@ -129,7 +134,11 @@ class SlideshowVariableControllerTest extends AbstractControllerIntegrationTest<
     @Override
     public void testModelValidationOnPut() throws Exception {
         SlideshowVariableDto dto = new SlideshowVariableDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.slideshowId").exists(),
+                jsonPath("$.name").exists(),
+                jsonPath("$.value").exists()
+        );
     }
 
     @Test

@@ -1,5 +1,6 @@
 package integration.java.com.nhlstenden.student.vigmo.controllers;
 
+import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
 import com.nhlstenden.student.vigmo.dto.FileDto;
 import integration.java.com.nhlstenden.student.vigmo.IntegrationTestConfig;
 import integration.java.com.nhlstenden.student.vigmo.controllers.logic.AbstractControllerIntegrationTest;
@@ -123,7 +124,12 @@ class FileControllerTest extends AbstractControllerIntegrationTest<FileDto> {
     @Override
     public void testModelValidationOnPost() throws Exception {
         FileDto dto = new FileDto();
-        super.modelValidationOnPost(dto);
+        super.modelValidationOnPost(dto).andExpectAll(
+                jsonPath("$.name").exists(),
+                jsonPath("$.mimeType").exists(),
+                jsonPath("$.data").exists(),
+                jsonPath("$.key").doesNotExist()
+        );
     }
 
     @Test
@@ -131,7 +137,12 @@ class FileControllerTest extends AbstractControllerIntegrationTest<FileDto> {
     @Override
     public void testModelValidationOnPut() throws Exception {
         FileDto dto = new FileDto();
-        super.modelValidationOnPut(dto);
+        super.modelValidationOnPut(dto).andExpectAll(
+                jsonPath("$.name").exists(),
+                jsonPath("$.mimeType").exists(),
+                jsonPath("$.data").exists(),
+                jsonPath("$.key").doesNotExist()
+        );
     }
 
     @Test
