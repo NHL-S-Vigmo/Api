@@ -31,6 +31,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RssSlideService extends AbstractVigmoService<RssSlideRepository, RssSlideDto, RssSlide> {
@@ -104,16 +105,18 @@ public class RssSlideService extends AbstractVigmoService<RssSlideRepository, Rs
 
                 //get the category tag.
                 if (slide.getCategoryTag() != null) {
-                    Optional<Node> tag = nodes
-                            .stream().filter(n -> n.getNodeName().equals(slide.getCategoryTag())).findFirst();
-                    tag.ifPresent(value -> rssItemDto.setCategory(value.getTextContent()));
+                    String tag = nodes
+                            .stream().filter(n -> n.getNodeName().equals(slide.getCategoryTag()))
+                            .map(Node::getTextContent).collect(Collectors.joining(", "));
+                    rssItemDto.setCategory(tag);
                 }
 
                 //get the author tag.
                 if (slide.getAuthorTag() != null) {
-                    Optional<Node> tag = nodes
-                            .stream().filter(n -> n.getNodeName().equals(slide.getAuthorTag())).findFirst();
-                    tag.ifPresent(value -> rssItemDto.setAuthor(value.getTextContent()));
+                    String tag = nodes
+                            .stream().filter(n -> n.getNodeName().equals(slide.getAuthorTag()))
+                            .map(Node::getTextContent).collect(Collectors.joining(", "));
+                    rssItemDto.setAuthor(tag);
                 }
 
                 //get the image tag.
