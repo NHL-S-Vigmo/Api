@@ -2,8 +2,6 @@ package com.nhlstenden.student.vigmo.validators;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Base64;
-import java.util.regex.Pattern;
 
 public class Base64ValidatorImpl implements ConstraintValidator<Base64Validator, String> {
     @Override

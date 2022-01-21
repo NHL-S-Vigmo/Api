@@ -2,7 +2,6 @@ package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.RssItemDto;
 import com.nhlstenden.student.vigmo.dto.RssSlideDto;
-import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.RssSlide;
 import com.nhlstenden.student.vigmo.repositories.RssSlideRepository;
@@ -11,13 +10,11 @@ import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import com.nhlstenden.student.vigmo.transformers.XmlUtility;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.transaction.Transactional;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

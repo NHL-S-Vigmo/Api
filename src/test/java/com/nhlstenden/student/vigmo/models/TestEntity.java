@@ -1,6 +1,5 @@
 package com.nhlstenden.student.vigmo.models;
 
-import com.nhlstenden.student.vigmo.models.EntityId;
 import lombok.*;
 
 import javax.persistence.*;

@@ -54,7 +54,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     @Override
     public long create(DTO dto) {
         try {
-            Long id = isFieldSet(dto);
+            Long id = getIdFieldValue(dto);
 
             if (id != null) {
                 throw new IdProvidedInCreateRequestException("Id provided in create request", id);
@@ -111,19 +111,19 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      *
      * @param object generic object
      * @return returns the id that was in the object
-     * @throws NoSuchFieldException
+     * @throws NoSuchFieldException will throw when field id is not present in object
      */
-    private Long isFieldSet(DTO object) throws NoSuchFieldException {
+    private Long getIdFieldValue(DTO object) throws NoSuchFieldException {
         //get the field from the initial object
         Optional<Field> field = Arrays.stream(object.getClass().getDeclaredFields()).filter(f -> f.getName().equals("id")).findFirst();
         if (field.isPresent()) {
-            return getGetterResult(dtoType, object);
+            return getIdGetterResult(object);
         } else {
             //if the field was not found, try again with the generic super class.
             Optional<Field> field1 = Arrays.stream(((Class) object.getClass().getGenericSuperclass()).getDeclaredFields()).filter(f -> f.getName().equals("id")).findFirst();
 
             if (field1.isPresent()) {
-                return getGetterResult(dtoType, object);
+                return getIdGetterResult(object);
             }
         }
 
@@ -133,14 +133,13 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     /**
      * Function that executes the getId on anonymous objects
      *
-     * @param o
-     * @param object
+     * @param object dto object to get the id from
      * @return returns -1 if there is no id present
      */
-    public Long getGetterResult(Class<DTO> o, DTO object) {
-        Optional<Method> getter = Arrays.stream(o.getMethods()).filter(method -> method.getName().equals("getId")).findFirst();
+    public Long getIdGetterResult(DTO object) {
+        Optional<Method> getter = Arrays.stream(object.getClass().getMethods()).filter(method -> method.getName().equals("getId")).findFirst();
 
-        if (!getter.isPresent()) {
+        if (getter.isEmpty()) {
             return null;
         }
 

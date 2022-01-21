@@ -2,7 +2,6 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
-import com.nhlstenden.student.vigmo.security.JWTProvider;
 import com.nhlstenden.student.vigmo.services.MediaSlideService;
 import com.nhlstenden.student.vigmo.services.UserService;
 import io.swagger.annotations.Api;

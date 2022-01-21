@@ -5,8 +5,6 @@ import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.Availability;
 import com.nhlstenden.student.vigmo.repositories.AvailabilityRepository;
-import com.nhlstenden.student.vigmo.services.AvailabilityService;
-import com.nhlstenden.student.vigmo.services.UserService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,9 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 public class AvailabilityServiceTest {

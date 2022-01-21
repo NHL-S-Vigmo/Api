@@ -4,9 +4,7 @@ import com.nhlstenden.student.vigmo.dto.FileDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.File;
 import com.nhlstenden.student.vigmo.repositories.FileRepository;
-import com.nhlstenden.student.vigmo.services.FileService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
-import liquibase.repackaged.org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -18,7 +16,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -57,9 +54,6 @@ class FileServiceTest {
         when(fileDtoMockWithoutId.getId()).thenReturn(null);
         when(fileMock.getId()).thenReturn(1L);
         when(fileDtoMockWithId.getId()).thenReturn(1L);
-
-
-        //when(RandomStringUtils.random(64,true,true)).thenReturn(randomKey);
         when(fileDtoMockWithId.getKey()).thenReturn(randomKey);
     }
 

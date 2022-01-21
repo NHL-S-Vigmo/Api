@@ -1,8 +1,6 @@
 package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.MediaSlideDto;
-import com.nhlstenden.student.vigmo.dto.SlideshowDto;
-import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.MediaSlide;
 import com.nhlstenden.student.vigmo.repositories.MediaSlideRepository;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;

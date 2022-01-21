@@ -3,17 +3,11 @@ package com.nhlstenden.student.vigmo.controllers.security;
 import com.nhlstenden.student.vigmo.dto.ScreenDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.security.JWTProvider;
-import com.nhlstenden.student.vigmo.security.models.LoginDto;
 import com.nhlstenden.student.vigmo.services.ScreenService;
-import com.nhlstenden.student.vigmo.services.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

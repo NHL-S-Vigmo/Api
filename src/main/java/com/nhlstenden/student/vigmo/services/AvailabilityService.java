@@ -1,7 +1,6 @@
 package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
-import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.Availability;
 import com.nhlstenden.student.vigmo.repositories.AvailabilityRepository;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;

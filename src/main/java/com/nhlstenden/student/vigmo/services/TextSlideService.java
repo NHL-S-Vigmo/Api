@@ -1,9 +1,6 @@
 package com.nhlstenden.student.vigmo.services;
 
-import com.nhlstenden.student.vigmo.dto.RssSlideDto;
-import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.dto.TextSlideDto;
-import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.TextSlide;
 import com.nhlstenden.student.vigmo.repositories.TextSlideRepository;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;

@@ -2,7 +2,6 @@ package com.nhlstenden.student.vigmo.controllers.logic;
 
 import com.nhlstenden.student.vigmo.services.UserService;
 import com.nhlstenden.student.vigmo.services.logic.VigmoService;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin(exposedHeaders = "X-Total-Count, Location, jwt-new-token, X-File-Id")

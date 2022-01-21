@@ -53,12 +53,13 @@ public class RssSlideServiceTest {
         //mocks for the mapper
         when(mapper.mapObject(any(RssSlideDto.class), eq(RssSlide.class))).
                 thenReturn(rssSlideMock);
+
         when(rssSlideMock.getId()).thenReturn(1L);
     }
 
     @Test
     void testRssSlideCreateWithExistingSlideshow(){
-        //TODO: replace dto with a mocked dto, however mocking a child of slide dto causes isFieldSet
+        //TODO: replace dto with a mocked dto, however mocking a child of slide dto causes getIdFieldValue
         //      from AbstractVigmoService to no longer be able to find the id field
         RssSlideDto rssSlideDto = new RssSlideDto();
         //Slideshow id is of an existing slideshow

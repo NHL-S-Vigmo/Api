@@ -14,7 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
-import static org.modelmapper.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional

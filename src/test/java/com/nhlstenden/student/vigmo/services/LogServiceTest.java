@@ -82,7 +82,7 @@ public class LogServiceTest {
 
     @Test
     void testCreateWithExistingUser() {
-        //Id is of an existing user
+        //id is of an existing user
         when(logDtoMockWithoutId.getUserId()).thenReturn(1L);
         Long id = logService.create(logDtoMockWithoutId);
 
@@ -97,7 +97,7 @@ public class LogServiceTest {
 
     @Test
     void testCreateWithNonExistingUser() {
-        //Id is of a non-existing user
+        //id is of a non-existing user
         when(logDtoMockWithoutId.getUserId()).thenReturn(999L);
 
         Assertions.assertThatThrownBy(() -> logService.create(logDtoMockWithoutId)).isInstanceOf(DataNotFoundException.class);
@@ -108,7 +108,7 @@ public class LogServiceTest {
 
     @Test
     void testUpdateWithExistingUser() {
-        //Id is of an existing user
+        //id is of an existing user
         when(logDtoMockWithoutId.getUserId()).thenReturn(1L);
 
         logService.update(logDtoMockWithoutId, 1L);
@@ -119,7 +119,7 @@ public class LogServiceTest {
 
     @Test
     void testUpdateWithNonExistingUser() {
-        //Id is of a non-existing user
+        //id is of a non-existing user
         when(logDtoMockWithoutId.getUserId()).thenReturn(999L);
 
         Assertions.assertThatThrownBy(() -> logService.update(logDtoMockWithoutId, 1L)).isInstanceOf(DataNotFoundException.class);

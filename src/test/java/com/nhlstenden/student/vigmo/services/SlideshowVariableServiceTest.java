@@ -2,7 +2,6 @@ package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
-import com.nhlstenden.student.vigmo.models.Slideshow;
 import com.nhlstenden.student.vigmo.models.SlideshowVariable;
 import com.nhlstenden.student.vigmo.repositories.SlideshowVariableRepository;
 import com.nhlstenden.student.vigmo.services.SlideshowService;
@@ -78,7 +77,7 @@ public class SlideshowVariableServiceTest {
 
     @Test
     void testCreateWithExistingSlideshow() {
-        //Id is of an existing slideshow
+        //id is of an existing slideshow
         when(slideshowVariableDtoMockWithoutId.getSlideshowId()).thenReturn(1L);
         Long id = slideshowVariableService.create(slideshowVariableDtoMockWithoutId);
 
@@ -93,7 +92,7 @@ public class SlideshowVariableServiceTest {
 
     @Test
     void testCreateWithNonExistingSlideshow() {
-        //Id is of a non-existing slideshow
+        //id is of a non-existing slideshow
         when(slideshowVariableDtoMockWithoutId.getSlideshowId()).thenReturn(999L);
 
         Assertions.assertThatThrownBy(() -> slideshowVariableService.create(slideshowVariableDtoMockWithoutId)).isInstanceOf(DataNotFoundException.class);
@@ -104,7 +103,7 @@ public class SlideshowVariableServiceTest {
 
     @Test
     void testUpdateWithExistingSlideshow() {
-        //Id is of an existing slideshow
+        //id is of an existing slideshow
         when(slideshowVariableDtoMockWithoutId.getSlideshowId()).thenReturn(1L);
 
         slideshowVariableService.update(slideshowVariableDtoMockWithoutId, 1L);
@@ -115,7 +114,7 @@ public class SlideshowVariableServiceTest {
 
     @Test
     void testUpdateWithNonExistingSlideshow() {
-        //Id is of a non-existing slideshow
+        //id is of a non-existing slideshow
         when(slideshowVariableDtoMockWithoutId.getSlideshowId()).thenReturn(999L);
 
         Assertions.assertThatThrownBy(() -> slideshowVariableService.update(slideshowVariableDtoMockWithoutId, 1L)).isInstanceOf(DataNotFoundException.class);

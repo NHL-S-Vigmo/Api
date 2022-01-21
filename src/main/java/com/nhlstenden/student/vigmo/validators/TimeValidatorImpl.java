@@ -2,12 +2,9 @@ package com.nhlstenden.student.vigmo.validators;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 public class TimeValidatorImpl implements ConstraintValidator<TimeValidator, String> {
     @Override

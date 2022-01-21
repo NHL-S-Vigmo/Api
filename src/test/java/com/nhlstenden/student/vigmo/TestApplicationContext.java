@@ -1,10 +1,6 @@
 package com.nhlstenden.student.vigmo;
 
-import com.nhlstenden.student.vigmo.dto.TestEntityDto;
 import com.nhlstenden.student.vigmo.it.IntegrationTestConfig;
-import com.nhlstenden.student.vigmo.models.TestEntity;
-import com.nhlstenden.student.vigmo.repositories.TestEntityRepository;
-import com.nhlstenden.student.vigmo.services.custom.TestEntityService;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

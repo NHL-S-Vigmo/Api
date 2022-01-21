@@ -10,8 +10,6 @@ import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import liquibase.repackaged.org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
 public class ScreenService extends AbstractVigmoService<ScreenRepository, ScreenDto, Screen> {
     public ScreenService(ScreenRepository repo, MappingUtility mapper, LogService logService) {

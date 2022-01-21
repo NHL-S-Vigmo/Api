@@ -1,17 +1,12 @@
 package com.nhlstenden.student.vigmo.dto;
 
-import static org.junit.Assert.assertFalse;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 import com.nhlstenden.student.vigmo.dto.AvailabilityDto;
 import com.nhlstenden.student.vigmo.dto.SlideDto;

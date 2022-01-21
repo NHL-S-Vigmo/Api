@@ -1,6 +1,5 @@
 package com.nhlstenden.student.vigmo.services;
 
-import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowSlidesDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
@@ -23,7 +22,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -137,7 +135,7 @@ class SlideshowServiceTest {
 
         assertThat(id)
                 .isNotNull();
-        //verify that the screen got saved and mapped correctly
+        //verify that the slideshow got saved and mapped correctly
         verify(repo).
                 save(any());
         verify(mapper).

@@ -49,15 +49,16 @@ public class MediaSlideServiceTest {
         when(repo.findById(1L)).
                 thenReturn(Optional.of(mediaSlideMock));
 
-        //mocks for the mapper
+        //mock for the mapper
         when(mapper.mapObject(any(MediaSlideDto.class), eq(MediaSlide.class))).
                 thenReturn(mediaSlideMock);
+
         when(mediaSlideMock.getId()).thenReturn(1L);
     }
 
     @Test
     void testMediaSlideCreateWithExistingSlideshow(){
-        //TODO: replace dto with a mocked dto, however mocking a child of slide dto causes isFieldSet
+        //FIXME: replace dto with a mocked dto, however mocking a child of slide dto causes getIdFieldValue
         //      from AbstractVigmoService to no longer be able to find the id field
         MediaSlideDto mediaSlideDto = new MediaSlideDto();
         //Slideshow id is of an existing slideshow

@@ -4,8 +4,6 @@ import com.nhlstenden.student.vigmo.dto.TextSlideDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.models.TextSlide;
 import com.nhlstenden.student.vigmo.repositories.TextSlideRepository;
-import com.nhlstenden.student.vigmo.services.TextSlideService;
-import com.nhlstenden.student.vigmo.services.SlideshowService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +56,7 @@ public class TextSlideServiceTest {
 
     @Test
     void testTextSlideCreateWithExistingSlideshow(){
-        //TODO: replace dto with a mocked dto, however mocking a child of slide dto causes isFieldSet
+        //TODO: replace dto with a mocked dto, however mocking a child of slide dto causes getIdFieldValue
         //      from AbstractVigmoService to no longer be able to find the id field
         TextSlideDto textSlideDto = new TextSlideDto();
         //Slideshow id is of an existing slideshow

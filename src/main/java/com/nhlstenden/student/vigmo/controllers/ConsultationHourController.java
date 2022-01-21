@@ -2,7 +2,6 @@ package com.nhlstenden.student.vigmo.controllers;
 
 import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.ConsultationHourDto;
-import com.nhlstenden.student.vigmo.security.JWTProvider;
 import com.nhlstenden.student.vigmo.services.ConsultationHourService;
 import com.nhlstenden.student.vigmo.services.UserService;
 import io.swagger.annotations.Api;
