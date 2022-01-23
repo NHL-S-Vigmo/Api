@@ -28,8 +28,15 @@ _For a deployment guide, check our wiki: [Vigmo Wiki](https://github.com/NHL-S-V
 * Now simply deploy from within IntelliJ. *During development Tomcat **9.0.55** and **9.0.56** was used*
 * Create default user if you have an empty user table. The username is `admin` and password is `changeme`.
     ```mysql
-    INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `role`, `pfp_location`) VALUES (NULL, 'admin', '$2a$10$6WuZxvmGulNvJTPqhSSwGuPUYfniQqb5t4J0zn.DQPY0CII2kkYwq', '1', 'ROLE_ADMIN', '/ava/avatar.jpg')
+    INSERT INTO `users` 
+    (`id`, `username`, `password`, `enabled`, `role`, `pfp_location`) 
+    VALUES (NULL, 'admin', '$2a$10$6WuZxvmGulNvJTPqhSSwGuPUYfniQqb5t4J0zn.DQPY0CII2kkYwq',
+    '1', 'ROLE_ADMIN', '/ava/avatar.jpg');
     ```
+* Visit the deployment location of the API. On the default page will be a link to direct you to the Swagger.
+* You can now use Swagger to test out the API.
+
+
 If these steps didnt work, take a look at our deployment guide over on the [Vigmo Wiki](https://github.com/NHL-S-Vigmo/docs/wiki)
 
 ---
