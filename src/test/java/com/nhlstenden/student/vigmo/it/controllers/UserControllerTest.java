@@ -3,6 +3,7 @@ package com.nhlstenden.student.vigmo.it.controllers;
 import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.it.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.it.controllers.logic.AbstractControllerIntegrationTest;
+import com.nhlstenden.student.vigmo.security.models.LoginDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -163,7 +164,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     }
 
     @Test
-    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     public void testCreateExistingUsername() throws Exception {
         UserDto user = new UserDto(null, "Thijs_Smegen", "password", true, "ROLE_DOCENT", "");
 
@@ -175,7 +176,7 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     }
 
     @Test
-    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    @WithMockUser(username = "Jan_Doornbos", authorities = USER_ROLE)
     public void changePasswordUsingPut() throws Exception {
         UserDto user = new UserDto(1L, "Thijs_Smegen", "password1", true, "ROLE_ADMIN", "");
 
@@ -192,5 +193,47 @@ public class UserControllerTest extends AbstractControllerIntegrationTest<UserDt
     public void testInvalidMediaType() throws Exception {
         UserDto dto = new UserDto();
         super.postWithWrongMediaType(dto);
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testPostAsDocentNotAllowed() throws Exception {
+        UserDto dto = new UserDto(null, "Thijs_Smegen3", "", true, "ROLE_ADMIN", "/image_013.jpg");
+        getMockMvc().perform(MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getObjectMapper().writeValueAsString(dto)))
+                .andExpect(status()
+                        .isForbidden())
+                .andExpect(jsonPath("$.error").exists());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testPutAsDocentNotAllowedOnOtherUser() throws Exception {
+        UserDto dto = new UserDto(1L, "Thijs_Smegen3", "", true, "ROLE_ADMIN", "/image_013.jpg");
+        getMockMvc().perform(MockMvcRequestBuilders.put("/users/" + 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getObjectMapper().writeValueAsString(dto)))
+                .andExpect(status()
+                        .isForbidden())
+                .andExpect(jsonPath("$.error").exists());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testDeleteAsDocentNotAllowed() throws Exception {
+        getMockMvc().perform(MockMvcRequestBuilders.delete("/users/1"))
+                .andExpect(status()
+                        .isForbidden())
+                .andExpect(jsonPath("$.error").exists());
+    }
+
+    @Test
+    @WithMockUser(username = "Jan_Doornbos", authorities = "ROLE_DOCENT")
+    public void testGetAsDocentOnOtherUserNotAllowed() throws Exception {
+        getMockMvc().perform(MockMvcRequestBuilders.get("/users/1"))
+                .andExpect(status()
+                        .isForbidden())
+                .andExpect(jsonPath("$.error").exists());
     }
 }

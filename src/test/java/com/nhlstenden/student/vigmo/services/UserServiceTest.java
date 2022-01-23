@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 class UserServiceTest {
@@ -55,17 +55,22 @@ class UserServiceTest {
 
         //Encrypted string of the new password
          newPasswordString ="$2y$10$esv7TJOyfROYADjv08Ba5OasbZLkpZuHfvWaNAlRiQb42P8t1ujs.";
+
         //Encrypted password string currently in database for the user
         oldPasswordString = "$2a$10$9yiz1wi41mdOTLDNeDiMqOAobStwnR4SAaLQQ6TBPOofKgT1ObOv2";
+
         //Mock password functions
         when(passwordEncoderMock.encode(any())).thenReturn(newPasswordString);
         when(userMock.getPassword()).thenReturn(oldPasswordString);
+
         //Mock repository functions
-        when(repo.findById(anyLong())).thenReturn(Optional.of(userMock));
+        when(repo.findById(anyLong())).thenReturn(Optional.of(userEntityMock));
         when(repo.save(userMock)).thenReturn(userMock);
+
         //Make sure the id is not set in dto and is set in de entity
         when(userDtoMock.getId()).thenReturn(null);
         when(userMock.getId()).thenReturn(1L);
+
         //Mock mapper functions
         when(mapper.mapObject(any(User.class), eq(UserDto.class))).thenReturn(userDtoMock);
         when(mapper.mapObject(any(UserDto.class), eq(User.class))).thenReturn(userMock);
@@ -101,6 +106,10 @@ class UserServiceTest {
 
     @Test
     void testUpdatePassword(){
+        User userObject = spy(new User());
+        userObject.setUsername("Jan_Doornbos");
+        doReturn(Optional.of(userObject)).when(repo).findById(any());
+
         when(userDtoMock.getPassword()).thenReturn("password123");
         //Test updating the password
         userService.update(userDtoMock, 1L);
@@ -112,6 +121,11 @@ class UserServiceTest {
 
     @Test
     void testUpdateWithNoPassword(){
+        User userObject = spy(new User());
+        userObject.setUsername("Jan_Doornbos");
+        doReturn(Optional.of(userObject)).when(repo).findById(any());
+
+        when(userObject.getPassword()).thenReturn(oldPasswordString);
         when(userDtoMock.getPassword()).thenReturn("");
 
         userService.update(userDtoMock, 1L);

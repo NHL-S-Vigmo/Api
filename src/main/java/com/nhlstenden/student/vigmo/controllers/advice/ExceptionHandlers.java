@@ -57,7 +57,7 @@ public class ExceptionHandlers {
     @ExceptionHandler(HttpMediaTypeException.class)
     public ErrorResponse handleHttpMediaTypeNotAcceptableException(HttpServletRequest request) {
         return new ErrorResponse(request.getContentType() +
-                "is not an acceptable MIME type. Acceptable MIME types are:" + MediaType.APPLICATION_JSON_VALUE);
+                " is not an acceptable MIME type. Acceptable MIME types are:" + MediaType.APPLICATION_JSON_VALUE);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -70,6 +70,12 @@ public class ExceptionHandlers {
     @ExceptionHandler(EntityIdRequirementNotMetException.class)
     public ErrorResponse handleEntityIdRequirementNotMetException(EntityIdRequirementNotMetException exception) {
         return new ErrorResponse("Error getting the id of an object: " + exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DeletionOfLastAdminAccountException.class)
+    public ErrorResponse handleDeletionOfLastAdminAccountException(DeletionOfLastAdminAccountException exception) {
+        return new ErrorResponse(String.format("%s", exception.getMessage()));
     }
 
     @Generated

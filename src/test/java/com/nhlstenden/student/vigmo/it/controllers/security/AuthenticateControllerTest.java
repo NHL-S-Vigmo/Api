@@ -130,23 +130,6 @@ class AuthenticateControllerTest {
                 .andExpect(jsonPath("$").isArray());
     }
 
-    @Test
-    void loginWithDocentAndChangeAnotherUserAccount() throws Exception {
-        LoginDto loginDto = new LoginDto("Martijn_Pomp", "password123");
-        UserDto dto = new UserDto(1L, "Thijs_Smegen", "", true, "ROLE_ADMIN", "/image_013.jpg");
-
-        //sign in with the above model
-        String jwt = loginAndGetDto(loginDto);
-
-        this.mockMvc.perform(MockMvcRequestBuilders.put("/users/" + 1L)
-                        .header("Authorization", "Bearer " + jwt)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(om.writeValueAsString(dto)))
-                .andExpect(status()
-                        .isForbidden())
-                .andExpect(jsonPath("$.error").exists());
-    }
-
     /**
      * Sign in with the provided DTO and get the jwt that belongs to it.
      * @param loginDto model with username and password

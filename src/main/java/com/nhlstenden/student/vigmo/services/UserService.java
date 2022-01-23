@@ -2,6 +2,7 @@ package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
+import com.nhlstenden.student.vigmo.exception.DeletionOfLastAdminAccountException;
 import com.nhlstenden.student.vigmo.exception.ForbiddenActionException;
 import com.nhlstenden.student.vigmo.exception.UserAlreadyExistsException;
 import com.nhlstenden.student.vigmo.models.User;
@@ -63,6 +64,11 @@ public class UserService extends AbstractVigmoService<UserRepository, UserDto, U
 
     @Override
     public long create(UserDto userDto) {
+        // because of controller abstraction, annotations cause a proxy to be generated instead.
+        // therefore, check inside the function.
+        if(userHasAuthority("ROLE_DOCENT"))
+            throw new ForbiddenActionException();
+
         Optional<User> u = repo.findByUsername(userDto.getUsername());
         if (u.isPresent())
             throw new UserAlreadyExistsException(String.format("The username '%s' is already taken", userDto.getUsername()));
@@ -101,9 +107,14 @@ public class UserService extends AbstractVigmoService<UserRepository, UserDto, U
 
     @Override
     public void delete(long id) {
+        // because of controller abstraction, annotations cause a proxy to be generated instead.
+        // therefore, check inside the function.
+        if(userHasAuthority("ROLE_DOCENT"))
+            throw new ForbiddenActionException();
+
         if (getList().stream().filter(user -> user.getRole().equals("ROLE_ADMIN")).count() == 1
                 && get(id).getRole().equals("ROLE_ADMIN"))
-            throw new RuntimeException("Deleting the last admin account will leave the api unusable.");
+            throw new DeletionOfLastAdminAccountException();
 
         super.delete(id);
     }
