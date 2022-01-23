@@ -56,8 +56,8 @@ public class TextSlideServiceTest {
 
     @Test
     void testTextSlideCreateWithExistingSlideshow(){
-        //TODO: replace dto with a mocked dto, however mocking a child of slide dto causes getIdFieldValue
-        //      from AbstractVigmoService to no longer be able to find the id field
+        //uses a dto instead of mocked dto as using a mocked dto causes getIdFieldValue
+        //from AbstractVigmoService to no longer be able to find the id field
         TextSlideDto textSlideDto = new TextSlideDto();
         //Slideshow id is of an existing slideshow
         textSlideDto.setSlideshowId(1L);
