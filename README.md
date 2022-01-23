@@ -1,20 +1,11 @@
 [![Java CI with Maven](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml/badge.svg)](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml)
+[![Latest release](https://badgen.net/github/release/Naereen/Strapdown.js)](https://github.com/NHL-S-Vigmo/Api/releases)
+[![Website vigmo.serverict.nl](https://img.shields.io/website-up-down-green-red/https/vigmo.serverict.nl.svg)](https://vigmo.serverict.nl/)
 
-# Vigmo Cool
-*Project for Advanced Java Minor, made by Students*
+# Vigmo Dashboard
+*Project for Advanced Java Minor, made by Students*  
 
-## Available endpoints
-
-* availabilities
-* consultation_hours
-* logs
-* media_slides
-* rss_slides
-* screens
-* slideshows
-* slideshow_variables
-* test_slides
-* users
+_For a deployment guide, check our wiki: [Vigmo Wiki](https://github.com/NHL-S-Vigmo/docs/wiki)_
 
 ## How to install
 * Create a database using the script **vigmo.sql** in the root of the repository.
@@ -32,3 +23,23 @@
     ```mysql
     INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `role`, `pfp_location`) VALUES (NULL, 'admin', '$2a$10$6WuZxvmGulNvJTPqhSSwGuPUYfniQqb5t4J0zn.DQPY0CII2kkYwq', '1', 'ROLE_ADMIN', '/ava/avatar.jpg')
     ```
+
+## Available endpoints
+These endpoints are available on the API.
+
+* availabilities
+* consultation_hours
+* files
+* logs
+* media_slides
+* rss_slides
+* screens
+* slideshows
+* slideshow_variables
+* test_slides
+* users
+
+## Api documentation by Swagger
+This Api project uses swagger to further document actions on endpoints and data models that were used.
+If you have completed the setup of the project, visting the landings page would direct you to the location of Swagger.
+
