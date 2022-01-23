@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("logs")
 public class LogController extends AbstractVigmoController<LogService, LogDto> {
-    public LogController(LogService service, UserService userService) {
-        super(service, userService);
+    public LogController(LogService service) {
+        super(service);
     }
 }

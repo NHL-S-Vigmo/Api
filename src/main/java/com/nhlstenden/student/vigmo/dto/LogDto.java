@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
@@ -24,7 +25,6 @@ public class LogDto {
     private Long id;
 
     @ApiModelProperty(name = "userId", value = "Direct link to the user table, to have a connection if user changes their username after malicious actions.")
-    @Positive
     private Long userId;
 
     @ApiModelProperty(name = "username", value = "Username of the user that performed the action, added to persist logs when users are deleted.")

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("text_slides")
 public class TextSlideController extends AbstractVigmoController<TextSlideService, TextSlideDto> {
-    public TextSlideController(TextSlideService service, UserService userService) {
-        super(service, userService);
+    public TextSlideController(TextSlideService service) {
+        super(service);
     }
 }
 

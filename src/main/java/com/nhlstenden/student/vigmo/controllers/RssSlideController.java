@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("rss_slides")
 public class RssSlideController extends AbstractVigmoController<RssSlideService, RssSlideDto> {
-    public RssSlideController(RssSlideService service, UserService userService) {
-        super(service, userService);
+    public RssSlideController(RssSlideService service) {
+        super(service);
     }
 
     @ApiOperation(value = "Gets the latest rss item from the requested rss feed")

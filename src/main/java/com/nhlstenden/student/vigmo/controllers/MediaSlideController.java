@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("media_slides")
 public class MediaSlideController extends AbstractVigmoController<MediaSlideService, MediaSlideDto> {
-    public MediaSlideController(MediaSlideService service, UserService userService) {
-        super(service, userService);
+    public MediaSlideController(MediaSlideService service) {
+        super(service);
     }
 }

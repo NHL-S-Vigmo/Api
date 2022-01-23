@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("consultation_hours")
 public class ConsultationHourController extends AbstractVigmoController<ConsultationHourService, ConsultationHourDto> {
 
-    public ConsultationHourController(ConsultationHourService service, UserService userService) {
-        super(service, userService);
+    public ConsultationHourController(ConsultationHourService service) {
+        super(service);
     }
 }

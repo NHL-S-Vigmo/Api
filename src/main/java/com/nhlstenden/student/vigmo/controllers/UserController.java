@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("users")
 public class UserController extends AbstractVigmoController<UserService, UserDto> {
     public UserController(UserService service) {
-        super(service, service);
+        super(service);
     }
 
 }

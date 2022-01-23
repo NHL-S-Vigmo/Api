@@ -131,7 +131,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      * @throws DataNotFoundException if no user with the given id is found
      */
     @Override
-    public final long create(DTO dto, long userId, String username) {
+    public final long create(DTO dto, Long userId, String username) {
         long id = create(dto);
         LogDto logDto = new LogDto(userId, username, ACTION_CREATE, "", Instant.now().getEpochSecond());
 
@@ -148,7 +148,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      * @throws DataNotFoundException if no entity or user with the given id is found
      */
     @Override
-    public final void update(DTO dto, long id, long userId, String username) {
+    public final void update(DTO dto, long id, Long userId, String username) {
         update(dto, id);
         LogDto logDto = new LogDto(userId, username, ACTION_UPDATE, "", Instant.now().getEpochSecond());
         if (logService != null)
@@ -163,7 +163,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      * @throws DataNotFoundException if no entity or user with the given id is found
      */
     @Override
-    public final void delete(long id, long userId, String username) {
+    public final void delete(long id, Long userId, String username) {
         delete(id);
         LogDto logDto = new LogDto(userId, username, ACTION_DELETE, "", Instant.now().getEpochSecond());
         if (logService != null)

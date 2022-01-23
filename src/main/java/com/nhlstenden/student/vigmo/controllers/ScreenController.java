@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("screens")
 public class ScreenController extends AbstractVigmoController<ScreenService, ScreenDto> {
-    public ScreenController(ScreenService service, UserService userService) {
-        super(service, userService);
+    public ScreenController(ScreenService service) {
+        super(service);
     }
 }

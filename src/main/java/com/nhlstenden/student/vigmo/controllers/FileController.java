@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("files")
 public class FileController extends AbstractVigmoController<FileService, FileDto> {
 
-    public FileController(FileService service, UserService userService) {
-        super(service, userService);
+    public FileController(FileService service) {
+        super(service);
     }
 
     @ApiOperation(value = "Gets the related variables for the requested slideshow")

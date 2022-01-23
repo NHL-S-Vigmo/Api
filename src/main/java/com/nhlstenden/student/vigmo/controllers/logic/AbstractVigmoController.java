@@ -2,12 +2,14 @@ package com.nhlstenden.student.vigmo.controllers.logic;
 
 import com.nhlstenden.student.vigmo.services.UserService;
 import com.nhlstenden.student.vigmo.services.logic.VigmoService;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,12 +20,9 @@ import java.util.List;
 @CrossOrigin(exposedHeaders = "X-Total-Count, Location, jwt-new-token, X-File-Id")
 public abstract class AbstractVigmoController<Service extends VigmoService<DTO>, DTO> implements VigmoController<DTO> {
     protected final Service service;
-    private final UserService userService;
 
-    public AbstractVigmoController(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") Service service, UserService userService) {
-        //TODO: when user id can be extracted from the jwt token user service can be deleted from the constructor
+    public AbstractVigmoController(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") Service service) {
         this.service = service;
-        this.userService = userService;
     }
 
     @Override
@@ -43,7 +42,7 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
     @Override
     public ResponseEntity<Void> post(@Valid DTO postObject, Authentication authentication) {
         String username = authentication.getName();
-        long userId = userService.findByUsername(username).getId(); //TODO: replace with id from jwtToken
+        Long userId = getIdFromToken();
         return ResponseEntity.created(URI.create(String.format("/%s/%d", getPathName(), service.create(postObject, userId, username)))).build();
     }
 
@@ -53,7 +52,7 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
     public ResponseEntity<Void> put(final long id, @Valid DTO putObject, Authentication authentication) {
         String username = authentication.getName();
 
-        long userId = userService.findByUsername(username).getId(); //TODO: replace with id from jwtToken
+        Long userId = getIdFromToken();
         service.update(putObject, id, userId, username);
         return ResponseEntity.ok().build();
     }
@@ -62,7 +61,7 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
     @Override
     public ResponseEntity<Void> delete(final long id, Authentication authentication) {
         String username = authentication.getName();
-        long userId = userService.findByUsername(username).getId(); //TODO: replace with id from jwtToken
+        Long userId = getIdFromToken();
         service.delete(id, userId, username);
         return ResponseEntity.noContent().build();
     }
@@ -70,5 +69,12 @@ public abstract class AbstractVigmoController<Service extends VigmoService<DTO>,
     private String getPathName() {
         String[] annotationValues = getClass().getAnnotation(RequestMapping.class).value();
         return String.join("", annotationValues);
+    }
+
+    private Long getIdFromToken(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getCredentials() == null || authentication.getCredentials() instanceof String) return null;
+        Claims claims = (Claims) authentication.getCredentials();
+        return claims.get("id", Long.class);
     }
 }
