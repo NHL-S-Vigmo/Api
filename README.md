@@ -14,8 +14,10 @@
 _For a deployment guide, check our wiki: [Vigmo Wiki](https://github.com/NHL-S-Vigmo/docs/wiki)_
 
 ## How to install
-* Create a database using the script **vigmo.sql** in the root of the repository.
-* Now update the **application.properties** file with credentials to your database like so: 
+* Clone the project to a folder of your desire.
+* Create a database and run the script `vigmo.sql`  that can be found in the root of the repository.
+* Open the project with IntelliJ, and create a run config for Tomcat
+* Now update the `application.properties` file with credentials to your database like so: 
     ```properties
     database.user=[USERNAME]
     database.pass=[PASSWORD]
@@ -23,12 +25,14 @@ _For a deployment guide, check our wiki: [Vigmo Wiki](https://github.com/NHL-S-V
     database.driver=com.mysql.jdbc.Driver
     ```
 * If you are not using mysql as your db driver, change those values for your respective db type.
-* Now configure the project to run in a webserver that is capable of running java web applications. *During development Tomcat **9.0.55** and **9.0.56** was used*
-
+* Now simply deploy from within IntelliJ. *During development Tomcat **9.0.55** and **9.0.56** was used*
 * Create default user if you have an empty user table. The username is `admin` and password is `changeme`.
     ```mysql
     INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `role`, `pfp_location`) VALUES (NULL, 'admin', '$2a$10$6WuZxvmGulNvJTPqhSSwGuPUYfniQqb5t4J0zn.DQPY0CII2kkYwq', '1', 'ROLE_ADMIN', '/ava/avatar.jpg')
     ```
+If these steps didnt work, take a look at our deployment guide over on the [Vigmo Wiki](https://github.com/NHL-S-Vigmo/docs/wiki)
+
+---
 
 ## Available endpoints
 These endpoints are available on the API.
