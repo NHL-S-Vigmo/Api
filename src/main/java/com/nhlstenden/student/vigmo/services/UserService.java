@@ -8,6 +8,7 @@ import com.nhlstenden.student.vigmo.models.User;
 import com.nhlstenden.student.vigmo.repositories.UserRepository;
 import com.nhlstenden.student.vigmo.services.logic.AbstractVigmoService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

@@ -31,8 +31,8 @@ public class ExceptionHandlers {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public String handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
-        return String.format("{\"username\":\"%s\"}", exception.getMessage());
+    public UsernameErrorResponse handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+        return new UsernameErrorResponse(exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -77,5 +77,12 @@ public class ExceptionHandlers {
     @Getter
     public static class ErrorResponse {
         private String error;
+    }
+
+    @Generated
+    @AllArgsConstructor
+    @Getter
+    public static class UsernameErrorResponse {
+        private String username;
     }
 }

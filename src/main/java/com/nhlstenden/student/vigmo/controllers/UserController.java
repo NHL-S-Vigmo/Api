@@ -18,16 +18,5 @@ public class UserController extends AbstractVigmoController<UserService, UserDto
         super(service, service);
     }
 
-    @Secured("ROLE_ADMIN")
-    @Override
-    public ResponseEntity<Void> post(UserDto postObject, Authentication authentication) {
-        return super.post(postObject, authentication);
-    }
-
-    @Override
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<Void> delete(long id, Authentication authentication) {
-        return super.delete(id, authentication);
-    }
 }
 
