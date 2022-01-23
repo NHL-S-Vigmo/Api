@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Class used to test handling of a dto without id field by the AbstractVigmoService
+ */
 @Getter
 @Setter
 @AllArgsConstructor

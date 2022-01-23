@@ -28,6 +28,13 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
     private final String ACTION_UPDATE;
     private final String ACTION_DELETE;
 
+    /**
+     * @param repo Repository of the entity the service uses
+     * @param mapper Mapper to map entities to dtos and dtos to entities
+     * @param dto Dto of the entity the service uses
+     * @param entity Entity the service uses
+     * @param logService LogService of the application to log changes, set to null to not log changes
+     */
     public AbstractVigmoService(Repository repo, MappingUtility mapper, Class<DTO> dto, Class<Entity> entity, LogService logService) {
         this.repo = repo;
         this.mapper = mapper;
@@ -39,11 +46,21 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
         this.ACTION_DELETE = "Delete " + entityType.getSimpleName();
     }
 
+    /**
+     * Will return a full list of all entities in the repository mapped to dtos.
+     * @return list of entities, will return an empty list if no entities are stored in the repository
+     */
     @Override
     public List<DTO> getList() {
         return mapper.mapList(repo.findAll(), dtoType);
     }
 
+    /**
+     * Will return a single entity mapped to a dto
+     * @param id identity of the entity to retrieve
+     * @return dto of the entity with the given id
+     * @throws DataNotFoundException if no entity with the given id is found
+     */
     @Override
     public DTO get(long id) {
         Entity o = repo.findById(id)
@@ -51,6 +68,13 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
         return mapper.mapObject(o, dtoType);
     }
 
+    /**
+     * Will store a new entity to the repository
+     * @param dto dto of the entity that needs to be saved to the repository, id in the dto needs to be null
+     * @return will return the id assigned to the new entity stored in the database
+     * @throws IdProvidedInCreateRequestException if the id in the given dto is already set
+     * @throws EntityIdRequirementNotMetException if the dto does not have an id field
+     */
     @Override
     public long create(DTO dto) {
         try {
@@ -66,6 +90,12 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
         return repo.save(mapper.mapObject(dto, entityType)).getId();
     }
 
+    /**
+     * Will replace the values of an existing entity in the repository to the new ones given
+     * @param dto dto of the entity with the updated values
+     * @param id id of the entity which values get updated
+     * @throws DataNotFoundException if no entity with the given id is found
+     */
     @Override
     public void update(DTO dto, long id) {
         repo.findById(id).orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
@@ -74,12 +104,27 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
         repo.save(newObject);
     }
 
+    /**
+     * Will delete an entity in the database
+     * @param id id of the entity to be deleted
+     * @throws DataNotFoundException if no entity with the given id is found
+     */
     @Override
     public void delete(long id) {
         repo.findById(id).orElseThrow(() -> new DataNotFoundException(getClass().getSimpleName() + " could not find " + id));
         repo.deleteById(id);
     }
 
+    /**
+     * Will store a new entity to the repository along with a log with information about the creation
+     * @param dto dto of the entity that needs to be saved to the repository, id in the dto needs to be null
+     * @param userId id of the user that requested the creation of the entity
+     * @param username name of the user that requested the creation of the entity
+     * @return will return the id assigned to the new entity stored in the database
+     * @throws IdProvidedInCreateRequestException if the id in the given dto is already set
+     * @throws EntityIdRequirementNotMetException if the dto does not have an id field
+     * @throws DataNotFoundException if no user with the given id is found
+     */
     @Override
     public final long create(DTO dto, long userId, String username) {
         long id = create(dto);
@@ -89,7 +134,14 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
             logService.create(logDto);
         return id;
     }
-
+    /**
+     * Will replace the values of an existing entity in the repository to the new ones given and create a log with information about the update
+     * @param dto dto of the entity with the updated values
+     * @param id id of the entity which values get updated
+     * @param userId id of the user that requested the update of the entity
+     * @param username name of the user that requested the update of the entity
+     * @throws DataNotFoundException if no entity or user with the given id is found
+     */
     @Override
     public final void update(DTO dto, long id, long userId, String username) {
         update(dto, id);
@@ -98,6 +150,13 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
             logService.create(logDto);
     }
 
+    /**
+     * Will delete an entity in the database and create a log with information about the deletion
+     * @param id id of the entity to be deleted
+     * @param userId id of the user that requested the deletion of the entity
+     * @param username name of the user that requested the deletion of the entity
+     * @throws DataNotFoundException if no entity or user with the given id is found
+     */
     @Override
     public final void delete(long id, long userId, String username) {
         delete(id);

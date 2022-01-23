@@ -20,6 +20,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String originName ;
+            //Check if the error originates from a field or an object
             if(error instanceof FieldError){
                 originName = ((FieldError) error).getField();
             }else{
