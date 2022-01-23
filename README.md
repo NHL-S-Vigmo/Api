@@ -2,7 +2,12 @@
 [![Latest release](https://badgen.net/github/release/NHL-S-Vigmo/Api)](https://github.com/NHL-S-Vigmo/Api/releases)
 [![Website vigmo.serverict.nl](https://img.shields.io/website-up-down-green-red/https/vigmo.serverict.nl.svg)](https://vigmo.serverict.nl/)  
 
+[![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)](#)
+
+[![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)](#)
 [![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)](#)
+[![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)](#)
+
 # Vigmo Dashboard
 *Project for Advanced Java Minor, made by Students*  
 
