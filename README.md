@@ -1,5 +1,5 @@
 [![Java CI with Maven](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml/badge.svg)](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml)
-[![Latest release](https://badgen.net/github/release/Naereen/Strapdown.js)](https://github.com/NHL-S-Vigmo/Api/releases)
+[![Latest release](https://badgen.net/github/release/NHL-S-Vigmo/Api)](https://github.com/NHL-S-Vigmo/Api/releases)
 [![Website vigmo.serverict.nl](https://img.shields.io/website-up-down-green-red/https/vigmo.serverict.nl.svg)](https://vigmo.serverict.nl/)
 
 # Vigmo Dashboard
