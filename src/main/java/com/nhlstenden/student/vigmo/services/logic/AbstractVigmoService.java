@@ -1,15 +1,12 @@
 package com.nhlstenden.student.vigmo.services.logic;
 
 import com.nhlstenden.student.vigmo.dto.LogDto;
-import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import com.nhlstenden.student.vigmo.exception.IdProvidedInCreateRequestException;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
 import com.nhlstenden.student.vigmo.exception.EntityIdRequirementNotMetException;
 import com.nhlstenden.student.vigmo.models.EntityId;
-import com.nhlstenden.student.vigmo.models.Slideshow;
 import com.nhlstenden.student.vigmo.services.LogService;
 import com.nhlstenden.student.vigmo.transformers.MappingUtility;
-import io.jsonwebtoken.Claims;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

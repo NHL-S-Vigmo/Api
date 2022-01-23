@@ -4,7 +4,6 @@ import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.FileDto;
 import com.nhlstenden.student.vigmo.models.File;
 import com.nhlstenden.student.vigmo.services.FileService;
-import com.nhlstenden.student.vigmo.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

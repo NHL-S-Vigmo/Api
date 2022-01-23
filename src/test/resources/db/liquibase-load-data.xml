@@ -85,11 +85,11 @@
             <column type="text" header="message"/>
         </loadData>
         <loadData tableName="files" file="files.csv">
-            <column type="BIGINT" header="id"></column>
-            <column type="VARCHAR(220)" header="file_name"></column>
-            <column type="VARCHAR(50)" header="mime_type"></column>
-            <column type="BLOB" header="file"></column>
-            <column type="VARCHAR(64)" header="file_key"></column>
+            <column type="BIGINT" header="id"/>
+            <column type="VARCHAR(220)" header="file_name"/>
+            <column type="VARCHAR(50)" header="mime_type"/>
+            <column type="BLOB" header="file"/>
+            <column type="VARCHAR(64)" header="file_key"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>

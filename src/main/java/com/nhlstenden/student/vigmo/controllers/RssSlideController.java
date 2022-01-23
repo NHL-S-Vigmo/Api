@@ -4,7 +4,6 @@ import com.nhlstenden.student.vigmo.controllers.logic.AbstractVigmoController;
 import com.nhlstenden.student.vigmo.dto.RssItemDto;
 import com.nhlstenden.student.vigmo.dto.RssSlideDto;
 import com.nhlstenden.student.vigmo.services.RssSlideService;
-import com.nhlstenden.student.vigmo.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

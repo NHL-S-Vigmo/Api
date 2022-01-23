@@ -107,14 +107,14 @@ public class ApiConfig implements WebMvcConfigurer {
     }
 
     private ModelMapper modelMapperDateParser(ModelMapper modelMapper) {
-        Provider<LocalDate> localDateProvider = new AbstractProvider<LocalDate>() {
+        Provider<LocalDate> localDateProvider = new AbstractProvider<>() {
             @Override
             public LocalDate get() {
                 return LocalDate.now();
             }
         };
 
-        Converter<String, LocalDate> toStringDate = new AbstractConverter<String, LocalDate>() {
+        Converter<String, LocalDate> toStringDate = new AbstractConverter<>() {
             @Override
             protected LocalDate convert(String source) {
                 if (source == null || source.isEmpty()) return null;
@@ -131,14 +131,14 @@ public class ApiConfig implements WebMvcConfigurer {
     }
 
     private ModelMapper modelMapperTimeParser(ModelMapper modelMapper) {
-        Provider<LocalTime> localTimeProvider = new AbstractProvider<LocalTime>() {
+        Provider<LocalTime> localTimeProvider = new AbstractProvider<>() {
             @Override
             public LocalTime get() {
                 return LocalTime.now();
             }
         };
 
-        Converter<String, LocalTime> toStringTime = new AbstractConverter<String, LocalTime>() {
+        Converter<String, LocalTime> toStringTime = new AbstractConverter<>() {
             @Override
             protected LocalTime convert(String source) {
                 if (source == null || source.isEmpty()) return null;

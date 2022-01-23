@@ -1,6 +1,5 @@
 package com.nhlstenden.student.vigmo.controllers.logic;
 
-import com.nhlstenden.student.vigmo.services.UserService;
 import com.nhlstenden.student.vigmo.services.logic.VigmoService;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;

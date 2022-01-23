@@ -3,7 +3,6 @@ package com.nhlstenden.student.vigmo.it.controllers;
 import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.it.IntegrationTestConfig;
 import com.nhlstenden.student.vigmo.it.controllers.logic.AbstractControllerIntegrationTest;
-import com.nhlstenden.student.vigmo.security.models.LoginDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

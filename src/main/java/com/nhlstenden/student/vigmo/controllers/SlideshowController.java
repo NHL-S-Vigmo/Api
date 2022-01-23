@@ -5,7 +5,6 @@ import com.nhlstenden.student.vigmo.dto.SlideshowDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowSlidesDto;
 import com.nhlstenden.student.vigmo.dto.SlideshowVariableDto;
 import com.nhlstenden.student.vigmo.services.SlideshowService;
-import com.nhlstenden.student.vigmo.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
