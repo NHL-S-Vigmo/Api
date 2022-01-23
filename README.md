@@ -1,7 +1,8 @@
 [![Java CI with Maven](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml/badge.svg)](https://github.com/NHL-S-Vigmo/Api/actions/workflows/maven.yml)
 [![Latest release](https://badgen.net/github/release/NHL-S-Vigmo/Api)](https://github.com/NHL-S-Vigmo/Api/releases)
-[![Website vigmo.serverict.nl](https://img.shields.io/website-up-down-green-red/https/vigmo.serverict.nl.svg)](https://vigmo.serverict.nl/)
+[![Website vigmo.serverict.nl](https://img.shields.io/website-up-down-green-red/https/vigmo.serverict.nl.svg)](https://vigmo.serverict.nl/)  
 
+[![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)](#)
 # Vigmo Dashboard
 *Project for Advanced Java Minor, made by Students*  
 
