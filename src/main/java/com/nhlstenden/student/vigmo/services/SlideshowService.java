@@ -35,6 +35,8 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
         //check if list must be filtered on screen.
         if(authentication.getCredentials() != null && !(authentication.getCredentials() instanceof String)){
             Claims claims = (Claims) authentication.getCredentials();
+
+            //check if the claim exists for role, and if it equals the screen role. If yes, limit the number of records returned.
             if(claims.get("role", String.class).equals("ROLE_SCREEN")){
                 //get only the slideshows related to this screen
                 List<Slideshow> slideshows = repo.findSlideshowsByScreenName(claims.getSubject());

@@ -19,31 +19,37 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DataNotFoundException.class)
-    public ErrorResponse handleDataException(DataNotFoundException exception, HttpServletRequest request) {
+    public ErrorResponse handleDataException(DataNotFoundException exception) {
         return new ErrorResponse("Reading data failed: " + exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IdProvidedInCreateRequestException.class)
-    public ErrorResponse handleIdProvidedInCreateRequestException(IdProvidedInCreateRequestException exception, HttpServletRequest request) {
+    public ErrorResponse handleIdProvidedInCreateRequestException(IdProvidedInCreateRequestException exception) {
         return new ErrorResponse(String.format("'%s' To modify the object with id '%d' perform a PUT request.", exception.getMessage(), exception.getId()));
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ErrorResponse handleUserAlreadyExistsException(UserAlreadyExistsException exception, HttpServletRequest request) {
-        return new ErrorResponse(String.format("Duplicate resource: %s", exception.getMessage()));
+    public UsernameErrorResponse handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+        return new UsernameErrorResponse(exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
-    public ErrorResponse handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+    public ErrorResponse handleBadCredentialsException(BadCredentialsException exception) {
         return new ErrorResponse(String.format("Invalid credentials: %s", exception.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(DisabledException.class)
-    public ErrorResponse handleDisabledException(DisabledException exception, HttpServletRequest request) {
+    public ErrorResponse handleDisabledException(DisabledException exception) {
+        return new ErrorResponse(String.format("%s", exception.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenActionException.class)
+    public ErrorResponse handleForbiddenActionException(ForbiddenActionException exception) {
         return new ErrorResponse(String.format("%s", exception.getMessage()));
     }
 
@@ -51,7 +57,7 @@ public class ExceptionHandlers {
     @ExceptionHandler(HttpMediaTypeException.class)
     public ErrorResponse handleHttpMediaTypeNotAcceptableException(HttpServletRequest request) {
         return new ErrorResponse(request.getContentType() +
-                "is not an acceptable MIME type. Acceptable MIME types are:" + MediaType.APPLICATION_JSON_VALUE);
+                " is not an acceptable MIME type. Acceptable MIME types are:" + MediaType.APPLICATION_JSON_VALUE);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -66,10 +72,23 @@ public class ExceptionHandlers {
         return new ErrorResponse("Error getting the id of an object: " + exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DeletionOfLastAdminAccountException.class)
+    public ErrorResponse handleDeletionOfLastAdminAccountException(DeletionOfLastAdminAccountException exception) {
+        return new ErrorResponse(String.format("%s", exception.getMessage()));
+    }
+
     @Generated
     @AllArgsConstructor
     @Getter
     public static class ErrorResponse {
         private String error;
+    }
+
+    @Generated
+    @AllArgsConstructor
+    @Getter
+    public static class UsernameErrorResponse {
+        private String username;
     }
 }
