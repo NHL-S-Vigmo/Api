@@ -19,31 +19,37 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DataNotFoundException.class)
-    public ErrorResponse handleDataException(DataNotFoundException exception, HttpServletRequest request) {
+    public ErrorResponse handleDataException(DataNotFoundException exception) {
         return new ErrorResponse("Reading data failed: " + exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IdProvidedInCreateRequestException.class)
-    public ErrorResponse handleIdProvidedInCreateRequestException(IdProvidedInCreateRequestException exception, HttpServletRequest request) {
+    public ErrorResponse handleIdProvidedInCreateRequestException(IdProvidedInCreateRequestException exception) {
         return new ErrorResponse(String.format("'%s' To modify the object with id '%d' perform a PUT request.", exception.getMessage(), exception.getId()));
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ErrorResponse handleUserAlreadyExistsException(UserAlreadyExistsException exception, HttpServletRequest request) {
-        return new ErrorResponse(String.format("Duplicate resource: %s", exception.getMessage()));
+    public String handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+        return String.format("{\"username\":\"%s\"}", exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
-    public ErrorResponse handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+    public ErrorResponse handleBadCredentialsException(BadCredentialsException exception) {
         return new ErrorResponse(String.format("Invalid credentials: %s", exception.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(DisabledException.class)
-    public ErrorResponse handleDisabledException(DisabledException exception, HttpServletRequest request) {
+    public ErrorResponse handleDisabledException(DisabledException exception) {
+        return new ErrorResponse(String.format("%s", exception.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenActionException.class)
+    public ErrorResponse handleForbiddenActionException(ForbiddenActionException exception) {
         return new ErrorResponse(String.format("%s", exception.getMessage()));
     }
 

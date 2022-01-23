@@ -2,6 +2,7 @@ package com.nhlstenden.student.vigmo.services;
 
 import com.nhlstenden.student.vigmo.dto.UserDto;
 import com.nhlstenden.student.vigmo.exception.DataNotFoundException;
+import com.nhlstenden.student.vigmo.exception.ForbiddenActionException;
 import com.nhlstenden.student.vigmo.exception.UserAlreadyExistsException;
 import com.nhlstenden.student.vigmo.models.User;
 import com.nhlstenden.student.vigmo.repositories.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService extends AbstractVigmoService<UserRepository, UserDto, User> {
@@ -34,6 +36,11 @@ public class UserService extends AbstractVigmoService<UserRepository, UserDto, U
     public List<UserDto> getList() {
         List<UserDto> returnList = super.getList();
 
+        if (userHasAuthority("ROLE_DOCENT")) {
+            // return a list with 1 object in it. The one object being the current user.
+            return returnList.stream().filter(user -> user.getUsername().equals(getUsername())).collect(Collectors.toList());
+        }
+
         for (UserDto user : returnList) {
             user.setPassword("");
         }
@@ -44,6 +51,11 @@ public class UserService extends AbstractVigmoService<UserRepository, UserDto, U
     @Override
     public UserDto get(long id) {
         UserDto user = super.get(id);
+
+        if (userHasAuthority("ROLE_DOCENT"))
+            if (!getUsername().equals(user.getUsername()))
+                throw new ForbiddenActionException();
+
         user.setPassword("");
         return user;
     }
@@ -65,11 +77,33 @@ public class UserService extends AbstractVigmoService<UserRepository, UserDto, U
         User u = repo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Could not find user with id" + id));
 
-        //when updating a new user, encode the password
+        //if the user is not an admin, check if they are updating their own useraccount.
+        if (userHasAuthority("ROLE_DOCENT"))
+            if (!getUsername().equals(u.getUsername()))
+                throw new ForbiddenActionException();
+
+        // if the username is changed, check if the new username is available.
+        if (!u.getUsername().equals(userDto.getUsername())) {
+            Optional<User> fndUser = repo.findByUsername(userDto.getUsername());
+            if (fndUser.isPresent())
+                throw new UserAlreadyExistsException(String.format("The username '%s' is already taken", userDto.getUsername()));
+        }
+
+        //when updating a user, encode the password
         if (!userDto.getPassword().isEmpty())
             userDto.setPassword(encoder.encode(userDto.getPassword()));
         else
             userDto.setPassword(u.getPassword());
+
         super.update(userDto, id);
+    }
+
+    @Override
+    public void delete(long id) {
+        if (getList().stream().filter(user -> user.getRole().equals("ROLE_ADMIN")).count() == 1
+                && get(id).getRole().equals("ROLE_ADMIN"))
+            throw new RuntimeException("Deleting the last admin account will leave the api unusable.");
+
+        super.delete(id);
     }
 }
