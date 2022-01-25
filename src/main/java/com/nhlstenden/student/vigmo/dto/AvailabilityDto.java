@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-@Generated
+@Generated // Nee. Deze klasse is niet gegeneerd. De getters en setters worden gegenereerd. Dat is niet hetzelfde.
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class AvailabilityDto implements StartEndTime {
     private Long userId;
 
     @ApiModelProperty(name = "weekDay", required = true, value = "The day of availability")
-    @WeekdayValidator
+    @WeekdayValidator // Zou je hier niet gewoon @Pattern kunnen gebruiken?
     private String weekDay;
 
     @ApiModelProperty(name = "startTime", required = true, value = "When the hour starts", example = "10:45")

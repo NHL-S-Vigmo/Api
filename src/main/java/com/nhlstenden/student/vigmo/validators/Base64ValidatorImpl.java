@@ -14,6 +14,6 @@ public class Base64ValidatorImpl implements ConstraintValidator<Base64Validator,
         if (value == null) {
             return false;
         }
-        return value.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
+        return value.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$"); // Jongens, er is al een annotatie om regexes te matchen. @Pattern
     }
 }

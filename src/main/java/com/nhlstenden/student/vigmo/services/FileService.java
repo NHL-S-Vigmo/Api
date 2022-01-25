@@ -31,7 +31,7 @@ public class FileService extends AbstractVigmoService<FileRepository, FileDto, F
     @Override
     public FileDto get(long id) {
         FileDto file = super.get(id);
-        file.setData("<removed-binary-data>");
+        file.setData("<removed-binary-data>"); // ?
         return file;
     }
 

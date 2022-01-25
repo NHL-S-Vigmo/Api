@@ -49,7 +49,7 @@ public class RssSlideService extends AbstractVigmoService<RssSlideRepository, Rs
     @Override
     public void update(RssSlideDto rssSlideDto, long id) {
         //Will throw a data not found runtime exception if slideshow does not exist
-        slideshowService.get(rssSlideDto.getSlideshowId());
+        slideshowService.get(rssSlideDto.getSlideshowId()); // Gaat het persisten niet al fout dan?
         super.update(rssSlideDto, id);
     }
 
@@ -126,7 +126,7 @@ public class RssSlideService extends AbstractVigmoService<RssSlideRepository, Rs
 
             return rssItemDto;
         } catch (URISyntaxException | IOException | InterruptedException | SAXException | ParserConfigurationException e) {
-            throw new DataNotFoundException("Problem rendering the RSS Feed, check configuration");
+            throw new DataNotFoundException("Problem rendering the RSS Feed, check configuration"); // Erg generieke exception voor zoveel verschillende scenario's
         }
     }
 }

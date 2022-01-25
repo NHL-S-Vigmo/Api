@@ -31,7 +31,7 @@ public class ConsultationHour implements EntityId {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
-    @Override
+    @Override // Doen de Lombok annotaties dit niet al?
     public long getId(){
         return this.id;
     }

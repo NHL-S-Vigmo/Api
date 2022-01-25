@@ -54,7 +54,7 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
 
     public ResultActions getOne() throws Exception {
         //try to get a slideshow with id 1
-        return this.mockMvc.perform(get(path + "/" + operationId))
+        return this.mockMvc.perform(get(path + "/" + operationId)) // Waarom niet als argument meegeven aan de methode?
                 .andExpect(status()
                         .isOk());
     }
@@ -80,7 +80,7 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
                 .andExpectAll(header()
                         .exists("Location"),
                         header().string("Location", //check if the location header contains a part of the current path.
-                                Matchers.containsString(path)));
+                                Matchers.containsString(path))); // Geen check of er en ID bij staat?
     }
 
     public ResultActions postWithExistingId(DTO dto) throws Exception {
@@ -96,7 +96,7 @@ public abstract class AbstractControllerIntegrationTest<DTO> implements Controll
                         .contentType(MediaType.TEXT_PLAIN)
                         .content(om.writeValueAsString(dto)))
                 .andExpect(status()
-                        .isUnsupportedMediaType());
+                        .isUnsupportedMediaType()); // Zit er nog een response in?
     }
 
     public ResultActions put(DTO dto) throws Exception {

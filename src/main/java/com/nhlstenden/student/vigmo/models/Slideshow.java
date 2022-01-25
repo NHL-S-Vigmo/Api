@@ -27,12 +27,12 @@ public class Slideshow implements EntityId {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "slideshow", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "slideshow", fetch = FetchType.LAZY) // Lazy is de default
     @ToString.Exclude
     private List<Slide> slideList = new ArrayList<>(0);
 
     @OneToMany(mappedBy = "slideshow", fetch = FetchType.LAZY)
-    @ToString.Exclude
+    @ToString.Exclude // Is dit nodig? Waarom doe je hier toString op?
     private List<SlideshowVariable> slideshowVariableList = new ArrayList<>(0);
 
     @Override

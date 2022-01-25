@@ -38,7 +38,7 @@ public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
     public ErrorResponse handleBadCredentialsException(BadCredentialsException exception) {
-        return new ErrorResponse(String.format("Invalid credentials: %s", exception.getMessage()));
+        return new ErrorResponse(String.format("Invalid credentials: %s", exception.getMessage())); // Waarom hier String.format en bij anderen puur concatenation?
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -87,7 +87,7 @@ public class ExceptionHandlers {
 
     @Generated
     @AllArgsConstructor
-    @Getter
+    @Getter // Is een aparte DTO echt nodig hiervoor?
     public static class UsernameErrorResponse {
         private String username;
     }

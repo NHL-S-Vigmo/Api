@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @NotNull(message = "Weekday must be set")
 @ReportAsSingleViolation
-public @interface WeekdayValidator {
+public @interface WeekdayValidator { // De standaard validators hebben ook niet de postfix 'Validator'
     String message() default "Not a valid weekday, use either one of 'MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'";
 
     Class<?>[] groups() default {};

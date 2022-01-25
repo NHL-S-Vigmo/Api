@@ -24,7 +24,7 @@ public class RssSlideController extends AbstractVigmoController<RssSlideService,
 
     @ApiOperation(value = "Gets the latest rss item from the requested rss feed")
     @ApiResponses(value = {@ApiResponse(code = 404, message = "Invalid RssSlide id")})
-    @GetMapping("/{id}/latest")
+    @GetMapping("/{id}/latest") // Ik zou werken met /rss_slides/{id}?tag=LATEST o.i.d. Wat jullie nu hebben is niet RESTful, of in elk geval onduidelijk genoeg dat ik twijfel of het wel of niet kan.
     ResponseEntity<RssItemDto> latestFeedItem(@PathVariable("id") final long id) {
         //get the current rss slide info
         RssItemDto rssSlide = service.getLatestFeedItem(id);

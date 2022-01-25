@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.properties") // Waarom haal je die hier nog een keer op?
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .getUserDetailsService();
 
         // Spring requires USERNAME, PASSWORD and ENABLED
+        // Psst, dit was puur een voorbeeld en is niet nodig.
         userDetailsService
                 .setUsersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?");
 
@@ -76,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors();
+        http.cors(); // En wat doen jullie er dan mee? Waar is de configuratie?
 
         disableAuthOnSwagger(
                 enableRESTAuthentication(http))

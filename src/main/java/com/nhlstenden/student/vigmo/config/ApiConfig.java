@@ -28,11 +28,11 @@ import java.util.*;
 
 @EnableWebMvc
 @Configuration
-@EnableTransactionManagement()
+@EnableTransactionManagement() //Haakjes zijn niet nodig als er geen argumenten zijn
 @ComponentScan("com.nhlstenden.student.vigmo")
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories("com.nhlstenden.student.vigmo.repositories")
-@Import(SwaggerConfig.class)
+@Import(SwaggerConfig.class) // Deze wordt al automatisch gevonden dankzij de componentscan.
 public class ApiConfig implements WebMvcConfigurer {
 
     @Override
@@ -43,6 +43,7 @@ public class ApiConfig implements WebMvcConfigurer {
     @Bean
     public DataSource datasource(Environment env) {
         DriverManagerDataSource ds = new DriverManagerDataSource();
+        // Leuk dat jullie de database driver configureerbaar maken, maar in de additinalProperties() noemen jullie expliciet mySQLDialect.
         ds.setDriverClassName(Objects.requireNonNull(env.getProperty("database.driver")));
         ds.setUrl(env.getProperty("database.url"));
         ds.setUsername(env.getProperty("database.user"));

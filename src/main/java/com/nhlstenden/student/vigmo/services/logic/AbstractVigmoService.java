@@ -174,6 +174,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      * @return returns the id that was in the object
      * @throws NoSuchFieldException will throw when field id is not present in object
      */
+    // Waarom niet een interface DtoId, net zoals jullie voor de entities doen?
     private Long getIdFieldValue(DTO object) throws NoSuchFieldException {
         //get the field from the initial object
         Optional<Field> field = Arrays.stream(object.getClass().getDeclaredFields()).filter(f -> f.getName().equals("id")).findFirst();
@@ -197,6 +198,7 @@ public abstract class AbstractVigmoService<Repository extends JpaRepository<Enti
      * @param object dto object to get the id from
      * @return returns -1 if there is no id present
      */
+    // Ten eerste, waarom geen interface, ten tweede, waarom niet direct deze en de methode hierboven skippen?
     public Long getIdGetterResult(DTO object) {
         Optional<Method> getter = Arrays.stream(object.getClass().getMethods()).filter(method -> method.getName().equals("getId")).findFirst();
 
