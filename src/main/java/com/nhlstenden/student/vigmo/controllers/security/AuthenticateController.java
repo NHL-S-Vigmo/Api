@@ -40,9 +40,11 @@ public class AuthenticateController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        // Zou alle nuttige informatie niet al in de UserDetails staan?
         UserDto userByUsername = userService.findByUsername(username);
 
         long id = userByUsername.getId();
+        // Kan je neit gewoon userByUsername.getRole() doen?
         String role = ((UserDetails) authentication.getPrincipal()).getAuthorities().toArray()[0].toString();
         String profilePicture = userByUsername.getPfpLocation();
         String token = jwtProvider.createToken(id, username, role, profilePicture);

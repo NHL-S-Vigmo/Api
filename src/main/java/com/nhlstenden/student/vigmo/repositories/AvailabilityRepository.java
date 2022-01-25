@@ -4,6 +4,6 @@ import com.nhlstenden.student.vigmo.models.Availability;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository // Overbodig voor de JpaRepositories
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
 }

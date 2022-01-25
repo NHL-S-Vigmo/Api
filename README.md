@@ -15,7 +15,7 @@ _For a deployment guide, check our wiki: [Vigmo Wiki](https://github.com/NHL-S-V
 
 ## How to install
 * Clone the project to a folder of your desire.
-* Create a database and run the script `vigmo.sql`  that can be found in the root of the repository.
+* Create a database and run the script `vigmo.sql`  that can be found in the root of the repository. // Wat is dan het punt van Liquibase?
 * Open the project with IntelliJ, and create a run config for Tomcat
 * Now update the `application.properties` file with credentials to your database like so: 
     ```properties

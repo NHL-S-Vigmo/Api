@@ -33,7 +33,7 @@ class ServiceTest {
     @Mock
     private MappingUtility mapper;
 
-    @Mock
+    @Mock // Waarom zou je een entity of DTO mocken?
     private TestEntity testEntityMock;
 
     @Mock

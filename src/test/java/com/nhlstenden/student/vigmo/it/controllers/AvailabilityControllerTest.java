@@ -174,7 +174,7 @@ public class AvailabilityControllerTest extends AbstractControllerIntegrationTes
                         contentType(MediaType.APPLICATION_JSON).
                         content(getObjectMapper().writeValueAsString(nonExistentUserDto))).
                 andExpect(status().
-                        isNotFound());
+                        isNotFound()); // En wat is de response?
     }
 
     @Test

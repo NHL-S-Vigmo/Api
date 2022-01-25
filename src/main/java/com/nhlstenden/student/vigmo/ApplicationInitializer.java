@@ -5,7 +5,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import javax.annotation.Generated;
 
-@Generated("org.springframework")
+@Generated("org.springframework") // Is deze klasse gegenereerd? Hebben jullie dit echt niet zelf geschreven? Hmmm?
 public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {

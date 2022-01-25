@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="NHLSVigmo" />
+        <module name="Api" />
         <module name="NHL-S_Vigmo" />
         <module name="NHL-S Vigmo" />
-        <module name="Api" />
       </profile>
     </annotationProcessing>
   </component>

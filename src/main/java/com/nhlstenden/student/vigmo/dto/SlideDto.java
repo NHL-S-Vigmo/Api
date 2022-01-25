@@ -35,7 +35,7 @@ public abstract class SlideDto implements StartEndTime, StartEndDate {
     private Integer duration;
 
     @ApiModelProperty(name = "startDate", value = "When the slide is visible", example = "2022-01-21")
-    @DateTimeFormat(fallbackPatterns = {"yyyy-MM-dd"})
+    @DateTimeFormat(fallbackPatterns = {"yyyy-MM-dd"}) // Is dit niet voldoende? Is die DateValidator wel nodig?
     @DateValidator
     private String startDate;
 

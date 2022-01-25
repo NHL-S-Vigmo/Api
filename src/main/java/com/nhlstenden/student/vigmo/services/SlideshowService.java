@@ -37,7 +37,7 @@ public class SlideshowService extends AbstractVigmoService<SlideshowRepository, 
             Claims claims = (Claims) authentication.getCredentials();
 
             //check if the claim exists for role, and if it equals the screen role. If yes, limit the number of records returned.
-            if(claims.get("role", String.class).equals("ROLE_SCREEN")){
+            if(claims.get("role", String.class).equals("ROLE_SCREEN")){ // Kan je hier niet die hasAuthority methode voor gebruiken?
                 //get only the slideshows related to this screen
                 List<Slideshow> slideshows = repo.findSlideshowsByScreenName(claims.getSubject());
 

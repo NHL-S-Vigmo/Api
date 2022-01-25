@@ -20,7 +20,7 @@ public class JWTProvider {
     private static final long validityInMilliseconds = 3600000; // 1 hour
     private static final long refreshTokenTimeRequiredInMilliSeconds = 2700000; //45 minutes
     private static final long validityScreenInMilliseconds = 900000; // 15 minutes
-    private static final long refreshTokenScreenTimeRequiredInMilliSeconds = 600000; //10 minutes
+    private static final long refreshTokenScreenTimeRequiredInMilliSeconds = 600000; //10 minutes // Had dit niet in een config gekund?
 
     private final UserDetailsService userDetailsService;
     private final String secretKey;

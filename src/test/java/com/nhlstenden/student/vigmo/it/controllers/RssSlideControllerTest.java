@@ -62,7 +62,7 @@ public class RssSlideControllerTest extends AbstractControllerIntegrationTest<Rs
     @Override
     public void testGetNotFound() throws Exception {
         super.getNotFound().andExpectAll(
-                jsonPath("$.error").exists(),
+                jsonPath("$.error").exists(), // Match je dat niet al met de volgende?
                 jsonPath("$.error").value(Matchers.containsString("RssSlideService could not find"))
         );
     }
